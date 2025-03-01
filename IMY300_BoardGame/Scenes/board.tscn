@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bfdgnxum4aywl"]
+
+[ext_resource type="Texture2D" uid="uid://cbq76v7niuuyk" path="res://Assets/boards/board_plain_04.png" id="1_1s1hf"]
+[ext_resource type="Script" path="res://checkers.gd" id="2_x7cx5"]
+
+[node name="board" type="Sprite2D"]
+position = Vector2(64, -64)
+texture = ExtResource("1_1s1hf")
+script = ExtResource("2_x7cx5")
+
+[node name="Pieces" type="Node2D" parent="."]
+
+[node name="Dots" type="Node2D" parent="."]
+
+[node name="Turn" type="Sprite2D" parent="."]
+z_index = -10
