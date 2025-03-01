@@ -13,4 +13,3 @@ script = ExtResource("2_x7cx5")
 [node name="Dots" type="Node2D" parent="."]
 
 [node name="Turn" type="Sprite2D" parent="."]
-z_index = -10
