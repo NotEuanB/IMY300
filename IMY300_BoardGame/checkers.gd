@@ -18,7 +18,7 @@ const PIECE_MOVE = preload("res://Assets/Piece_move.png")
 @onready var turn: Sprite2D = $Turn
 @onready var turn_label: Label = $"../Label"
 
-#Variables
+# Variables
 # -1 = black piece
 # 0 = empty
 # 1 = white piece
@@ -28,6 +28,7 @@ var white : bool = true
 var state : bool = false
 var moves = []
 var selected_piece : Vector2
+var selected_square : Vector2 = Vector2(0, 0)  # New variable to track the selected square
 
 func _ready() -> void:
 	board.append([1, 0, 1, 0, 1, 0, 1, 0])
@@ -42,7 +43,7 @@ func _ready() -> void:
 	display_board()
 
 func _input(event):
-	if event is InputEventMouseButton && event.pressed:
+	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if is_mouse_out(): return
 			var var1 = snapped(get_global_mouse_position().x, 0) / CELL_WIDTH
@@ -52,7 +53,26 @@ func _input(event):
 				show_options()
 				state = true
 			elif state: set_move(var2, var1)
-	
+	elif event is InputEventKey:
+		if event.pressed:
+			match event.keycode:
+				KEY_UP:
+					selected_square.x = min(selected_square.x + 1, BOARD_SIZE - 1)
+				KEY_DOWN:
+					selected_square.x = max(selected_square.x - 1, 0)
+				KEY_LEFT:
+					selected_square.y = max(selected_square.y - 1, 0)
+				KEY_RIGHT:
+					selected_square.y = min(selected_square.y + 1, BOARD_SIZE - 1)
+				KEY_ENTER, KEY_SPACE:
+					if !state and (white && board[selected_square.x][selected_square.y] > 0 || !white and board[selected_square.x][selected_square.y] < 0):
+						selected_piece = Vector2(selected_square.x, selected_square.y)
+						show_options()
+						state = true
+					elif state:
+						set_move(selected_square.x, selected_square.y)
+			update_selected_square()
+
 func is_mouse_out():
 	if get_global_mouse_position().x < 0 || get_global_mouse_position().x > 144 || get_global_mouse_position().y > 0 || get_global_mouse_position().y < -144: return true
 	return false
@@ -86,6 +106,8 @@ func display_board():
 		turn.scale.y = -1
 		turn.global_position = Vector2(BOARD_SIZE * CELL_WIDTH / 2, -128)  # Near Black side
 
+	update_selected_square()
+
 func show_options():
 	moves = get_moves()
 	if moves == []:
@@ -110,11 +132,13 @@ func set_move(var2, var1):
 			# Move the selected piece to the new position
 			board[var2][var1] = board[selected_piece.x][selected_piece.y]
 			board[selected_piece.x][selected_piece.y] = 0
+			$move_sound.play();
 			
 			# Check if this was a capture move
 			if abs(var2 - selected_piece.x) == 2:  # Capture moves are always 2 squares away
 				var captured_piece = Vector2((var2 + selected_piece.x) / 2, (var1 + selected_piece.y) / 2)
 				board[captured_piece.x][captured_piece.y] = 0  # Remove the captured piece
+				$take_sound.play();
 			
 			# Switch turns
 			white = !white
@@ -157,10 +181,12 @@ func check_winner():
 		end_game("Black Wins!")
 	elif not white and not black_has_moves:
 		print("White Wins! (Black has no moves)")
-		end_game("White Wins!")
+		end_game("White Wins!") 
 
 func end_game(winner_text: String):
 	turn.texture = null  # Hide turn indicator
+	$AudioStreamPlayer.stop()
+	$win_sound.play()
 	turn_label.text = winner_text
 	turn_label.add_theme_font_size_override("font_size", 24)
 	turn_label.add_theme_color_override("font_color", Color(1, 1, 1))
@@ -197,7 +223,6 @@ func get_checker_moves():
 	
 	return _moves
 
-
 func is_valid_position(pos : Vector2):
 	if pos.x >= 0 && pos.x < BOARD_SIZE && pos.y >= 0 && pos.y < BOARD_SIZE: return true
 	return false
@@ -209,3 +234,10 @@ func is_empty(pos : Vector2):
 func is_enemy(pos : Vector2):
 	if white && board[pos.x][pos.y] < 0 || !white && board[pos.x][pos.y] > 0: return true
 	return false
+
+func update_selected_square():
+	# Highlight the selected square
+	for child in pieces.get_children():
+		child.modulate = Color(1, 1, 1, 1)  # Reset color
+	var selected_child = pieces.get_child(selected_square.x * BOARD_SIZE + selected_square.y)
+	selected_child.modulate = Color(1, 1, 0, 1)  # Highlight color
