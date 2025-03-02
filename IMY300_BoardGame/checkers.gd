@@ -24,11 +24,11 @@ const PIECE_MOVE = preload("res://Assets/Piece_move.png")
 # 1 = white piece
 
 var board : Array
-var white : bool = true
+var white : bool = false
 var state : bool = false
 var moves = []
 var selected_piece : Vector2
-var selected_square : Vector2 = Vector2(0, 0)  # New variable to track the selected square
+var selected_square : Vector2 = Vector2(7, 7)  # New variable to track the selected square
 
 func _ready() -> void:
 	board.append([1, 0, 1, 0, 1, 0, 1, 0])
