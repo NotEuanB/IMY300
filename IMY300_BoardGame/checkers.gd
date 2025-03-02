@@ -110,11 +110,13 @@ func set_move(var2, var1):
 			# Move the selected piece to the new position
 			board[var2][var1] = board[selected_piece.x][selected_piece.y]
 			board[selected_piece.x][selected_piece.y] = 0
+			$move_sound.play();
 			
 			# Check if this was a capture move
 			if abs(var2 - selected_piece.x) == 2:  # Capture moves are always 2 squares away
 				var captured_piece = Vector2((var2 + selected_piece.x) / 2, (var1 + selected_piece.y) / 2)
 				board[captured_piece.x][captured_piece.y] = 0  # Remove the captured piece
+				$take_sound.play();
 			
 			# Switch turns
 			white = !white
@@ -157,10 +159,12 @@ func check_winner():
 		end_game("Black Wins!")
 	elif not white and not black_has_moves:
 		print("White Wins! (Black has no moves)")
-		end_game("White Wins!")
+		end_game("White Wins!") 
 
 func end_game(winner_text: String):
 	turn.texture = null  # Hide turn indicator
+	$AudioStreamPlayer.stop()
+	$win_sound.play()
 	turn_label.text = winner_text
 	turn_label.add_theme_font_size_override("font_size", 24)
 	turn_label.add_theme_color_override("font_color", Color(1, 1, 1))

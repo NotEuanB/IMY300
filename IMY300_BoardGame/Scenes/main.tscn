@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://ca5g0s4cldls6"]
+[gd_scene load_steps=6 format=3 uid="uid://ca5g0s4cldls6"]
 
 [ext_resource type="PackedScene" uid="uid://bfdgnxum4aywl" path="res://Scenes/board.tscn" id="1_mrv0d"]
+[ext_resource type="AudioStream" uid="uid://bi6gv4ovdnmep" path="res://Assets/sounds/2-cherry-cute-bgm-271158.mp3" id="2_nc3vn"]
+[ext_resource type="AudioStream" uid="uid://b5h0sy57p6x0h" path="res://Assets/sounds/pop-sound-effect-197846.mp3" id="3_mloyg"]
+[ext_resource type="AudioStream" uid="uid://dxbvutx5y6d0s" path="res://Assets/sounds/mixkit-player-jumping-in-a-video-game-2043.wav" id="4_y8sqi"]
+[ext_resource type="AudioStream" uid="uid://df2kwc06wuinn" path="res://Assets/sounds/spin-complete-295086.mp3" id="5_2jbik"]
 
 [node name="Main" type="Node2D"]
 
@@ -12,8 +16,22 @@ zoom = Vector2(3, 3)
 
 [node name="board" parent="." instance=ExtResource("1_mrv0d")]
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="board"]
+stream = ExtResource("2_nc3vn")
+volume_db = -18.739
+autoplay = true
+parameters/looping = false
+
+[node name="move_sound" type="AudioStreamPlayer" parent="board"]
+stream = ExtResource("3_mloyg")
+
+[node name="take_sound" type="AudioStreamPlayer" parent="board"]
+stream = ExtResource("4_y8sqi")
+
+[node name="win_sound" type="AudioStreamPlayer" parent="board"]
+stream = ExtResource("5_2jbik")
+
 [node name="Label" type="Label" parent="."]
-offset_left = 23.0
 offset_top = -152.0
-offset_right = 63.0
+offset_right = 40.0
 offset_bottom = -129.0
