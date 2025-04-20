@@ -1,12 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://df7fpuhmkgi11"]
+[gd_scene load_steps=6 format=3 uid="uid://df7fpuhmkgi11"]
 
 [ext_resource type="Script" uid="uid://bf2bg5llb6imy" path="res://Scenes/Gold Display/gold_display.gd" id="1_ds663"]
 [ext_resource type="Texture2D" uid="uid://c4awhqfup7o2k" path="res://assets/sprites/gold.png" id="1_spygf"]
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="2_5xxp2"]
+[ext_resource type="FontFile" uid="uid://wqfms7k4ykv2" path="res://assets/font/abaddon_bold.ttf" id="3_4sr4f"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ds663"]
-shadow_size = 2
-shadow_color = Color(0, 0, 0, 0.647059)
+font = ExtResource("3_4sr4f")
+font_color = Color(0, 0, 0, 1)
+shadow_color = Color(0.95158, 0.95158, 0.95158, 0.486275)
 
 [node name="GoldDisplay" type="HBoxContainer"]
 offset_right = 28.0
