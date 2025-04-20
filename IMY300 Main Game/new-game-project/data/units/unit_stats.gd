@@ -7,6 +7,7 @@ extends Resource
 @export var gold_cost := 1
 @export var attack := 2
 @export var health := 1
+@export var pool_count := 5
 
 @export_category("Visuals")
 @export var skin: Texture2D
