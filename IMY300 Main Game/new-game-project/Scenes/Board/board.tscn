@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=13 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://Scenes/Board/board.gd" id="1_ef5ss"]
 [ext_resource type="TileSet" uid="uid://b77a7ss6h0c2m" path="res://new_tile_set.tres" id="2_qlllu"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://lqm5228wqvl6" path="res://Scenes/Sell Portal/sell_portal.tscn" id="8_qlllu"]
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="9_me64r"]
 [ext_resource type="PackedScene" uid="uid://cnhx7egcrqt28" path="res://Scenes/Tooltip/tooltip.tscn" id="11_gti8d"]
+[ext_resource type="AudioStream" uid="uid://cwnis3uqvj52u" path="res://assets/Our Assets/Shop - Unit Bought.mp3" id="12_brcfe"]
 [ext_resource type="PackedScene" uid="uid://ehcpt7j0kkj3" path="res://Scenes/ShopContainer/shop_container.tscn" id="12_dkxek"]
 [ext_resource type="Resource" uid="uid://bn1waem751oqp" path="res://data/unit_pool/unit_pool.tres" id="13_brcfe"]
 
@@ -67,3 +68,6 @@ offset_right = 480.0
 offset_bottom = 116.0
 unit_pool = ExtResource("13_brcfe")
 player_stats = ExtResource("9_me64r")
+
+[node name="BuySound" type="AudioStreamPlayer2D" parent="ShopUI"]
+stream = ExtResource("12_brcfe")
