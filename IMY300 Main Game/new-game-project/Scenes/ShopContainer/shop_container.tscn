@@ -11,6 +11,7 @@ offset_top = 29.0
 offset_right = 479.0
 offset_bottom = 109.0
 scale = Vector2(1.2, 1.2)
+theme_override_constants/separation = 19
 script = ExtResource("1_fkysy")
 
 [node name="Top" type="HBoxContainer" parent="."]

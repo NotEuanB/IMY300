@@ -26,24 +26,6 @@ func _on_unit_bought(unit_stats: UnitStats) -> void:
 	$ShopUI/BuySound.play()
 
 
-	# Connect tooltip hover events to units
-	var units = get_tree().get_nodes_in_group("units")
-	for unit in units:
-		unit.connect("mouse_entered", Callable(self, "_on_unit_hovered").bind(unit))
-		unit.connect("mouse_exited", Callable(self, "_on_unit_exited").bind(unit))
-
-func _on_unit_spawned(unit: Node) -> void:
-	_connect_unit_tooltip_signals(unit)
-
-func _connect_unit_tooltip_signals(unit: Node) -> void:
-	unit.connect("mouse_entered", Callable(self, "_on_unit_hovered").bind(unit))
-	unit.connect("mouse_exited", Callable(self, "_on_unit_exited").bind(unit))
-
-	if unit.has_node("DragAndDrop"):
-		var drag_and_drop = unit.get_node("DragAndDrop")
-		drag_and_drop.drag_started.connect(_on_unit_drag_started)
-
-
 # Tooltip handlers
 func _on_unit_hovered(unit: Node) -> void:
 	# Only start the hover tracking if the unit is not being dragged

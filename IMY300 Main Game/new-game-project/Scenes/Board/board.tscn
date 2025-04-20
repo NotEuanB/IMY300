@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=14 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://Scenes/Board/board.gd" id="1_ef5ss"]
 [ext_resource type="TileSet" uid="uid://b77a7ss6h0c2m" path="res://new_tile_set.tres" id="2_qlllu"]
+[ext_resource type="Texture2D" uid="uid://cid5kq1qg62w7" path="res://assets/Our Assets/board_basic.svg" id="3_brcfe"]
 [ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="3_dkvsl"]
 [ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="3_ffhyd"]
 [ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="6_7ohde"]
@@ -24,6 +25,14 @@ metadata/_edit_lock_ = true
 [node name="Background" type="TileMapLayer" parent="Visuals"]
 tile_set = ExtResource("2_qlllu")
 
+[node name="TextureRect" type="TextureRect" parent="Visuals"]
+offset_top = -140.0
+offset_right = 640.0
+offset_bottom = 500.0
+texture = ExtResource("3_brcfe")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="PlayerArea" type="TileMapLayer" parent="." node_paths=PackedStringArray("unit_grid")]
 position = Vector2(128, 192)
 tile_set = ExtResource("2_qlllu")
@@ -35,17 +44,17 @@ script = ExtResource("3_ffhyd")
 size = Vector2i(6, 1)
 
 [node name="HandArea" type="TileMapLayer" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(128, 256)
+position = Vector2(13, 273)
 tile_set = ExtResource("2_qlllu")
 script = ExtResource("3_dkvsl")
 unit_grid = NodePath("HandUnitGrid")
 
 [node name="HandUnitGrid" type="Node2D" parent="HandArea"]
 script = ExtResource("3_ffhyd")
-size = Vector2i(6, 1)
+size = Vector2i(4, 1)
 
 [node name="SellPortal" parent="." instance=ExtResource("8_qlllu")]
-position = Vector2(0, 192)
+position = Vector2(15, 147)
 unit_pool = ExtResource("13_brcfe")
 player_stats = ExtResource("9_me64r")
 metadata/_edit_lock_ = true
@@ -63,10 +72,11 @@ hand_area = NodePath("../HandArea")
 [node name="ShopUI" type="CanvasLayer" parent="."]
 
 [node name="ShopContainer" parent="ShopUI" instance=ExtResource("12_dkxek")]
-offset_left = 64.0
-offset_top = 36.0
-offset_right = 480.0
-offset_bottom = 116.0
+offset_left = 123.0
+offset_top = 71.0
+offset_right = 539.0
+offset_bottom = 166.0
+scale = Vector2(0.95, 0.95)
 unit_pool = ExtResource("13_brcfe")
 player_stats = ExtResource("9_me64r")
 

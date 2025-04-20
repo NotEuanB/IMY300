@@ -10,6 +10,7 @@ name = "Golem"
 gold_cost = 3
 attack = 5
 health = 7
+pool_count = 5
 skin = ExtResource("2_la75s")
 portrait = ExtResource("1_hfrm6")
 description = "This is a golem"
