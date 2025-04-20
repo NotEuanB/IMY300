@@ -16,6 +16,10 @@ config/features=PackedStringArray("4.4", "Forward Plus")
 run/max_fps=150
 config/icon="uid://bix2bcrnqqbpq"
 
+[autoload]
+
+GameState="*res://Scripts/GameState.gd"
+
 [display]
 
 window/size/viewport_width=640

@@ -36,6 +36,9 @@ func _put_back_remaining_to_pool() -> void:
 
 func _on_unit_bought(unit: UnitStats) -> void:
 	unit_bought.emit(unit)
+	
+	GameState.add_to_inventory(unit)
+	print("Unit added to inventory: ", unit.name)
 
 func _on_reroll_button_pressed() -> void:
 	print(unit_pool.unit_pool)
