@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3 uid="uid://ehcpt7j0kkj3"]
+
+[ext_resource type="PackedScene" uid="uid://urlrv6wjxn5n" path="res://Scenes/Reroll Button/reroll_button.tscn" id="1_f18wc"]
+[ext_resource type="Script" uid="uid://7sdaeso87g1t" path="res://Scenes/ShopContainer/shop_container.gd" id="1_fkysy"]
+[ext_resource type="PackedScene" uid="uid://df7fpuhmkgi11" path="res://Scenes/Gold Display/gold_display.tscn" id="2_fkysy"]
+[ext_resource type="PackedScene" uid="uid://bt0uy01056sim" path="res://Scenes/UnitCard/unit_card.tscn" id="3_cfpj3"]
+
+[node name="ShopContainer" type="VBoxContainer"]
+offset_left = 63.0
+offset_top = 29.0
+offset_right = 479.0
+offset_bottom = 109.0
+scale = Vector2(1.2, 1.2)
+script = ExtResource("1_fkysy")
+
+[node name="Top" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 301
+
+[node name="RerollButton" parent="Top" instance=ExtResource("1_f18wc")]
+layout_mode = 2
+
+[node name="GoldDisplay" parent="Top" instance=ExtResource("2_fkysy")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Bottom" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="UnitCard" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard2" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard3" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard4" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard5" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[connection signal="pressed" from="Top/RerollButton" to="." method="_on_reroll_button_pressed"]

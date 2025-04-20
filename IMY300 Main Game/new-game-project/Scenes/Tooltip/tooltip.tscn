@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnhx7egcrqt28"]
+
+[ext_resource type="Script" uid="uid://dv1t7o6tpfwfp" path="res://Scenes/Tooltip/tooltip.gd" id="1_gwequ"]
+
+[node name="Tooltip" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+script = ExtResource("1_gwequ")
+
+[node name="UnitImage" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="UnitLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 18.0
