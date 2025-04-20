@@ -19,7 +19,12 @@ var hover_delay: float = 1000.0  # 1 second delay before showing tooltip (in mil
 func _ready() -> void:
 	unit_spawner.unit_spawned.connect(unit_mover.setup_unit)
 	unit_spawner.unit_spawned.connect(sell_portal.setup_unit)
-	shop_container.unit_bought.connect(unit_spawner.spawn_unit)
+	shop_container.unit_bought.connect(_on_unit_bought)
+
+func _on_unit_bought(unit_stats: UnitStats) -> void:
+	unit_spawner.spawn_unit(unit_stats)
+	$ShopUI/BuySound.play()
+
 
 	# Connect tooltip hover events to units
 	var units = get_tree().get_nodes_in_group("units")
