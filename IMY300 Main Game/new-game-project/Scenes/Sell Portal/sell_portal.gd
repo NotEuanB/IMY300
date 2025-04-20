@@ -1,6 +1,7 @@
 class_name SellPortal
 extends Area2D
 
+@export var unit_pool: UnitPool
 @export var player_stats: PlayerStats
 
 @onready var gold: HBoxContainer = %Gold
@@ -20,7 +21,8 @@ func setup_unit(unit: Unit) -> void:
 
 func _sell_unit(unit: Unit) -> void:
 	player_stats.gold += unit.stats.gold_cost
-	print(player_stats.gold)
+	
+	unit_pool.add_unit(unit.stats)
 	
 	unit.queue_free()
 
