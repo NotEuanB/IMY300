@@ -46,6 +46,7 @@ size = Vector2i(6, 1)
 
 [node name="SellPortal" parent="." instance=ExtResource("8_qlllu")]
 position = Vector2(0, 192)
+unit_pool = ExtResource("13_brcfe")
 player_stats = ExtResource("9_me64r")
 metadata/_edit_lock_ = true
 
