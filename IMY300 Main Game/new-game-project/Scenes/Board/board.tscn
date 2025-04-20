@@ -1,15 +1,13 @@
-[gd_scene load_steps=14 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=12 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://Scenes/Board/board.gd" id="1_ef5ss"]
 [ext_resource type="TileSet" uid="uid://b77a7ss6h0c2m" path="res://new_tile_set.tres" id="2_qlllu"]
 [ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="3_dkvsl"]
 [ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="3_ffhyd"]
 [ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="6_7ohde"]
-[ext_resource type="Resource" uid="uid://cc31lth8kllsv" path="res://data/units/golem.tres" id="6_me64r"]
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="7_x1pfr"]
 [ext_resource type="PackedScene" uid="uid://lqm5228wqvl6" path="res://Scenes/Sell Portal/sell_portal.tscn" id="8_qlllu"]
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="9_me64r"]
-[ext_resource type="PackedScene" uid="uid://mmpc3j84035o" path="res://Scenes/Unit/unit.tscn" id="10_me64r"]
 [ext_resource type="PackedScene" uid="uid://cnhx7egcrqt28" path="res://Scenes/Tooltip/tooltip.tscn" id="11_gti8d"]
 [ext_resource type="PackedScene" uid="uid://ehcpt7j0kkj3" path="res://Scenes/ShopContainer/shop_container.tscn" id="12_dkxek"]
 [ext_resource type="Resource" uid="uid://bn1waem751oqp" path="res://data/unit_pool/unit_pool.tres" id="13_brcfe"]
@@ -35,9 +33,6 @@ unit_grid = NodePath("PlayerUnitGrid")
 script = ExtResource("3_ffhyd")
 size = Vector2i(6, 1)
 
-[node name="Unit" parent="PlayerArea" instance=ExtResource("10_me64r")]
-position = Vector2(128, 0)
-
 [node name="HandArea" type="TileMapLayer" parent="." node_paths=PackedStringArray("unit_grid")]
 position = Vector2(128, 256)
 tile_set = ExtResource("2_qlllu")
@@ -48,10 +43,6 @@ unit_grid = NodePath("HandUnitGrid")
 script = ExtResource("3_ffhyd")
 size = Vector2i(6, 1)
 
-[node name="Unit2" parent="HandArea" instance=ExtResource("10_me64r")]
-position = Vector2(0, -64)
-stats = ExtResource("6_me64r")
-
 [node name="SellPortal" parent="." instance=ExtResource("8_qlllu")]
 position = Vector2(0, 192)
 player_stats = ExtResource("9_me64r")
@@ -61,8 +52,9 @@ metadata/_edit_lock_ = true
 script = ExtResource("6_7ohde")
 play_areas = [NodePath("../PlayerArea"), NodePath("../HandArea")]
 
-[node name="UnitSpawner" type="Node" parent="."]
+[node name="UnitSpawner" type="Node" parent="." node_paths=PackedStringArray("hand_area")]
 script = ExtResource("7_x1pfr")
+hand_area = NodePath("../HandArea")
 
 [node name="Tooltip" parent="." instance=ExtResource("11_gti8d")]
 

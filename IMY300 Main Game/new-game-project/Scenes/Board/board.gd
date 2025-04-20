@@ -9,6 +9,8 @@ const QUARTER_CELL_SIZE := Vector2(16, 16)
 @onready var unit_spawner: UnitSpawner = $UnitSpawner
 @onready var sell_portal: SellPortal = $SellPortal
 @onready var tooltip: TooltipClass = $Tooltip  # Ensure TooltipClass node exists
+@onready var shop_container: ShopContainter = $ShopUI/ShopContainer
+
 
 var hovered_unit: Node = null  # To store the currently hovered unit
 var time_hover_started: float = -1.0  # To track the time when hover started (in milliseconds)
@@ -17,12 +19,24 @@ var hover_delay: float = 1000.0  # 1 second delay before showing tooltip (in mil
 func _ready() -> void:
 	unit_spawner.unit_spawned.connect(unit_mover.setup_unit)
 	unit_spawner.unit_spawned.connect(sell_portal.setup_unit)
+	shop_container.unit_bought.connect(unit_spawner.spawn_unit)
 
 	# Connect tooltip hover events to units
 	var units = get_tree().get_nodes_in_group("units")
 	for unit in units:
 		unit.connect("mouse_entered", Callable(self, "_on_unit_hovered").bind(unit))
 		unit.connect("mouse_exited", Callable(self, "_on_unit_exited").bind(unit))
+
+func _on_unit_spawned(unit: Node) -> void:
+	_connect_unit_tooltip_signals(unit)
+
+func _connect_unit_tooltip_signals(unit: Node) -> void:
+	unit.connect("mouse_entered", Callable(self, "_on_unit_hovered").bind(unit))
+	unit.connect("mouse_exited", Callable(self, "_on_unit_exited").bind(unit))
+
+	if unit.has_node("DragAndDrop"):
+		var drag_and_drop = unit.get_node("DragAndDrop")
+		drag_and_drop.drag_started.connect(_on_unit_drag_started)
 
 
 # Tooltip handlers
