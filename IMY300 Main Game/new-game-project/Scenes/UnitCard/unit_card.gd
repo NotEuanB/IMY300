@@ -14,10 +14,15 @@ signal unit_bought(unit: UnitStats)
 @onready var placeholder: Panel = %Placeholder
 
 var bought := false
+var hand_full: bool = false
+
 
 func _ready() -> void:
 	player_stats.changed.connect(_on_player_stats_changed)
 	_on_player_stats_changed()
+
+func _can_be_bought() -> bool:
+	return unit_stats != null and player_stats.gold >= unit_stats.gold_cost and not bought
 
 
 func _set_unit_stats(value: UnitStats) -> void:

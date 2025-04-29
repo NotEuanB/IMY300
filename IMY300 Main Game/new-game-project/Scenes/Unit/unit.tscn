@@ -21,12 +21,12 @@ metadata/_edit_group_ = true
 
 [node name="Skin" type="Sprite2D" parent="."]
 position = Vector2(32, 32)
-scale = Vector2(2.5, 2.5)
+scale = Vector2(8, 8)
 texture = ExtResource("3_ulevp")
 
 [node name="StatsContainer" type="Node2D" parent="."]
-position = Vector2(29, 32)
-scale = Vector2(0.8, 0.8)
+position = Vector2(23, 40)
+scale = Vector2(3, 3)
 
 [node name="AttackBackground" type="Label" parent="StatsContainer"]
 offset_left = -35.0
@@ -67,7 +67,7 @@ vertical_alignment = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(32, 32)
-scale = Vector2(3, 3)
+scale = Vector2(11, 11)
 shape = SubResource("RectangleShape2D_ulevp")
 
 [node name="DragAndDrop" type="Node" parent="." node_paths=PackedStringArray("target")]

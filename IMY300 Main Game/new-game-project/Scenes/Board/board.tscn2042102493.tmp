@@ -2,11 +2,10 @@
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://Scenes/Board/board.gd" id="1_ef5ss"]
 [ext_resource type="TileSet" uid="uid://b77a7ss6h0c2m" path="res://new_tile_set.tres" id="2_qlllu"]
-[ext_resource type="Texture2D" uid="uid://dix2h5m4t3c7e" path="res://assets/Our Assets/board.png" id="2_s2gku"]
+[ext_resource type="Texture2D" uid="uid://cid5kq1qg62w7" path="res://assets/Our Assets/board_basic.svg" id="3_brcfe"]
 [ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="3_dkvsl"]
 [ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="3_ffhyd"]
 [ext_resource type="Texture2D" uid="uid://bc55foimbjkw2" path="res://assets/Our Assets/travernkeeper.svg" id="4_csi2d"]
-[ext_resource type="Texture2D" uid="uid://th841nl8m0hy" path="res://assets/Our Assets/Untitled-2.svg" id="4_s2gku"]
 [ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="6_7ohde"]
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="7_x1pfr"]
 [ext_resource type="PackedScene" uid="uid://lqm5228wqvl6" path="res://Scenes/Sell Portal/sell_portal.tscn" id="8_qlllu"]
@@ -15,6 +14,7 @@
 [ext_resource type="AudioStream" uid="uid://cwnis3uqvj52u" path="res://assets/Our Assets/Shop - Unit Bought.mp3" id="12_brcfe"]
 [ext_resource type="PackedScene" uid="uid://ehcpt7j0kkj3" path="res://Scenes/ShopContainer/shop_container.tscn" id="12_dkxek"]
 [ext_resource type="Resource" uid="uid://bn1waem751oqp" path="res://data/unit_pool/unit_pool.tres" id="13_brcfe"]
+[ext_resource type="Script" uid="uid://q4xbeiedjo50" path="res://Scripts/GameState.gd" id="15_s2gku"]
 
 [node name="Shop" type="Node2D"]
 script = ExtResource("1_ef5ss")
@@ -24,25 +24,24 @@ metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
 metadata/_edit_lock_ = true
 
+[node name="Background" type="TileMapLayer" parent="Visuals"]
+tile_set = ExtResource("2_qlllu")
+
 [node name="TextureRect" type="TextureRect" parent="Visuals"]
-offset_right = 1920.0
-offset_bottom = 1080.0
-texture = ExtResource("2_s2gku")
+offset_top = -140.0
+offset_right = 640.0
+offset_bottom = 500.0
+texture = ExtResource("3_brcfe")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Necromancer" type="Sprite2D" parent="Visuals"]
-position = Vector2(953, 912)
-scale = Vector2(0.07, 0.07)
-texture = ExtResource("4_s2gku")
-
 [node name="Travernkeeper" type="Sprite2D" parent="Visuals"]
-position = Vector2(955, 169)
-scale = Vector2(0.07, 0.07)
+position = Vector2(317, 57)
+scale = Vector2(0.024, 0.024)
 texture = ExtResource("4_csi2d")
 
 [node name="PlayerArea" type="TileMapLayer" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(513, 550)
+position = Vector2(128, 192)
 tile_set = ExtResource("2_qlllu")
 script = ExtResource("3_dkvsl")
 unit_grid = NodePath("PlayerUnitGrid")
@@ -52,7 +51,7 @@ script = ExtResource("3_ffhyd")
 size = Vector2i(6, 1)
 
 [node name="HandArea" type="TileMapLayer" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(21, 779)
+position = Vector2(13, 273)
 tile_set = ExtResource("2_qlllu")
 script = ExtResource("3_dkvsl")
 unit_grid = NodePath("HandUnitGrid")
@@ -62,7 +61,7 @@ script = ExtResource("3_ffhyd")
 size = Vector2i(4, 1)
 
 [node name="SellPortal" parent="." instance=ExtResource("8_qlllu")]
-position = Vector2(212, 518)
+position = Vector2(15, 147)
 unit_pool = ExtResource("13_brcfe")
 player_stats = ExtResource("9_me64r")
 metadata/_edit_lock_ = true
@@ -80,11 +79,11 @@ hand_area = NodePath("../HandArea")
 [node name="ShopUI" type="CanvasLayer" parent="."]
 
 [node name="ShopContainer" parent="ShopUI" instance=ExtResource("12_dkxek")]
-offset_left = 531.0
-offset_top = 321.0
-offset_right = 947.0
-offset_bottom = 416.0
-scale = Vector2(2, 2)
+offset_left = 123.0
+offset_top = 71.0
+offset_right = 539.0
+offset_bottom = 166.0
+scale = Vector2(0.95, 0.95)
 unit_pool = ExtResource("13_brcfe")
 player_stats = ExtResource("9_me64r")
 
@@ -92,11 +91,13 @@ player_stats = ExtResource("9_me64r")
 stream = ExtResource("12_brcfe")
 
 [node name="Button" type="Button" parent="."]
-offset_left = 1507.0
-offset_top = 476.0
-offset_right = 1549.0
-offset_bottom = 502.0
-scale = Vector2(5, 5)
+offset_left = 561.0
+offset_top = 167.0
+offset_right = 603.0
+offset_bottom = 193.0
 text = "Fight"
+
+[node name="GameState" type="Node2D" parent="."]
+script = ExtResource("15_s2gku")
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

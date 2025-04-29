@@ -10,6 +10,7 @@ name = "Rat"
 gold_cost = 1
 attack = 2
 health = 1
+pool_count = 5
 skin = ExtResource("2_yr27n")
 portrait = ExtResource("1_o4o40")
 description = "This is a rat"

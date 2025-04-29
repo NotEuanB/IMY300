@@ -8,7 +8,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7mc5g"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tn5u3"]
-shadow_size = 2
+font_size = 45
 shadow_color = Color(0, 0, 0, 0.694118)
 
 [node name="SellPortal" type="Area2D"]
@@ -19,26 +19,25 @@ material = ExtResource("1_tn5u3")
 
 [node name="Sprite2D" type="Sprite2D" parent="Visuals"]
 position = Vector2(32, 32)
-scale = Vector2(2.5, 2.5)
+scale = Vector2(10, 10)
 texture = ExtResource("2_bcvc4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(32, 32)
-scale = Vector2(3, 3)
+scale = Vector2(12, 12)
 shape = SubResource("RectangleShape2D_7mc5g")
 
 [node name="SellLabel" type="Label" parent="."]
-offset_left = 21.0
-offset_top = 53.0
-offset_right = 42.0
-offset_bottom = 71.0
+offset_left = 5.0
+offset_top = 114.0
+offset_right = 64.0
+offset_bottom = 165.0
 text = "Sell"
 label_settings = SubResource("LabelSettings_tn5u3")
 horizontal_alignment = 1
 
 [node name="Gold" type="HBoxContainer" parent="."]
 unique_name_in_owner = true
-visible = false
 offset_top = 67.0
 offset_right = 64.0
 offset_bottom = 85.0
@@ -52,7 +51,7 @@ label_settings = SubResource("LabelSettings_tn5u3")
 horizontal_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="Gold"]
-custom_minimum_size = Vector2(8, 0)
+custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 texture = ExtResource("3_bcvc4")
 expand_mode = 1
