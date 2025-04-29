@@ -17,6 +17,7 @@ func _ready() -> void:
 		child.queue_free()
 	
 	_roll_units()
+	
 
 
 func _roll_units() -> void:

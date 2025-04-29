@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bs8vkfyk56sd1"]
+[gd_scene load_steps=9 format=3 uid="uid://bs8vkfyk56sd1"]
 
 [ext_resource type="Script" uid="uid://3x7dbeeeixhh" path="res://Scenes/Fighting/fighting_board.gd" id="1_rjd1f"]
 [ext_resource type="Texture2D" uid="uid://th841nl8m0hy" path="res://assets/Our Assets/Untitled-2.svg" id="2_il34r"]
@@ -7,6 +7,7 @@
 [ext_resource type="TileSet" uid="uid://b77a7ss6h0c2m" path="res://new_tile_set.tres" id="4_s8hk7"]
 [ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="5_rjd1f"]
 [ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="6_6whw1"]
+[ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="8_6whw1"]
 
 [node name="fightingScene" type="Node2D"]
 script = ExtResource("1_rjd1f")
@@ -30,7 +31,7 @@ scale = Vector2(0.024, 0.024)
 texture = ExtResource("3_il34r")
 
 [node name="PlayerArea" type="TileMapLayer" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(128, 192)
+position = Vector2(128, 181)
 tile_set = ExtResource("4_s8hk7")
 script = ExtResource("5_rjd1f")
 unit_grid = NodePath("PlayerUnitGrid")
@@ -51,7 +52,7 @@ script = ExtResource("6_6whw1")
 size = Vector2i(6, 1)
 
 [node name="HandArea" type="TileMapLayer" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(13, 273)
+position = Vector2(13, 255)
 tile_set = ExtResource("4_s8hk7")
 script = ExtResource("5_rjd1f")
 unit_grid = NodePath("HandUnitGrid")
@@ -66,3 +67,7 @@ offset_top = 166.0
 offset_right = 599.0
 offset_bottom = 192.0
 text = "Fight"
+
+[node name="UnitMover" type="Node" parent="." node_paths=PackedStringArray("play_areas")]
+script = ExtResource("8_6whw1")
+play_areas = [NodePath("../HandArea"), NodePath("../PlayerArea")]

@@ -22,12 +22,12 @@ GameState="*res://Scripts/GameState.gd"
 
 [display]
 
-window/size/viewport_width=640
-window/size/viewport_height=360
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=3
 window/size/window_width_override=1300
 window/size/window_height_override=750
 window/stretch/mode="viewport"
-window/stretch/scale_mode="integer"
 window/vsync/vsync_mode=0
 
 [gui]

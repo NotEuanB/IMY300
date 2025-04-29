@@ -7,8 +7,7 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_ds663"]
 font = ExtResource("3_4sr4f")
-font_color = Color(0, 0, 0, 1)
-shadow_color = Color(0.95158, 0.95158, 0.95158, 0.486275)
+shadow_color = Color(0, 0, 0, 0.568627)
 
 [node name="GoldDisplay" type="HBoxContainer"]
 offset_right = 28.0
