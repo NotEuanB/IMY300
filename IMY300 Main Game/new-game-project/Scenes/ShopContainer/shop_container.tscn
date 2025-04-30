@@ -10,13 +10,12 @@ offset_left = 63.0
 offset_top = 29.0
 offset_right = 479.0
 offset_bottom = 109.0
-scale = Vector2(1.2, 1.2)
 theme_override_constants/separation = 19
 script = ExtResource("1_fkysy")
 
 [node name="Top" type="HBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 301
+theme_override_constants/separation = 600
 
 [node name="RerollButton" parent="Top" instance=ExtResource("1_f18wc")]
 layout_mode = 2
@@ -27,6 +26,7 @@ size_flags_horizontal = 4
 
 [node name="Bottom" type="HBoxContainer" parent="."]
 layout_mode = 2
+theme_override_constants/separation = 20
 
 [node name="UnitCard" parent="Bottom" instance=ExtResource("3_cfpj3")]
 layout_mode = 2
@@ -41,6 +41,9 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="UnitCard5" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard6" parent="Bottom" instance=ExtResource("3_cfpj3")]
 layout_mode = 2
 
 [connection signal="pressed" from="Top/RerollButton" to="." method="_on_reroll_button_pressed"]

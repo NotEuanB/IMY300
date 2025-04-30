@@ -28,7 +28,7 @@ shadow_color = Color(0, 0, 0, 0.878431)
 bg_color = Color(0, 0, 0, 1)
 
 [node name="UnitCard" type="Button"]
-custom_minimum_size = Vector2(80, 52)
+custom_minimum_size = Vector2(130, 220)
 offset_right = 8.0
 offset_bottom = 8.0
 focus_mode = 0
@@ -49,10 +49,10 @@ color = Color(0.0846899, 0.0846899, 0.0846899, 1)
 [node name="Traits" type="Label" parent="Backdrop"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 2.0
-offset_top = 1.0
-offset_right = 47.0
-offset_bottom = 37.0
+offset_left = 12.0
+offset_top = 71.0
+offset_right = 57.0
+offset_bottom = 107.0
 text = "2 ATK
 1 HP"
 label_settings = SubResource("LabelSettings_apj8s")
@@ -65,7 +65,6 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -18.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
@@ -117,10 +116,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -31.0
-offset_top = 2.0
-offset_right = -1.0
-offset_bottom = 32.0
+offset_left = -46.0
+offset_top = 69.0
+offset_right = -16.0
+offset_bottom = 99.0
 grow_horizontal = 0
 mouse_filter = 2
 texture = ExtResource("3_24gas")
