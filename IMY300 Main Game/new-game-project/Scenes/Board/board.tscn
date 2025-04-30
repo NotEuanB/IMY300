@@ -80,11 +80,10 @@ hand_area = NodePath("../HandArea")
 [node name="ShopUI" type="CanvasLayer" parent="."]
 
 [node name="ShopContainer" parent="ShopUI" instance=ExtResource("12_dkxek")]
-offset_left = 531.0
-offset_top = 321.0
-offset_right = 947.0
-offset_bottom = 416.0
-scale = Vector2(2, 2)
+offset_left = 514.0
+offset_top = 253.0
+offset_right = 1394.0
+offset_bottom = 532.0
 unit_pool = ExtResource("13_brcfe")
 player_stats = ExtResource("9_me64r")
 

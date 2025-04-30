@@ -8,11 +8,12 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_k10ps"]
 font = ExtResource("3_k10ps")
+font_size = 28
 shadow_size = 2
 shadow_color = Color(0, 0, 0, 0.709804)
 
 [node name="RerollButton" type="Button"]
-custom_minimum_size = Vector2(80, 24)
+custom_minimum_size = Vector2(200, 40)
 offset_right = 8.0
 offset_bottom = 8.0
 focus_mode = 0
@@ -27,6 +28,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="RerollLabel" type="Label" parent="HBoxContainer"]
@@ -35,12 +37,14 @@ text = "Reroll 2"
 label_settings = SubResource("LabelSettings_k10ps")
 
 [node name="GoldIcon" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(15, 0)
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("2_qogto")
 stretch_mode = 5
 
 [node name="RollIcon" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("3_q8vrn")

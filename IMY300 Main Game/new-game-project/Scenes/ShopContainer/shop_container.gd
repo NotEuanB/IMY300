@@ -21,7 +21,7 @@ func _ready() -> void:
 
 
 func _roll_units() -> void:
-	for i in 5:
+	for i in 6:
 		var new_card: UnitCard = UNIT_CARD.instantiate()
 		new_card.unit_stats = unit_pool.get_random_unit()
 		new_card.unit_bought.connect(_on_unit_bought)
