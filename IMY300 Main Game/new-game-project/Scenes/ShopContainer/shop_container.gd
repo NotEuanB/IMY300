@@ -1,4 +1,4 @@
-class_name ShopContainter
+class_name ShopContainer
 extends Control
 
 signal unit_bought(unit: UnitStats)

@@ -1,10 +1,19 @@
 class_name UnitMover
 extends Node
 
-@export var play_areas: Array[PlayArea]
 
+@export var play_area_paths: Array[NodePath]
+
+var play_areas: Array[PlayArea] = []
 
 func _ready() -> void:
+	play_areas.clear()
+	for path in play_area_paths:
+		var node = get_node_or_null(path)
+		if node and node is PlayArea:
+			play_areas.append(node)
+		else:
+			push_error("Node at %s is not a PlayArea!" % path)
 	var units := get_tree().get_nodes_in_group("units")
 	for unit: Unit in units:
 		setup_unit(unit)
@@ -58,7 +67,7 @@ func _on_unit_drag_canceled(starting_position: Vector2, unit: Unit) -> void:
 func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
 
 	var old_area_index := _get_play_area_for_position(starting_position)
-	var drop_area_index := _get_play_area_for_position(unit.get_global_mouse_position())
+	var drop_area_index := _get_play_area_for_position(unit.global_position)
 	
 	if drop_area_index == -1:
 		_reset_unit_to_starting_position(starting_position, unit)

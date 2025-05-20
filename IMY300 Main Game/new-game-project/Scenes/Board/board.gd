@@ -9,7 +9,7 @@ const QUARTER_CELL_SIZE := Vector2(16, 16)
 @onready var unit_spawner: UnitSpawner = $UnitSpawner
 @onready var sell_portal: SellPortal = $SellPortal
 @onready var tooltip: TooltipClass = $Tooltip  # Ensure TooltipClass node exists
-@onready var shop_container: ShopContainter = $ShopUI/ShopContainer
+@onready var shop_container: ShopContainer = $ShopUI/ShopContainer
 
 
 var hovered_unit: Node = null  # To store the currently hovered unit

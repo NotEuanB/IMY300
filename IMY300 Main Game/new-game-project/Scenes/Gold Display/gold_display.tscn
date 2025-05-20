@@ -1,12 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://df7fpuhmkgi11"]
+[gd_scene load_steps=4 format=3 uid="uid://df7fpuhmkgi11"]
 
 [ext_resource type="Script" uid="uid://bf2bg5llb6imy" path="res://Scenes/Gold Display/gold_display.gd" id="1_ds663"]
-[ext_resource type="Texture2D" uid="uid://c4awhqfup7o2k" path="res://assets/sprites/gold.png" id="1_spygf"]
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="2_5xxp2"]
-[ext_resource type="FontFile" uid="uid://wqfms7k4ykv2" path="res://assets/font/abaddon_bold.ttf" id="3_4sr4f"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ds663"]
-font = ExtResource("3_4sr4f")
 font_size = 28
 shadow_color = Color(0, 0, 0, 0.568627)
 
@@ -20,10 +17,3 @@ player_stats = ExtResource("2_5xxp2")
 layout_mode = 2
 text = "99"
 label_settings = SubResource("LabelSettings_ds663")
-
-[node name="Icon" type="TextureRect" parent="."]
-custom_minimum_size = Vector2(20, 0)
-layout_mode = 2
-texture = ExtResource("1_spygf")
-expand_mode = 1
-stretch_mode = 5

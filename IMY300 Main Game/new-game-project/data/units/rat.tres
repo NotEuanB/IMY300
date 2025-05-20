@@ -1,8 +1,7 @@
-[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://24ojvr82jtob"]
+[gd_resource type="Resource" script_class="UnitStats" load_steps=3 format=3 uid="uid://24ojvr82jtob"]
 
-[ext_resource type="Texture2D" uid="uid://51gja5vqgkwm" path="res://assets/Our Assets/Rat.png" id="1_o4o40"]
 [ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_yqogo"]
-[ext_resource type="Texture2D" uid="uid://wxshjtwjoc31" path="res://assets/sprites/traits/human.png" id="2_yr27n"]
+[ext_resource type="Texture2D" uid="uid://dcg3ugiflcbdh" path="res://assets/units/Rat.png" id="2_yr27n"]
 
 [resource]
 script = ExtResource("1_yqogo")
@@ -12,6 +11,5 @@ attack = 2
 health = 1
 pool_count = 5
 skin = ExtResource("2_yr27n")
-portrait = ExtResource("1_o4o40")
 description = "This is a rat"
 metadata/_custom_type_script = "uid://d2inypj55y68q"

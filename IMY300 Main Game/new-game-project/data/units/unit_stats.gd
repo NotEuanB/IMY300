@@ -11,7 +11,6 @@ extends Resource
 
 @export_category("Visuals")
 @export var skin: Texture2D
-@export var portrait: Texture2D
 @export var description: String = ""
 
 func _to_string() -> String:

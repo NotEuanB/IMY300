@@ -1,9 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://mmpc3j84035o"]
+[gd_scene load_steps=7 format=3 uid="uid://mmpc3j84035o"]
 
 [ext_resource type="Script" uid="uid://navurmx1e1fi" path="res://Scenes/Unit/unit.gd" id="1_ladk0"]
-[ext_resource type="FontFile" uid="uid://8di0jvr25vat" path="res://assets/font/m5x7.ttf" id="2_15sed"]
 [ext_resource type="Resource" uid="uid://24ojvr82jtob" path="res://data/units/rat.tres" id="2_iuf4a"]
-[ext_resource type="Texture2D" uid="uid://wxshjtwjoc31" path="res://assets/sprites/traits/human.png" id="3_ulevp"]
+[ext_resource type="Texture2D" uid="uid://dcg3ugiflcbdh" path="res://assets/units/Rat.png" id="3_iuf4a"]
 [ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="5_ulevp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_15sed"]
@@ -20,12 +19,9 @@ stats = ExtResource("2_iuf4a")
 metadata/_edit_group_ = true
 
 [node name="Skin" type="Sprite2D" parent="."]
-position = Vector2(32, 32)
-scale = Vector2(8, 8)
-texture = ExtResource("3_ulevp")
+texture = ExtResource("3_iuf4a")
 
 [node name="StatsContainer" type="Node2D" parent="."]
-position = Vector2(23, 40)
 scale = Vector2(3, 3)
 
 [node name="AttackBackground" type="Label" parent="StatsContainer"]
@@ -41,7 +37,6 @@ offset_top = 1.0
 offset_right = 12.0
 offset_bottom = 33.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_15sed")
 theme_override_font_sizes/font_size = 32
 text = "2"
 vertical_alignment = 2
@@ -59,14 +54,12 @@ offset_top = 1.0
 offset_right = 36.0
 offset_bottom = 33.0
 theme_override_colors/font_color = Color(0, 1, 0, 1)
-theme_override_fonts/font = ExtResource("2_15sed")
 theme_override_font_sizes/font_size = 32
 text = "1"
 horizontal_alignment = 2
 vertical_alignment = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(32, 32)
 scale = Vector2(11, 11)
 shape = SubResource("RectangleShape2D_ulevp")
 

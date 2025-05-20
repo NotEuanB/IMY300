@@ -6,11 +6,10 @@ signal unit_bought(unit: UnitStats)
 @export var player_stats: PlayerStats
 @export var unit_stats: UnitStats : set = _set_unit_stats
 
-@onready var traits: Label = %Traits
 @onready var bottom: Panel = %Bottom
 @onready var unit_name: Label = %UnitName
 @onready var gold_label: Label = %GoldLabel
-@onready var unit_icon: TextureRect = $UnitIcon
+@onready var unit_image: TextureRect = $CardBackground/UnitImage
 @onready var placeholder: Panel = %Placeholder
 
 var bought := false
@@ -37,10 +36,9 @@ func _set_unit_stats(value: UnitStats) -> void:
 		bought = true
 		return
 	
-	traits.text = str(unit_stats.attack) + " ATK\n" + str(unit_stats.health) + " HP" 
 	unit_name.text = unit_stats.name
 	gold_label.text = str(unit_stats.gold_cost)
-	unit_icon.texture = unit_stats.skin
+	unit_image.texture = unit_stats.skin
 
 func _on_player_stats_changed() -> void:
 	if not unit_stats:
