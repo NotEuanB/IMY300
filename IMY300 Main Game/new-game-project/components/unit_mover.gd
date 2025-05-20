@@ -40,24 +40,29 @@ func _get_play_area_for_position(global: Vector2) -> int:
 
 func _reset_unit_to_starting_position(starting_position: Vector2, unit: Unit) -> void:
 	var i := _get_play_area_for_position(starting_position)
+	if i == -1:
+		return
 	var tile := play_areas[i].get_tile_from_global(starting_position)
-	
+	if not play_areas[i].is_tile_in_bounds(tile):
+		return
 	unit.reset_after_dragging(starting_position)
 	play_areas[i].unit_grid.add_unit(tile, unit)
 
 
 func _move_unit(unit: Unit, play_area: PlayArea, tile: Vector2i) -> void:
-	play_area.unit_grid.add_unit(tile, unit)
-	unit.global_position = play_area.get_global_from_tile(tile) - Shop.HALF_CELL_SIZE
+	if not play_area.is_tile_in_bounds(tile):
+		return
+	unit.global_position = play_area.get_global_from_tile(tile)
 	unit.reparent(play_area.unit_grid)
+	play_area.unit_grid.add_unit(tile, unit)
 
 
 func _on_unit_drag_started(unit: Unit) -> void:
-	
 	var i := _get_play_area_for_position(unit.global_position)
 	if i > -1:
 		var tile := play_areas[i].get_tile_from_global(unit.global_position)
-		play_areas[i].unit_grid.remove_unit(tile)
+		if play_areas[i].is_tile_in_bounds(tile):
+			play_areas[i].unit_grid.remove_unit(tile)
 
 
 func _on_unit_drag_canceled(starting_position: Vector2, unit: Unit) -> void:
@@ -65,23 +70,24 @@ func _on_unit_drag_canceled(starting_position: Vector2, unit: Unit) -> void:
 
 
 func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
-
 	var old_area_index := _get_play_area_for_position(starting_position)
 	var drop_area_index := _get_play_area_for_position(unit.global_position)
-	
-	if drop_area_index == -1:
-		_reset_unit_to_starting_position(starting_position, unit)
-		return
 
+	if drop_area_index == -1 or old_area_index == -1:
+		_reset_unit_to_starting_position(starting_position, unit)
+		return	
 	var old_area := play_areas[old_area_index]
 	var old_tile := old_area.get_tile_from_global(starting_position)
 	var new_area := play_areas[drop_area_index]
-	var new_tile := new_area.get_hovered_tile()
-	
+	var new_tile := new_area.get_hovered_tile()	
+	if not new_area.is_tile_in_bounds(new_tile):
+		_reset_unit_to_starting_position(starting_position, unit)
+		return
+
 	# swap units if we have to
 	if new_area.unit_grid.is_tile_occupied(new_tile):
 		var old_unit: Unit = new_area.unit_grid.units[new_tile]
 		new_area.unit_grid.remove_unit(new_tile)
 		_move_unit(old_unit, old_area, old_tile)
-	
+
 	_move_unit(unit, new_area, new_tile)

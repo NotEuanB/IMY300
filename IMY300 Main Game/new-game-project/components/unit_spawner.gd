@@ -26,6 +26,6 @@ func spawn_unit(unit: UnitStats) -> void:
 	new_unit.add_to_group("units")
 	area.unit_grid.add_child(new_unit)
 	area.unit_grid.add_unit(tile, new_unit)
-	new_unit.global_position = area.get_global_from_tile(tile) - Shop.HALF_CELL_SIZE
+	new_unit.global_position = area.get_global_from_tile(tile)
 	new_unit.stats = unit
 	unit_spawned.emit(new_unit)

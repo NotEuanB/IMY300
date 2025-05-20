@@ -38,7 +38,7 @@ position = Vector2(1787, 116)
 texture = ExtResource("4_s2gku")
 
 [node name="PlayArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(434, 708)
+position = Vector2(383, 611)
 script = ExtResource("3_dkvsl")
 unit_grid = NodePath("PlayerUnitGrid")
 
@@ -47,7 +47,7 @@ script = ExtResource("3_ffhyd")
 size = Vector2i(6, 1)
 
 [node name="HandArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(645, 976)
+position = Vector2(511, 948)
 script = ExtResource("3_dkvsl")
 unit_grid = NodePath("HandUnitGrid")
 
@@ -57,7 +57,7 @@ size = Vector2i(6, 1)
 
 [node name="UnitMover" type="Node" parent="."]
 script = ExtResource("6_7ohde")
-play_area_paths = Array[NodePath]([NodePath("../PlayArea"), NodePath("../HandArea")])
+play_area_paths = Array[NodePath]([NodePath("../HandArea"), NodePath("../PlayArea")])
 
 [node name="UnitSpawner" type="Node" parent="." node_paths=PackedStringArray("hand_area")]
 script = ExtResource("7_x1pfr")

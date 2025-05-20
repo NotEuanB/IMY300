@@ -6,13 +6,8 @@ extends Node2D
 
 var bounds: Rect2i
 
-func _process(_delta):
-	if is_mouse_inside():
-		print("✅ Mouse inside PlayArea!")
-
-
 func _ready() -> void:
-	bounds = Rect2i(Vector2i.ZERO, unit_grid.size)
+	bounds = Rect2i(Vector2i.ZERO, Vector2i(unit_grid.size.x * int(cell_size.x), unit_grid.size.y * int(cell_size.y)))
 
 func get_tile_from_global(global: Vector2) -> Vector2i:
 	var local_pos = to_local(global)
