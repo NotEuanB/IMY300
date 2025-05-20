@@ -1,71 +1,77 @@
-[gd_scene load_steps=7 format=3 uid="uid://mmpc3j84035o"]
+[gd_scene load_steps=10 format=3 uid="uid://mmpc3j84035o"]
 
 [ext_resource type="Script" uid="uid://navurmx1e1fi" path="res://Scenes/Unit/unit.gd" id="1_ladk0"]
 [ext_resource type="Resource" uid="uid://24ojvr82jtob" path="res://data/units/rat.tres" id="2_iuf4a"]
 [ext_resource type="Texture2D" uid="uid://dcg3ugiflcbdh" path="res://assets/units/Rat.png" id="3_iuf4a"]
+[ext_resource type="Texture2D" uid="uid://jnjcdsx038nv" path="res://assets/units/frame.png" id="3_ulevp"]
 [ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="5_ulevp"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_15sed"]
-corner_radius_top_left = 50
-corner_radius_top_right = 50
-corner_radius_bottom_right = 50
-corner_radius_bottom_left = 50
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ulevp"]
+size = Vector2(177, 303)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ulevp"]
+font_size = 22
+font_color = Color(0.000693898, 0.000693898, 0.000693898, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_jbdwb"]
+font_size = 22
+font_color = Color(0.00566115, 0.00566115, 0.00566115, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_kakeo"]
+font_size = 20
+font_color = Color(0.000835145, 0.000688611, 0.000347056, 1)
 
 [node name="Unit" type="Area2D" groups=["units"]]
 script = ExtResource("1_ladk0")
 stats = ExtResource("2_iuf4a")
 metadata/_edit_group_ = true
 
+[node name="CardBack" type="TextureRect" parent="."]
+offset_right = 200.0
+offset_bottom = 305.0
+texture = ExtResource("3_ulevp")
+
 [node name="Skin" type="Sprite2D" parent="."]
+position = Vector2(100, 153)
 texture = ExtResource("3_iuf4a")
 
-[node name="StatsContainer" type="Node2D" parent="."]
-scale = Vector2(3, 3)
-
-[node name="AttackBackground" type="Label" parent="StatsContainer"]
-offset_left = -35.0
-offset_top = 11.0
-offset_right = -10.0
-offset_bottom = 34.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_15sed")
-
-[node name="AttackLabel" type="Label" parent="StatsContainer"]
-offset_left = -28.0
-offset_top = 1.0
-offset_right = 12.0
-offset_bottom = 33.0
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_font_sizes/font_size = 32
-text = "2"
-vertical_alignment = 2
-
-[node name="HealthBackground" type="Label" parent="StatsContainer"]
-offset_left = 16.0
-offset_top = 11.0
-offset_right = 41.0
-offset_bottom = 34.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_15sed")
-
-[node name="HealthLabel" type="Label" parent="StatsContainer"]
-offset_left = 4.0
-offset_top = 1.0
-offset_right = 36.0
-offset_bottom = 33.0
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-theme_override_font_sizes/font_size = 32
-text = "1"
-horizontal_alignment = 2
-vertical_alignment = 2
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-scale = Vector2(11, 11)
+position = Vector2(99.5, 152.5)
 shape = SubResource("RectangleShape2D_ulevp")
 
 [node name="DragAndDrop" type="Node" parent="." node_paths=PackedStringArray("target")]
 script = ExtResource("5_ulevp")
 target = NodePath("..")
+
+[node name="Stats" type="Node2D" parent="."]
+position = Vector2(-10, 0)
+
+[node name="AttackStat" type="Label" parent="Stats"]
+offset_left = 16.0
+offset_top = 177.0
+offset_right = 77.0
+offset_bottom = 211.0
+text = "Place"
+label_settings = SubResource("LabelSettings_ulevp")
+horizontal_alignment = 1
+
+[node name="HealthStat" type="Label" parent="Stats"]
+offset_left = 147.0
+offset_top = 177.0
+offset_right = 203.0
+offset_bottom = 208.0
+text = "Place"
+label_settings = SubResource("LabelSettings_jbdwb")
+horizontal_alignment = 1
+
+[node name="Name" type="Label" parent="Stats"]
+offset_left = 23.0
+offset_top = 206.0
+offset_right = 197.0
+offset_bottom = 234.0
+label_settings = SubResource("LabelSettings_kakeo")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

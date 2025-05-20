@@ -21,13 +21,15 @@ func add_unit(tile: Vector2i, unit: Node) -> void:
 
 func remove_unit(tile: Vector2i) -> void:
 	if not units.has(tile):
+		print("Tried to remove from invalid tile: ", tile)
 		return
 	var unit := units[tile] as Node
 	if not unit:
+		print("No unit at tile: ", tile)
 		return
 	units[tile] = null
+	print("Removed unit from tile: ", tile)
 	unit_grid_changed.emit()
-
 
 func is_tile_occupied(tile: Vector2i) -> bool:
 	if not units.has(tile):

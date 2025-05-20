@@ -5,9 +5,10 @@ extends Area2D
 @export var stats: UnitStats : set = set_stats
 
 @onready var skin: Sprite2D = $Skin
-@onready var attack: Label = $StatsContainer/AttackLabel
-@onready var health: Label = $StatsContainer/HealthLabel
 @onready var drag_and_drop: DragAndDrop = $DragAndDrop
+@onready var unit_atk: Label = $Stats/AttackStat
+@onready var unit_hp: Label = $Stats/HealthStat
+@onready var unit_name: Label = $Stats/Name
 
 signal hovered(stats: UnitStats)
 
@@ -20,9 +21,10 @@ func set_stats(value: UnitStats) -> void:
 	if not is_node_ready():
 		await ready
 	
-	attack.text = str(stats.attack)
-	health.text = str(stats.health)
 	skin.texture = stats.skin
+	unit_name.text = stats.name
+	unit_atk.text = str(stats.attack)
+	unit_hp.text = str(stats.health)
 
 
 func _on_mouse_entered() -> void:

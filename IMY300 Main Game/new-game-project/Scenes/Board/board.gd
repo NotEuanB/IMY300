@@ -65,15 +65,3 @@ func _process(_delta: float) -> void:
 			tooltip.show_unit_tooltip(unit_stats)  # Show the unit's name and image
 			tooltip.global_position = get_global_mouse_position() + Vector2(16, 16)  # Position the tooltip near the mouse
 			time_hover_started = -1.0  # Reset so the tooltip isn't shown again
-
-
-func _on_button_pressed() -> void:
-	print("Fight button pressed!")
-	# Save inventory and team setup to GameState
-	GameState.inventory = get_inventory()
-	# Transition to the Fighting Scene
-	get_tree().change_scene_to_file("res://Scenes/Fighting/fighting_scene.tscn")
-
-# Placeholder function to get inventory
-func get_inventory() -> Array:
-	return GameState.get_inventory()

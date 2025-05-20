@@ -11,7 +11,11 @@ func _ready() -> void:
 
 func get_tile_from_global(global: Vector2) -> Vector2i:
 	var local_pos = to_local(global)
-	return Vector2i(floor(local_pos.x / cell_size.x), floor(local_pos.y / cell_size.y))
+	var x = floor(local_pos.x / cell_size.x)
+	var y = floor(local_pos.y / cell_size.y)
+	if unit_grid.size.y == 1:
+		y = 0
+	return Vector2i(x, y)
 
 
 func get_global_from_tile(tile: Vector2i) -> Vector2:

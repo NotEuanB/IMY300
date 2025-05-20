@@ -38,18 +38,20 @@ position = Vector2(1787, 116)
 texture = ExtResource("4_s2gku")
 
 [node name="PlayArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(383, 611)
+position = Vector2(337, 550)
 script = ExtResource("3_dkvsl")
 unit_grid = NodePath("PlayerUnitGrid")
+cell_size = Vector2(209, 305)
 
 [node name="PlayerUnitGrid" type="Node2D" parent="PlayArea"]
 script = ExtResource("3_ffhyd")
 size = Vector2i(6, 1)
 
 [node name="HandArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(511, 948)
+position = Vector2(338, 871)
 script = ExtResource("3_dkvsl")
 unit_grid = NodePath("HandUnitGrid")
+cell_size = Vector2(209, 305)
 
 [node name="HandUnitGrid" type="Node2D" parent="HandArea"]
 script = ExtResource("3_ffhyd")
@@ -67,13 +69,14 @@ hand_area = NodePath("../HandArea")
 
 [node name="ShopUI" type="CanvasLayer" parent="."]
 
-[node name="ShopContainer" parent="ShopUI" instance=ExtResource("12_dkxek")]
+[node name="ShopContainer" parent="ShopUI" node_paths=PackedStringArray("unit_spawner") instance=ExtResource("12_dkxek")]
 offset_left = 348.0
 offset_top = 155.0
 offset_right = 1578.0
 offset_bottom = 530.0
 unit_pool = ExtResource("13_brcfe")
 player_stats = ExtResource("9_me64r")
+unit_spawner = NodePath("../../UnitSpawner")
 
 [node name="BuySound" type="AudioStreamPlayer2D" parent="ShopUI"]
 

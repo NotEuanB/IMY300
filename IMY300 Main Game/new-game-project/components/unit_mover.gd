@@ -58,11 +58,16 @@ func _move_unit(unit: Unit, play_area: PlayArea, tile: Vector2i) -> void:
 
 
 func _on_unit_drag_started(unit: Unit) -> void:
-	var i := _get_play_area_for_position(unit.global_position)
-	if i > -1:
-		var tile := play_areas[i].get_tile_from_global(unit.global_position)
-		if play_areas[i].is_tile_in_bounds(tile):
-			play_areas[i].unit_grid.remove_unit(tile)
+	for i in play_areas.size():
+		if unit.get_parent() == play_areas[i].unit_grid:
+			# Find the tile in this grid that contains the unit
+			for tile in play_areas[i].unit_grid.units.keys():
+				if play_areas[i].unit_grid.units[tile] == unit:
+					play_areas[i].unit_grid.remove_unit(tile)
+					unit.set_meta("last_grid_index", i)
+					unit.set_meta("last_tile", tile)
+					print("Drag started from play area", i, "tile", tile)
+					return
 
 
 func _on_unit_drag_canceled(starting_position: Vector2, unit: Unit) -> void:
@@ -70,24 +75,25 @@ func _on_unit_drag_canceled(starting_position: Vector2, unit: Unit) -> void:
 
 
 func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
-	var old_area_index := _get_play_area_for_position(starting_position)
-	var drop_area_index := _get_play_area_for_position(unit.global_position)
-
-	if drop_area_index == -1 or old_area_index == -1:
+	var mouse_pos := get_viewport().get_mouse_position()
+	var old_area_index := int(unit.get_meta("last_grid_index", -1))
+	var old_tile_variant = unit.get_meta("last_tile", null)
+	var old_tile: Vector2i = old_tile_variant if typeof(old_tile_variant) == TYPE_VECTOR2I else Vector2i(-1, -1)
+	var drop_area_index := _get_play_area_for_position(mouse_pos)	
+	
+	if drop_area_index == -1 or old_area_index == -1 or old_tile == Vector2i(-1, -1):
 		_reset_unit_to_starting_position(starting_position, unit)
 		return	
 	var old_area := play_areas[old_area_index]
-	var old_tile := old_area.get_tile_from_global(starting_position)
 	var new_area := play_areas[drop_area_index]
-	var new_tile := new_area.get_hovered_tile()	
+	var new_tile := new_area.get_tile_from_global(mouse_pos)
 	if not new_area.is_tile_in_bounds(new_tile):
 		_reset_unit_to_starting_position(starting_position, unit)
-		return
-
+		return		
+	
 	# swap units if we have to
 	if new_area.unit_grid.is_tile_occupied(new_tile):
 		var old_unit: Unit = new_area.unit_grid.units[new_tile]
 		new_area.unit_grid.remove_unit(new_tile)
-		_move_unit(old_unit, old_area, old_tile)
-
+		_move_unit(old_unit, old_area, old_tile)		
 	_move_unit(unit, new_area, new_tile)

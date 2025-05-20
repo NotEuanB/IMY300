@@ -8,12 +8,21 @@ const UNIT = preload("res://scenes/unit/unit.tscn")
 @export var hand_area: PlayArea
 
 
+signal hand_full_changed(is_full: bool)
+
+func _ready() -> void:
+	hand_area.unit_grid.unit_grid_changed.connect(_on_hand_grid_changed)
+	_on_hand_grid_changed() # Initial check
+
+func _on_hand_grid_changed() -> void:
+	var full = hand_area.unit_grid.is_grid_full()
+	hand_full_changed.emit(full)
+
 func _get_first_available_area() -> PlayArea:
 	if not hand_area.unit_grid.is_grid_full():
 		return hand_area
 	
 	return null
-
 
 func spawn_unit(unit: UnitStats) -> void:
 	var area := _get_first_available_area()
