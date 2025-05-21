@@ -1,15 +1,14 @@
 class_name Shop
 extends Node2D
 
-const CELL_SIZE := Vector2(64, 64)
-const HALF_CELL_SIZE := Vector2(32, 32)
-const QUARTER_CELL_SIZE := Vector2(16, 16)
+const CELL_SIZE := Vector2(180, 305)
 
 @onready var unit_mover: UnitMover = $UnitMover
 @onready var unit_spawner: UnitSpawner = $UnitSpawner
 @onready var sell_portal: SellPortal = $SellPortal
 @onready var tooltip: TooltipClass = $Tooltip  # Ensure TooltipClass node exists
-@onready var shop_container: ShopContainter = $ShopUI/ShopContainer
+@onready var shop_container: ShopContainer = $ShopUI/ShopContainer
+@onready var combination_page = $CombinationPage
 
 
 var hovered_unit: Node = null  # To store the currently hovered unit
@@ -37,7 +36,7 @@ func _on_unit_hovered(unit: Node) -> void:
 	time_hover_started = Time.get_ticks_msec()  # Start tracking hover time (in milliseconds)
 
 
-func _on_unit_exited(unit: Node) -> void:
+func _on_unit_exited(_unit: Node) -> void:
 	# Hide the tooltip when mouse exits the unit
 	tooltip.hide_tooltip()  # Ensure tooltip is hidden when exiting
 	hovered_unit = null
@@ -70,12 +69,5 @@ func _process(_delta: float) -> void:
 
 
 func _on_button_pressed() -> void:
-	print("Fight button pressed!")
-	# Save inventory and team setup to GameState
-	GameState.inventory = get_inventory()
-	# Transition to the Fighting Scene
-	get_tree().change_scene_to_file("res://Scenes/Fighting/fighting_scene.tscn")
-
-# Placeholder function to get inventory
-func get_inventory() -> Array:
-	return GameState.get_inventory()
+	combination_page.visible = true
+	$ShopUI.visible = false

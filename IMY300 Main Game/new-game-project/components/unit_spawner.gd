@@ -8,12 +8,21 @@ const UNIT = preload("res://scenes/unit/unit.tscn")
 @export var hand_area: PlayArea
 
 
+signal hand_full_changed(is_full: bool)
+
+func _ready() -> void:
+	hand_area.unit_grid.unit_grid_changed.connect(_on_hand_grid_changed)
+	_on_hand_grid_changed() # Initial check
+
+func _on_hand_grid_changed() -> void:
+	var full = hand_area.unit_grid.is_grid_full()
+	hand_full_changed.emit(full)
+
 func _get_first_available_area() -> PlayArea:
 	if not hand_area.unit_grid.is_grid_full():
 		return hand_area
 	
 	return null
-
 
 func spawn_unit(unit: UnitStats) -> void:
 	var area := _get_first_available_area()
@@ -21,11 +30,12 @@ func spawn_unit(unit: UnitStats) -> void:
 		print("⚠ No available space to add unit to hand!")
 		return  # Do nothing
 	
-	var new_unit := UNIT.instantiate()
+	var unit_scene := unit.unit_scene if unit.unit_scene else UNIT
+	var new_unit := unit_scene.instantiate()
 	var tile := area.unit_grid.get_first_empty_tile()
 	new_unit.add_to_group("units")
 	area.unit_grid.add_child(new_unit)
 	area.unit_grid.add_unit(tile, new_unit)
-	new_unit.global_position = area.get_global_from_tile(tile) - Shop.HALF_CELL_SIZE
-	new_unit.stats = unit
+	new_unit.global_position = area.get_global_from_tile(tile)
+	new_unit.stats = unit.duplicate()
 	unit_spawned.emit(new_unit)

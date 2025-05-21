@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://br7hxhhv218ye"]
+
+[ext_resource type="Script" uid="uid://drai3em61m33r" path="res://Scenes/CombinationPage/combination_page.gd" id="1_rrk1q"]
+[ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="2_laep4"]
+[ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="2_ptwoj"]
+
+[node name="CombinationPage" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_rrk1q")
+
+[node name="SlotOnePlayArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
+position = Vector2(362, 148)
+script = ExtResource("2_ptwoj")
+unit_grid = NodePath("SlotOneGrid")
+
+[node name="SlotOneGrid" type="Node2D" parent="SlotOnePlayArea"]
+script = ExtResource("2_laep4")
+size = Vector2i(1, 1)
+
+[node name="AcceptButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 675.0
+offset_top = 235.0
+offset_right = 875.0
+offset_bottom = 315.0
+
+[node name="SlotOne2" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 991.0
+offset_top = 174.0
+offset_right = 1171.0
+offset_bottom = 479.0
+
+[node name="DeclineButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 675.0
+offset_top = 341.0
+offset_right = 875.0
+offset_bottom = 421.0
+
+[connection signal="pressed" from="DeclineButton" to="." method="_on_decline_button_pressed"]

@@ -1,17 +1,17 @@
 [gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://cc31lth8kllsv"]
 
-[ext_resource type="Texture2D" uid="uid://b4u51b228a336" path="res://assets/Our Assets/Golem.png" id="1_hfrm6"]
 [ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_v16q2"]
-[ext_resource type="Texture2D" uid="uid://c32cyuudt3x6x" path="res://assets/sprites/traits/noble.png" id="2_la75s"]
+[ext_resource type="Texture2D" uid="uid://cukomjm0gno60" path="res://assets/units/Golem.png" id="2_la75s"]
+[ext_resource type="PackedScene" uid="uid://d1v1e8miycwhf" path="res://Scenes/Unit/GolemUnit.tscn" id="3_hfrm6"]
 
 [resource]
 script = ExtResource("1_v16q2")
 name = "Golem"
+unit_scene = ExtResource("3_hfrm6")
 gold_cost = 3
 attack = 5
 health = 7
-pool_count = 5
+pool_count = 100
 skin = ExtResource("2_la75s")
-portrait = ExtResource("1_hfrm6")
-description = "This is a golem"
+description = "Aura: Give adjacent units +2/+2"
 metadata/_custom_type_script = "uid://d2inypj55y68q"

@@ -1,130 +1,98 @@
-[gd_scene load_steps=12 format=3 uid="uid://bt0uy01056sim"]
+[gd_scene load_steps=10 format=3 uid="uid://bt0uy01056sim"]
 
 [ext_resource type="Script" uid="uid://dcccasptyoysi" path="res://Scenes/UnitCard/unit_card.gd" id="1_fxb4e"]
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="2_apj8s"]
-[ext_resource type="Texture2D" uid="uid://c4awhqfup7o2k" path="res://assets/sprites/gold.png" id="2_fxb4e"]
-[ext_resource type="Texture2D" uid="uid://wxshjtwjoc31" path="res://assets/sprites/traits/human.png" id="3_24gas"]
-[ext_resource type="Resource" uid="uid://cc31lth8kllsv" path="res://data/units/golem.tres" id="3_apj8s"]
-[ext_resource type="FontFile" uid="uid://wqfms7k4ykv2" path="res://assets/font/abaddon_bold.ttf" id="4_f1w4f"]
+[ext_resource type="Texture2D" uid="uid://jnjcdsx038nv" path="res://assets/units/frame.png" id="4_24gas"]
+[ext_resource type="Texture2D" uid="uid://cukomjm0gno60" path="res://assets/units/Golem.png" id="5_apj8s"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_fxb4e"]
+font_size = 22
+font_color = Color(0.000693898, 0.000693898, 0.000693898, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_24gas"]
+font_size = 22
+font_color = Color(0.00566115, 0.00566115, 0.00566115, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_apj8s"]
-line_spacing = 0.0
-font = ExtResource("4_f1w4f")
-font_color = Color(0.878431, 1, 1, 0.811765)
+font_size = 20
+font_color = Color(0.000835145, 0.000688611, 0.000347056, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f1w4f"]
-bg_color = Color(0.104621, 0.197819, 0.314962, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_j1fqa"]
-font = ExtResource("4_f1w4f")
-
-[sub_resource type="LabelSettings" id="LabelSettings_j0lwh"]
-line_spacing = 0.0
-font = ExtResource("4_f1w4f")
-shadow_size = 2
-shadow_color = Color(0, 0, 0, 0.878431)
+[sub_resource type="LabelSettings" id="LabelSettings_f1w4f"]
+font_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hd16a"]
 bg_color = Color(0, 0, 0, 1)
 
 [node name="UnitCard" type="Button"]
-custom_minimum_size = Vector2(130, 220)
+custom_minimum_size = Vector2(180, 305)
 offset_right = 8.0
 offset_bottom = 8.0
 focus_mode = 0
 script = ExtResource("1_fxb4e")
 player_stats = ExtResource("2_apj8s")
-unit_stats = ExtResource("3_apj8s")
 
-[node name="Backdrop" type="ColorRect" parent="."]
+[node name="CardBackground" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-color = Color(0.0846899, 0.0846899, 0.0846899, 1)
+texture = ExtResource("4_24gas")
+stretch_mode = 4
 
-[node name="Traits" type="Label" parent="Backdrop"]
+[node name="UnitImage" type="TextureRect" parent="CardBackground"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 12.0
-offset_top = 71.0
-offset_right = 57.0
-offset_bottom = 107.0
-text = "2 ATK
-1 HP"
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_apj8s")
+
+[node name="Stats" type="Node2D" parent="."]
+position = Vector2(-10, 0)
+
+[node name="AttackStat" type="Label" parent="Stats"]
+offset_left = 6.0
+offset_top = 174.0
+offset_right = 67.0
+offset_bottom = 208.0
+text = "Place"
+label_settings = SubResource("LabelSettings_fxb4e")
+horizontal_alignment = 1
+
+[node name="HealthStat" type="Label" parent="Stats"]
+offset_left = 138.0
+offset_top = 174.0
+offset_right = 194.0
+offset_bottom = 205.0
+text = "Place"
+label_settings = SubResource("LabelSettings_24gas")
+horizontal_alignment = 1
+
+[node name="Name" type="Label" parent="Stats"]
+offset_left = 13.0
+offset_top = 202.0
+offset_right = 187.0
+offset_bottom = 225.0
 label_settings = SubResource("LabelSettings_apj8s")
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Bottom" type="Panel" parent="."]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 18)
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_f1w4f")
-
-[node name="MarginContainer" type="MarginContainer" parent="Bottom"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_right = 4
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Bottom/MarginContainer"]
-layout_mode = 2
-
-[node name="UnitName" type="Label" parent="Bottom/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Domnaai"
-label_settings = SubResource("LabelSettings_j1fqa")
-
-[node name="GoldContainer" type="HBoxContainer" parent="Bottom/MarginContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 10
-theme_override_constants/separation = 2
-alignment = 2
-
-[node name="GoldIcon" type="TextureRect" parent="Bottom/MarginContainer/HBoxContainer/GoldContainer"]
-custom_minimum_size = Vector2(8, 0)
-layout_mode = 2
-mouse_filter = 2
-texture = ExtResource("2_fxb4e")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="GoldLabel" type="Label" parent="Bottom/MarginContainer/HBoxContainer/GoldContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "99"
-label_settings = SubResource("LabelSettings_j0lwh")
-
-[node name="UnitIcon" type="TextureRect" parent="."]
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -46.0
-offset_top = 69.0
-offset_right = -16.0
-offset_bottom = 99.0
-grow_horizontal = 0
-mouse_filter = 2
-texture = ExtResource("3_24gas")
-expand_mode = 1
-stretch_mode = 5
+[node name="Description" type="Label" parent="Stats"]
+offset_left = 13.0
+offset_top = 232.0
+offset_right = 187.0
+offset_bottom = 298.0
+text = "Description"
+label_settings = SubResource("LabelSettings_f1w4f")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="Placeholder" type="Panel" parent="."]
 unique_name_in_owner = true
@@ -139,4 +107,3 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_hd16a")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
-[connection signal="pressed" from="." to="." method="_on_pressed"]
