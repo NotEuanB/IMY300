@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bt0uy01056sim"]
+[gd_scene load_steps=10 format=3 uid="uid://bt0uy01056sim"]
 
 [ext_resource type="Script" uid="uid://dcccasptyoysi" path="res://Scenes/UnitCard/unit_card.gd" id="1_fxb4e"]
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="2_apj8s"]
@@ -16,6 +16,9 @@ font_color = Color(0.00566115, 0.00566115, 0.00566115, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_apj8s"]
 font_size = 20
 font_color = Color(0.000835145, 0.000688611, 0.000347056, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_f1w4f"]
+font_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hd16a"]
 bg_color = Color(0, 0, 0, 1)
@@ -79,6 +82,17 @@ offset_bottom = 225.0
 label_settings = SubResource("LabelSettings_apj8s")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Description" type="Label" parent="Stats"]
+offset_left = 13.0
+offset_top = 232.0
+offset_right = 187.0
+offset_bottom = 298.0
+text = "Description"
+label_settings = SubResource("LabelSettings_f1w4f")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="Placeholder" type="Panel" parent="."]
 unique_name_in_owner = true

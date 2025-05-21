@@ -1,7 +1,8 @@
 class_name UnitMover
 extends Node
 
-
+static var is_selecting_target: bool = false
+static var selecting_rat: RatUnit = null
 @export var play_area_paths: Array[NodePath]
 
 var play_areas: Array[PlayArea] = []
@@ -97,3 +98,11 @@ func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
 		new_area.unit_grid.remove_unit(new_tile)
 		_move_unit(old_unit, old_area, old_tile)		
 	_move_unit(unit, new_area, new_tile)
+
+	if new_area == play_areas[1]:
+		unit.on_played(new_area)
+	
+	if new_area == play_areas[1]:
+		for u in play_areas[1].unit_grid.units.values():
+			if u is GolemUnit:
+				u.update_aura(play_areas[1])

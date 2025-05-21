@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://Scenes/Board/board.gd" id="1_ef5ss"]
-[ext_resource type="Texture2D" uid="uid://cvhg11dbtlkxn" path="res://assets/board.png" id="2_dkxek"]
+[ext_resource type="Texture2D" uid="uid://citd2s4nw7fj1" path="res://assets/board_clean.png" id="2_brcfe"]
 [ext_resource type="Texture2D" uid="uid://bbmbjelb0by45" path="res://assets/necromancer_avatar.png" id="3_csi2d"]
 [ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="3_dkvsl"]
 [ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="3_ffhyd"]
@@ -22,10 +22,10 @@ metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
 metadata/_edit_lock_ = true
 
-[node name="TextureRect" type="TextureRect" parent="Visuals"]
+[node name="Board" type="TextureRect" parent="Visuals"]
 offset_right = 1920.0
 offset_bottom = 1080.0
-texture = ExtResource("2_dkxek")
+texture = ExtResource("2_brcfe")
 expand_mode = 1
 stretch_mode = 5
 
@@ -80,18 +80,8 @@ unit_spawner = NodePath("../../UnitSpawner")
 
 [node name="BuySound" type="AudioStreamPlayer2D" parent="ShopUI"]
 
-[node name="Button" type="Button" parent="."]
-offset_left = 1638.0
-offset_top = 480.0
-offset_right = 1680.0
-offset_bottom = 506.0
-scale = Vector2(5, 5)
-text = "Fight"
-
 [node name="SellPortal" parent="." instance=ExtResource("8_qlllu")]
 visible = false
 position = Vector2(-2, -3)
 unit_pool = ExtResource("13_brcfe")
 player_stats = ExtResource("9_me64r")
-
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

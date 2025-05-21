@@ -16,7 +16,7 @@ script = ExtResource("1_fkysy")
 
 [node name="Top" type="HBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 600
+theme_override_constants/separation = 980
 
 [node name="RerollButton" parent="Top" instance=ExtResource("1_f18wc")]
 layout_mode = 2

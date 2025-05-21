@@ -1,10 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://mmpc3j84035o"]
+[gd_scene load_steps=10 format=3 uid="uid://d1v1e8miycwhf"]
 
-[ext_resource type="Script" uid="uid://navurmx1e1fi" path="res://Scenes/Unit/unit.gd" id="1_ladk0"]
-[ext_resource type="Resource" uid="uid://24ojvr82jtob" path="res://data/units/rat.tres" id="2_iuf4a"]
-[ext_resource type="Texture2D" uid="uid://dcg3ugiflcbdh" path="res://assets/units/Rat.png" id="3_iuf4a"]
-[ext_resource type="Texture2D" uid="uid://jnjcdsx038nv" path="res://assets/units/frame.png" id="3_ulevp"]
-[ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="5_ulevp"]
+[ext_resource type="Script" uid="uid://bxx5yvfa7jk2o" path="res://Scenes/Unit/golem_unit.gd" id="1_i1m3y"]
+[ext_resource type="Texture2D" uid="uid://jnjcdsx038nv" path="res://assets/units/frame.png" id="2_4b5uh"]
+[ext_resource type="Texture2D" uid="uid://dcg3ugiflcbdh" path="res://assets/units/Rat.png" id="3_i7sna"]
+[ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="4_2ef6s"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ulevp"]
 size = Vector2(177, 303)
@@ -21,29 +20,28 @@ font_color = Color(0.00566115, 0.00566115, 0.00566115, 1)
 font_size = 20
 font_color = Color(0.000835145, 0.000688611, 0.000347056, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_2itl1"]
+[sub_resource type="LabelSettings" id="LabelSettings_i1m3y"]
 font_color = Color(0, 0, 0, 1)
 
 [node name="Unit" type="Area2D" groups=["units"]]
-script = ExtResource("1_ladk0")
-stats = ExtResource("2_iuf4a")
+script = ExtResource("1_i1m3y")
 metadata/_edit_group_ = true
 
 [node name="CardBack" type="TextureRect" parent="."]
 offset_right = 200.0
 offset_bottom = 305.0
-texture = ExtResource("3_ulevp")
+texture = ExtResource("2_4b5uh")
 
 [node name="Skin" type="Sprite2D" parent="."]
 position = Vector2(100, 153)
-texture = ExtResource("3_iuf4a")
+texture = ExtResource("3_i7sna")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(99.5, 152.5)
 shape = SubResource("RectangleShape2D_ulevp")
 
 [node name="DragAndDrop" type="Node" parent="." node_paths=PackedStringArray("target")]
-script = ExtResource("5_ulevp")
+script = ExtResource("4_2ef6s")
 target = NodePath("..")
 
 [node name="Stats" type="Node2D" parent="."]
@@ -83,7 +81,7 @@ offset_top = 236.0
 offset_right = 200.0
 offset_bottom = 302.0
 text = "On entering: Choose a unit to give +1/+1"
-label_settings = SubResource("LabelSettings_2itl1")
+label_settings = SubResource("LabelSettings_i1m3y")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2

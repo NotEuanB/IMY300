@@ -11,6 +11,7 @@ signal unit_bought(unit: UnitStats)
 @onready var unit_atk: Label = $Stats/AttackStat
 @onready var unit_hp: Label = $Stats/HealthStat
 @onready var unit_name: Label = $Stats/Name
+@onready var unit_description: Label = $Stats/Description
 
 var bought := false
 var hand_full: bool = false:
@@ -45,6 +46,7 @@ func _set_unit_stats(value: UnitStats) -> void:
 	unit_name.text = unit_stats.name
 	unit_atk.text = str(unit_stats.attack)
 	unit_hp.text = str(unit_stats.health)
+	unit_description.text = unit_stats.description
 
 
 func _on_player_stats_changed() -> void:

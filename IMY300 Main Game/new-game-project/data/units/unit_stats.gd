@@ -2,6 +2,7 @@ class_name UnitStats
 extends Resource
 
 @export var name: String
+@export var unit_scene: PackedScene
 
 @export_category("Data")
 @export var gold_cost := 1

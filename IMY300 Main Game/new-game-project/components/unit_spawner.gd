@@ -30,11 +30,12 @@ func spawn_unit(unit: UnitStats) -> void:
 		print("⚠ No available space to add unit to hand!")
 		return  # Do nothing
 	
-	var new_unit := UNIT.instantiate()
+	var unit_scene := unit.unit_scene if unit.unit_scene else UNIT
+	var new_unit := unit_scene.instantiate()
 	var tile := area.unit_grid.get_first_empty_tile()
 	new_unit.add_to_group("units")
 	area.unit_grid.add_child(new_unit)
 	area.unit_grid.add_unit(tile, new_unit)
 	new_unit.global_position = area.get_global_from_tile(tile)
-	new_unit.stats = unit
+	new_unit.stats = unit.duplicate()
 	unit_spawned.emit(new_unit)
