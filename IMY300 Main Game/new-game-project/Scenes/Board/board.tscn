@@ -44,6 +44,7 @@ unit_grid = NodePath("PlayerUnitGrid")
 cell_size = Vector2(209, 305)
 
 [node name="PlayerUnitGrid" type="Node2D" parent="PlayArea"]
+z_index = 100
 script = ExtResource("3_ffhyd")
 size = Vector2i(6, 1)
 
@@ -57,9 +58,20 @@ cell_size = Vector2(209, 305)
 script = ExtResource("3_ffhyd")
 size = Vector2i(6, 1)
 
+[node name="CombinationPage" type="Node2D" parent="."]
+position = Vector2(558, 224)
+
+[node name="SlotOne" type="Node2D" parent="CombinationPage" node_paths=PackedStringArray("unit_grid")]
+script = ExtResource("3_dkvsl")
+unit_grid = NodePath("SlotOneGrid")
+
+[node name="SlotOneGrid" type="Node2D" parent="CombinationPage/SlotOne"]
+script = ExtResource("3_ffhyd")
+size = Vector2i(1, 1)
+
 [node name="UnitMover" type="Node" parent="."]
 script = ExtResource("6_7ohde")
-play_area_paths = Array[NodePath]([NodePath("../HandArea"), NodePath("../PlayArea")])
+play_area_paths = Array[NodePath]([NodePath("../HandArea"), NodePath("../PlayArea"), NodePath("../CombinationPage/SlotOne")])
 
 [node name="UnitSpawner" type="Node" parent="." node_paths=PackedStringArray("hand_area")]
 script = ExtResource("7_x1pfr")
@@ -74,6 +86,7 @@ offset_left = 348.0
 offset_top = 155.0
 offset_right = 1578.0
 offset_bottom = 530.0
+theme_override_constants/separation = 28
 unit_pool = ExtResource("13_brcfe")
 player_stats = ExtResource("9_me64r")
 unit_spawner = NodePath("../../UnitSpawner")
@@ -81,7 +94,18 @@ unit_spawner = NodePath("../../UnitSpawner")
 [node name="BuySound" type="AudioStreamPlayer2D" parent="ShopUI"]
 
 [node name="SellPortal" parent="." instance=ExtResource("8_qlllu")]
-visible = false
-position = Vector2(-2, -3)
+position = Vector2(-212, 332)
 unit_pool = ExtResource("13_brcfe")
 player_stats = ExtResource("9_me64r")
+
+[node name="Button" type="Button" parent="."]
+modulate = Color(0.0941176, 0.0941176, 0.0941176, 0.376471)
+offset_left = 794.0
+offset_top = 23.0
+offset_right = 994.0
+offset_bottom = 103.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 40
+text = "Combine"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

@@ -8,6 +8,7 @@ const CELL_SIZE := Vector2(180, 305)
 @onready var sell_portal: SellPortal = $SellPortal
 @onready var tooltip: TooltipClass = $Tooltip  # Ensure TooltipClass node exists
 @onready var shop_container: ShopContainer = $ShopUI/ShopContainer
+@onready var combination_page = $CombinationPage
 
 
 var hovered_unit: Node = null  # To store the currently hovered unit
@@ -35,7 +36,7 @@ func _on_unit_hovered(unit: Node) -> void:
 	time_hover_started = Time.get_ticks_msec()  # Start tracking hover time (in milliseconds)
 
 
-func _on_unit_exited(unit: Node) -> void:
+func _on_unit_exited(_unit: Node) -> void:
 	# Hide the tooltip when mouse exits the unit
 	tooltip.hide_tooltip()  # Ensure tooltip is hidden when exiting
 	hovered_unit = null
@@ -65,3 +66,8 @@ func _process(_delta: float) -> void:
 			tooltip.show_unit_tooltip(unit_stats)  # Show the unit's name and image
 			tooltip.global_position = get_global_mouse_position() + Vector2(16, 16)  # Position the tooltip near the mouse
 			time_hover_started = -1.0  # Reset so the tooltip isn't shown again
+
+
+func _on_button_pressed() -> void:
+	combination_page.visible = true
+	$ShopUI.visible = false

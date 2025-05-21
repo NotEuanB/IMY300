@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://b1r0xrvnff084" path="res://Scenes/Sell Portal/sell_portal.gd" id="1_7mc5g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7mc5g"]
-size = Vector2(111.667, 38.25)
+size = Vector2(15.5835, 14.375)
 
 [sub_resource type="LabelSettings" id="LabelSettings_tn5u3"]
 font_size = 45
@@ -13,7 +13,7 @@ shadow_color = Color(0, 0, 0, 0.694118)
 script = ExtResource("1_7mc5g")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(945, 228)
+position = Vector2(368.499, 84.75)
 scale = Vector2(12, 12)
 shape = SubResource("RectangleShape2D_7mc5g")
 

@@ -104,5 +104,5 @@ func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
 	
 	if new_area == play_areas[1]:
 		for u in play_areas[1].unit_grid.units.values():
-			if u is GolemUnit:
+			if is_instance_valid(u) and u is GolemUnit:
 				u.update_aura(play_areas[1])
