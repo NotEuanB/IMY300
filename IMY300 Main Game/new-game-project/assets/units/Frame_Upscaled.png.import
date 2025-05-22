@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dayqwedi3elwk"
-path="res://.godot/imported/Tavern_avatar.png-c0e376b158e326291fe2d6155ab78ef1.ctex"
+uid="uid://q81qhmup21bm"
+path="res://.godot/imported/Frame_Upscaled.png-6e955bb8dc259561f1fb69f0fd2caedc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Tavern_avatar.png"
-dest_files=["res://.godot/imported/Tavern_avatar.png-c0e376b158e326291fe2d6155ab78ef1.ctex"]
+source_file="res://assets/units/Frame_Upscaled.png"
+dest_files=["res://.godot/imported/Frame_Upscaled.png-6e955bb8dc259561f1fb69f0fd2caedc.ctex"]
 
 [params]
 

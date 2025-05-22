@@ -1,11 +1,11 @@
 [gd_scene load_steps=14 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://Scenes/Board/board.gd" id="1_ef5ss"]
-[ext_resource type="Texture2D" uid="uid://citd2s4nw7fj1" path="res://assets/board_clean.png" id="2_brcfe"]
-[ext_resource type="Texture2D" uid="uid://bbmbjelb0by45" path="res://assets/necromancer_avatar.png" id="3_csi2d"]
+[ext_resource type="Texture2D" uid="uid://c6xr4umn1qegw" path="res://assets/board.png" id="2_brcfe"]
+[ext_resource type="Texture2D" uid="uid://bxvnsqfsenlnl" path="res://assets/Player_avatar.png" id="3_csi2d"]
 [ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="3_dkvsl"]
 [ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="3_ffhyd"]
-[ext_resource type="Texture2D" uid="uid://2biw3avybhk5" path="res://assets/tavern_avatar.png" id="4_s2gku"]
+[ext_resource type="Texture2D" uid="uid://dayqwedi3elwk" path="res://assets/Tavern_avatar.png" id="4_s2gku"]
 [ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="6_7ohde"]
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="7_x1pfr"]
 [ext_resource type="PackedScene" uid="uid://lqm5228wqvl6" path="res://Scenes/Sell Portal/sell_portal.tscn" id="8_qlllu"]
@@ -30,11 +30,11 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Necromancer" type="Sprite2D" parent="Visuals"]
-position = Vector2(158, 928)
+position = Vector2(138, 954)
 texture = ExtResource("3_csi2d")
 
 [node name="Travernkeeper" type="Sprite2D" parent="Visuals"]
-position = Vector2(1787, 116)
+position = Vector2(1779, 130)
 texture = ExtResource("4_s2gku")
 
 [node name="PlayArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
@@ -107,5 +107,11 @@ offset_bottom = 103.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 40
 text = "Combine"
+
+[node name="TextureButton" type="TextureButton" parent="."]
+offset_left = 1658.0
+offset_top = 568.0
+offset_right = 1698.0
+offset_bottom = 608.0
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

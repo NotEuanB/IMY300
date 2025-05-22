@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c1jabn0amf2jc"
-path="res://.godot/imported/fight_hover.png-9fe32ad9a4c13ce9d105932a96b1784d.ctex"
+uid="uid://cgi3q78r2y134"
+path="res://.godot/imported/Golem_Upscaled.png-de0aae7ba35f637a77755b04dcb33893.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/fight_hover.png"
-dest_files=["res://.godot/imported/fight_hover.png-9fe32ad9a4c13ce9d105932a96b1784d.ctex"]
+source_file="res://assets/units/Golem_Upscaled.png"
+dest_files=["res://.godot/imported/Golem_Upscaled.png-de0aae7ba35f637a77755b04dcb33893.ctex"]
 
 [params]
 

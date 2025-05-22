@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dayqwedi3elwk"
-path="res://.godot/imported/Tavern_avatar.png-c0e376b158e326291fe2d6155ab78ef1.ctex"
+uid="uid://df32qlasnjs4r"
+path="res://.godot/imported/Rat_Upscaled.png-e9fcd9d43822f7fc36c1b3b539232d09.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Tavern_avatar.png"
-dest_files=["res://.godot/imported/Tavern_avatar.png-c0e376b158e326291fe2d6155ab78ef1.ctex"]
+source_file="res://assets/units/Rat_Upscaled.png"
+dest_files=["res://.godot/imported/Rat_Upscaled.png-e9fcd9d43822f7fc36c1b3b539232d09.ctex"]
 
 [params]
 

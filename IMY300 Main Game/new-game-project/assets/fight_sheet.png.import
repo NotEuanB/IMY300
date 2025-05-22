@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bbmbjelb0by45"
-path="res://.godot/imported/necromancer_avatar.png-ad757bddd82dec7203fc055b37a237f5.ctex"
+uid="uid://boegkyvaykviy"
+path="res://.godot/imported/fight_sheet.png-1a99ccaf54d2843d1a8577fe81001f7b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/necromancer_avatar.png"
-dest_files=["res://.godot/imported/necromancer_avatar.png-ad757bddd82dec7203fc055b37a237f5.ctex"]
+source_file="res://assets/fight_sheet.png"
+dest_files=["res://.godot/imported/fight_sheet.png-1a99ccaf54d2843d1a8577fe81001f7b.ctex"]
 
 [params]
 

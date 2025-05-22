@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://24ojvr82jtob"]
 
 [ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_yqogo"]
-[ext_resource type="Texture2D" uid="uid://dcg3ugiflcbdh" path="res://assets/units/Rat.png" id="2_yr27n"]
+[ext_resource type="Texture2D" uid="uid://dh1hx2aib8w8y" path="res://assets/units/Rat.png" id="2_yr27n"]
 [ext_resource type="PackedScene" uid="uid://ctjoppicivqw7" path="res://Scenes/Unit/RatUnit.tscn" id="3_o4o40"]
 
 [resource]
