@@ -66,6 +66,8 @@ func _on_unit_drag_started(unit: Unit) -> void:
 					unit.set_meta("last_grid_index", i)
 					unit.set_meta("last_tile", tile)
 					print("Drag started from play area", i, "tile", tile)
+					if unit is GolemUnit:
+						unit.on_removed_from_board(play_areas[i])
 					return
 
 
@@ -90,6 +92,13 @@ func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
 		_reset_unit_to_starting_position(starting_position, unit)
 		return		
 	
+	var hand_area_index = 0
+	if old_area_index == hand_area_index and drop_area_index != hand_area_index:
+		unit.set_meta("left_hand", true)
+	if drop_area_index == hand_area_index and unit.get_meta("left_hand", false):
+		_reset_unit_to_starting_position(starting_position, unit)
+		return
+
 	# swap units if we have to
 	if new_area.unit_grid.is_tile_occupied(new_tile):
 		var old_unit: Unit = new_area.unit_grid.units[new_tile]

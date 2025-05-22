@@ -8,7 +8,7 @@ const CELL_SIZE := Vector2(180, 305)
 @onready var sell_portal: SellPortal = $SellPortal
 @onready var tooltip: TooltipClass = $Tooltip  # Ensure TooltipClass node exists
 @onready var shop_container: ShopContainer = $ShopUI/ShopContainer
-@onready var combination_page = $SlotOne
+@onready var combination_page = $CombinationPage
 
 
 var hovered_unit: Node = null  # To store the currently hovered unit

@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://navurmx1e1fi" path="res://Scenes/Unit/unit.gd" id="1_ladk0"]
 [ext_resource type="Resource" uid="uid://24ojvr82jtob" path="res://data/units/rat.tres" id="2_iuf4a"]
-[ext_resource type="Texture2D" uid="uid://dcg3ugiflcbdh" path="res://assets/units/Rat.png" id="3_iuf4a"]
-[ext_resource type="Texture2D" uid="uid://jnjcdsx038nv" path="res://assets/units/frame.png" id="3_ulevp"]
+[ext_resource type="Texture2D" uid="uid://dh1hx2aib8w8y" path="res://assets/units/Rat.png" id="3_iuf4a"]
+[ext_resource type="Texture2D" uid="uid://br881ewjuyyb4" path="res://assets/units/frame.png" id="3_ulevp"]
 [ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="5_ulevp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ulevp"]
