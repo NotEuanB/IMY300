@@ -1,50 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://ehcpt7j0kkj3"]
+[gd_scene load_steps=7 format=3 uid="uid://ehcpt7j0kkj3"]
 
-[ext_resource type="PackedScene" uid="uid://urlrv6wjxn5n" path="res://Scenes/Reroll Button/reroll_button.tscn" id="1_f18wc"]
+[ext_resource type="PackedScene" uid="uid://bjew0osvaa0rm" path="res://Scenes/Reroll Button/reroll_button.tscn" id="1_f18wc"]
 [ext_resource type="Script" uid="uid://7sdaeso87g1t" path="res://Scenes/ShopContainer/shop_container.gd" id="1_fkysy"]
 [ext_resource type="PackedScene" uid="uid://df7fpuhmkgi11" path="res://Scenes/Gold Display/gold_display.tscn" id="2_fkysy"]
 [ext_resource type="PackedScene" uid="uid://bt0uy01056sim" path="res://Scenes/UnitCard/unit_card.tscn" id="3_cfpj3"]
-[ext_resource type="Texture2D" uid="uid://boegkyvaykviy" path="res://assets/fight_sheet.png" id="3_urc0y"]
 [ext_resource type="Texture2D" uid="uid://b5l5skypukjgg" path="res://assets/currency.png" id="4_v7apu"]
 [ext_resource type="Resource" uid="uid://cc31lth8kllsv" path="res://data/units/golem.tres" id="5_cfpj3"]
-
-[sub_resource type="Animation" id="Animation_88t2e"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [2]
-}
-
-[sub_resource type="Animation" id="Animation_q8x0b"]
-resource_name = "Reroll_idle"
-length = 2.0
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [2, 5]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_75edi"]
-_data = {
-&"RESET": SubResource("Animation_88t2e"),
-&"Reroll_idle": SubResource("Animation_q8x0b")
-}
 
 [node name="ShopContainer" type="VBoxContainer"]
 offset_left = 63.0
@@ -60,18 +21,7 @@ theme_override_constants/separation = 980
 
 [node name="RerollButton" parent="Top" instance=ExtResource("1_f18wc")]
 layout_mode = 2
-
-[node name="RerollSprite" type="Sprite2D" parent="Top/RerollButton"]
-position = Vector2(98, -4)
-texture = ExtResource("3_urc0y")
-hframes = 3
-vframes = 2
-frame = 2
-
-[node name="RerollAnimation" type="AnimationPlayer" parent="Top/RerollButton/RerollSprite"]
-libraries = {
-&"": SubResource("AnimationLibrary_75edi")
-}
+size_flags_horizontal = 3
 
 [node name="GoldDisplay" parent="Top" instance=ExtResource("2_fkysy")]
 layout_mode = 2
