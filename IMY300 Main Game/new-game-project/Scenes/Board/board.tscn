@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=22 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://Scenes/Board/board.gd" id="1_ef5ss"]
 [ext_resource type="Texture2D" uid="uid://c6xr4umn1qegw" path="res://assets/board.png" id="2_brcfe"]
@@ -14,25 +14,12 @@
 [ext_resource type="PackedScene" uid="uid://cnhx7egcrqt28" path="res://Scenes/Tooltip/tooltip.tscn" id="11_gti8d"]
 [ext_resource type="PackedScene" uid="uid://ehcpt7j0kkj3" path="res://Scenes/ShopContainer/shop_container.tscn" id="12_dkxek"]
 [ext_resource type="Resource" uid="uid://bn1waem751oqp" path="res://data/unit_pool/unit_pool.tres" id="13_brcfe"]
-[ext_resource type="Texture2D" uid="uid://boegkyvaykviy" path="res://assets/fight_sheet.png" id="14_csi2d"]
 [ext_resource type="Script" uid="uid://b1l8sw114f6ua" path="res://Scenes/Board/fight_button.gd" id="15_xqaal"]
+[ext_resource type="Texture2D" uid="uid://bwfymqvnuum0x" path="res://assets/button_spritesheet.png" id="16_xqaal"]
 
-[sub_resource type="Animation" id="Animation_s2gku"]
-resource_name = "Fight_idle"
-length = 2.0
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.833333),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [3, 4]
-}
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqnt6"]
+atlas = ExtResource("16_xqaal")
+region = Rect2(0, 0, 763, 484)
 
 [sub_resource type="Animation" id="Animation_xqaal"]
 length = 0.001
@@ -46,12 +33,11 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [3]
+"values": [4]
 }
 
-[sub_resource type="Animation" id="Animation_dqnt6"]
-resource_name = "Fight_hover"
-length = 2.0
+[sub_resource type="Animation" id="Animation_63xfs"]
+resource_name = "Fight_idle"
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -60,7 +46,23 @@ tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.833333),
+"times": PackedFloat32Array(0, 0.533333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_dqnt6"]
+resource_name = "Fight_hover"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.533333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [0, 1]
@@ -69,7 +71,7 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_63xfs"]
 _data = {
 &"Fight_hover": SubResource("Animation_dqnt6"),
-&"Fight_idle": SubResource("Animation_s2gku"),
+&"Fight_idle": SubResource("Animation_63xfs"),
 &"RESET": SubResource("Animation_xqaal")
 }
 
@@ -191,18 +193,19 @@ theme_override_font_sizes/font_size = 40
 text = "Combine"
 
 [node name="FightButton" type="TextureButton" parent="."]
-offset_left = 1614.0
-offset_top = 455.0
-offset_right = 1806.0
-offset_bottom = 551.0
+offset_left = 1615.0
+offset_top = 462.0
+offset_right = 1807.0
+offset_bottom = 558.0
 script = ExtResource("15_xqaal")
 
 [node name="FightSprite" type="Sprite2D" parent="FightButton"]
-position = Vector2(96.78, 48.56)
-texture = ExtResource("14_csi2d")
-hframes = 3
-vframes = 2
-frame = 3
+position = Vector2(0.344971, 0)
+texture = SubResource("AtlasTexture_dqnt6")
+offset = Vector2(95, 48)
+hframes = 4
+vframes = 5
+frame = 4
 
 [node name="FightAnimation" type="AnimationPlayer" parent="FightButton/FightSprite"]
 libraries = {
