@@ -1,11 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=18 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://Scenes/Board/board.gd" id="1_ef5ss"]
 [ext_resource type="Texture2D" uid="uid://c6xr4umn1qegw" path="res://assets/board.png" id="2_brcfe"]
 [ext_resource type="Texture2D" uid="uid://bxvnsqfsenlnl" path="res://assets/Player_avatar.png" id="3_csi2d"]
 [ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="3_dkvsl"]
 [ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="3_ffhyd"]
-[ext_resource type="Texture2D" uid="uid://c0vwltgy65xru" path="res://assets/Tavern_avatar.png" id="4_s2gku"]
+[ext_resource type="Texture2D" uid="uid://c0vwltgy65xru" path="res://assets/tavern_avatar.png" id="4_s2gku"]
 [ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="6_7ohde"]
 [ext_resource type="Script" uid="uid://sqnjequuj6jv" path="res://components/unit_combine.gd" id="7_s2gku"]
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="7_x1pfr"]
@@ -122,8 +122,6 @@ offset_top = 155.0
 offset_right = 1578.0
 offset_bottom = 530.0
 theme_override_constants/separation = 28
-unit_pool = ExtResource("13_brcfe")
-player_stats = ExtResource("9_me64r")
 unit_spawner = NodePath("../../UnitSpawner")
 
 [node name="BuySound" type="AudioStreamPlayer2D" parent="ShopUI"]
