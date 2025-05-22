@@ -2,13 +2,13 @@ class_name UnitCombine
 extends Node
 
 var combination_db := {
-	"Golem+Rat": preload("res://data/units/rolet.tres"), # Use the UnitStats resource, not the scene!
+	"Golem+Rat": preload("res://data/units/rolet.tres"), 
 }
 
 @export var slot_one_area: PlayArea
 @export var slot_two_area: PlayArea
 @export var hand_area: PlayArea
-@export var unit_spawner: UnitSpawner  # To spawn the combined unit
+@export var unit_spawner: UnitSpawner
 
 signal units_combined(combined_unit: Unit)
 
@@ -30,16 +30,7 @@ func combine_units() -> void:
 	slot_one_unit.queue_free()
 	slot_two_unit.queue_free()
 	
-	# Use the spawner to add the combined unit to the hand
 	unit_spawner.spawn_unit(combined_stats)
-	
-	# Add the combined unit to the hand area
-	# var combined_unit = combined_stats.instantiate()
-	# var tile = hand_area.unit_grid.get_first_empty_tile()
-	# combined_unit.add_to_group("units")
-	# hand_area.unit_grid.add_child(combined_unit)
-	# hand_area.unit_grid.add_unit(tile, combined_unit)
-	# combined_unit.global_position = hand_area.get_global_from_tile(tile)
 	
 	emit_signal("units_combined")
 
