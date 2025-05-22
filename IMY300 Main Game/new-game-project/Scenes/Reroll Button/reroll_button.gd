@@ -22,8 +22,7 @@ func _on_player_stats_changed() -> void:
 func _on_pressed() -> void:
 	player_stats.gold -= 2
 	$HBoxContainer/Sprite2D/AnimationPlayer.play("Reroll_press")
-	await get_tree().create_timer(0.5).timeout  
-	emit_signal("mouse_entered")  
+	
 
 func _on_mouse_entered() -> void:
 	$HBoxContainer/Sprite2D/AnimationPlayer.play("Reroll_hover")
