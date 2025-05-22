@@ -24,7 +24,6 @@ func _on_unit_bought(unit_stats: UnitStats) -> void:
 	unit_spawner.spawn_unit(unit_stats)
 	$ShopUI/BuySound.play()
 
-
 # Tooltip handlers
 func _on_unit_hovered(unit: Node) -> void:
 	# Only start the hover tracking if the unit is not being dragged
