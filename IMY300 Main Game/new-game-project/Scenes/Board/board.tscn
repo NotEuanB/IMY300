@@ -42,9 +42,9 @@ position = Vector2(337, 550)
 script = ExtResource("3_dkvsl")
 unit_grid = NodePath("PlayerUnitGrid")
 cell_size = Vector2(209, 305)
+area_type = "board"
 
 [node name="PlayerUnitGrid" type="Node2D" parent="PlayArea"]
-z_index = 100
 script = ExtResource("3_ffhyd")
 size = Vector2i(6, 1)
 
@@ -53,25 +53,35 @@ position = Vector2(338, 871)
 script = ExtResource("3_dkvsl")
 unit_grid = NodePath("HandUnitGrid")
 cell_size = Vector2(209, 305)
+area_type = "hand"
 
 [node name="HandUnitGrid" type="Node2D" parent="HandArea"]
 script = ExtResource("3_ffhyd")
 size = Vector2i(6, 1)
 
-[node name="CombinationPage" type="Node2D" parent="."]
+[node name="SlotOne" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
 position = Vector2(558, 224)
-
-[node name="SlotOne" type="Node2D" parent="CombinationPage" node_paths=PackedStringArray("unit_grid")]
 script = ExtResource("3_dkvsl")
 unit_grid = NodePath("SlotOneGrid")
+area_type = "slotone"
 
-[node name="SlotOneGrid" type="Node2D" parent="CombinationPage/SlotOne"]
+[node name="SlotOneGrid" type="Node2D" parent="SlotOne"]
+script = ExtResource("3_ffhyd")
+size = Vector2i(1, 1)
+
+[node name="SlotTwo" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
+position = Vector2(1184, 224)
+script = ExtResource("3_dkvsl")
+unit_grid = NodePath("SlotTwoGrid")
+area_type = "slotone"
+
+[node name="SlotTwoGrid" type="Node2D" parent="SlotTwo"]
 script = ExtResource("3_ffhyd")
 size = Vector2i(1, 1)
 
 [node name="UnitMover" type="Node" parent="."]
 script = ExtResource("6_7ohde")
-play_area_paths = Array[NodePath]([NodePath("../HandArea"), NodePath("../PlayArea"), NodePath("../CombinationPage/SlotOne")])
+play_area_paths = Array[NodePath]([NodePath("../HandArea"), NodePath("../PlayArea"), NodePath("../SlotOne"), NodePath("../SlotTwo")])
 
 [node name="UnitSpawner" type="Node" parent="." node_paths=PackedStringArray("hand_area")]
 script = ExtResource("7_x1pfr")

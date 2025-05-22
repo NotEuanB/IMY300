@@ -12,7 +12,6 @@ func _ready() -> void:
 	for i in size.x:
 		for j in size.y:
 			units[Vector2i(i, j)] = null
-	queue_redraw()
 
 func add_unit(tile: Vector2i, unit: Node) -> void:
 	if not units.has(tile):
@@ -20,12 +19,6 @@ func add_unit(tile: Vector2i, unit: Node) -> void:
 	units[tile] = unit
 	unit_grid_changed.emit()
 
-func _draw():
-	var cell_size = Vector2(180, 305) # Change to your actual cell size if different
-	for i in size.x:
-		for j in size.y:
-			var pos = Vector2(i, j) * cell_size
-			draw_rect(Rect2(pos, cell_size), Color(1, 1, 0, 1), false, 10.0) # Yellow outline, 2px thick
 
 func remove_unit(tile: Vector2i) -> void:
 	if not units.has(tile):
