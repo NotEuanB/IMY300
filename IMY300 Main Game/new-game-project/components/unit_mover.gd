@@ -29,14 +29,12 @@ func setup_unit(unit: Unit) -> void:
 
 
 func _get_play_area_for_position(global: Vector2) -> int:
-	var dropped_area_index := -1
-	
-	for i in play_areas.size():
+	for i in range(play_areas.size()):
 		var tile := play_areas[i].get_tile_from_global(global)
 		if play_areas[i].is_tile_in_bounds(tile):
-			dropped_area_index = i
-	
-	return dropped_area_index
+			print("Selected play area:", i, "tile:", tile)
+			return i
+	return -1
 
 
 func _reset_unit_to_starting_position(starting_position: Vector2, unit: Unit) -> void:
@@ -96,10 +94,10 @@ func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
 	if new_area.unit_grid.is_tile_occupied(new_tile):
 		var old_unit: Unit = new_area.unit_grid.units[new_tile]
 		new_area.unit_grid.remove_unit(new_tile)
-		_move_unit(old_unit, old_area, old_tile)		
+		_move_unit(old_unit, old_area, old_tile)
 	_move_unit(unit, new_area, new_tile)
 
-	if new_area == play_areas[1]:
+	if new_area.area_type == "board":
 		unit.on_played(new_area)
 	
 	if new_area == play_areas[1]:
