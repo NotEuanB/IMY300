@@ -21,7 +21,11 @@ func on_played(play_area: PlayArea) -> void:
 
 	for unit in candidates:
 		unit.set_selectable(true)
-		unit.connect("selected", Callable(self, "_on_target_selected").bind(candidates), CONNECT_ONE_SHOT)
+		var callable = Callable(self, "_on_target_selected").bind(candidates)
+		# Disconnect previous connections to avoid stacking
+		if unit.is_connected("selected", callable):
+			unit.disconnect("selected", callable)
+		unit.connect("selected", callable, CONNECT_ONE_SHOT)
 
 func _on_target_selected(emitter, candidates):
 	emitter.stats.attack += 1
