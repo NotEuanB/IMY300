@@ -1,31 +1,157 @@
-[gd_scene load_steps=4 format=3 uid="uid://cc03g1urqt55u"]
+[gd_scene load_steps=14 format=3 uid="uid://cc03g1urqt55u"]
 
-[ext_resource type="Texture2D" uid="uid://bhfai08ca71g" path="res://assets/Combine_board-1.png" id="1_ast70"]
+[ext_resource type="Texture2D" uid="uid://yreyrph44857" path="res://assets/combine_button_spritesheet.png" id="1_ast70"]
+[ext_resource type="Texture2D" uid="uid://cefn0xha7tq81" path="res://assets/combine_board.png" id="1_fmpw1"]
+[ext_resource type="Script" uid="uid://dsli3x81jfhxp" path="res://Scenes/CombineBoard/combine_button.gd" id="2_ar1ei"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ar1ei"]
+atlas = ExtResource("1_fmpw1")
+
+[sub_resource type="Animation" id="Animation_eettl"]
+resource_name = "CombineBoard_hover"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+
+[sub_resource type="Animation" id="Animation_p2ppy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_a4yca"]
+resource_name = "CombineBoard_idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_p2ppy"]
+_data = {
+&"CombineBoard_hover": SubResource("Animation_eettl"),
+&"CombineBoard_idle": SubResource("Animation_a4yca"),
+&"RESET": SubResource("Animation_p2ppy")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fmpw1"]
+atlas = ExtResource("1_ast70")
 
 [sub_resource type="Animation" id="Animation_fmpw1"]
 resource_name = "Combine_idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_ar1ei"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_7n45d"]
+resource_name = "Combine_hover"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [4, 5]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ar1ei"]
 _data = {
-&"Combine_idle": SubResource("Animation_fmpw1")
+&"Combine_hover": SubResource("Animation_7n45d"),
+&"Combine_idle": SubResource("Animation_fmpw1"),
+&"RESET": SubResource("Animation_ar1ei")
 }
 
 [node name="Combineboard" type="Node2D"]
 
 [node name="Visuals" type="Node2D" parent="."]
 
-[node name="TextureRect" type="TextureRect" parent="Visuals"]
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("1_ast70")
+[node name="CombineBoardAnimation" type="Sprite2D" parent="Visuals"]
+position = Vector2(960, 540)
+texture = SubResource("AtlasTexture_ar1ei")
+hframes = 4
+vframes = 4
 
-[node name="TextureButton" type="TextureButton" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="CombineBoardAnimation" type="AnimationPlayer" parent="Visuals/CombineBoardAnimation"]
+libraries = {
+&"": SubResource("AnimationLibrary_p2ppy")
+}
 
-[node name="Sprite2D" type="Sprite2D" parent="TextureButton"]
+[node name="CombineButton" type="TextureButton" parent="."]
+offset_left = 740.0
+offset_top = 726.0
+offset_right = 1178.0
+offset_bottom = 836.0
+script = ExtResource("2_ar1ei")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="TextureButton/Sprite2D"]
+[node name="CombineSprite" type="Sprite2D" parent="CombineButton"]
+position = Vector2(219, 55)
+texture = SubResource("AtlasTexture_fmpw1")
+hframes = 4
+vframes = 4
+
+[node name="CombineAnimation" type="AnimationPlayer" parent="CombineButton/CombineSprite"]
 libraries = {
 &"": SubResource("AnimationLibrary_ar1ei")
 }
+
+[connection signal="mouse_entered" from="CombineButton" to="CombineButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="CombineButton" to="CombineButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="CombineButton" to="CombineButton" method="_on_pressed"]

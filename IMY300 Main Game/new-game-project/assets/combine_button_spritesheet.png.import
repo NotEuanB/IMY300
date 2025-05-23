@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhfai08ca71g"
-path="res://.godot/imported/Combine_board-1.png-c0b4bd3b11b72138070298fdf0314813.ctex"
+uid="uid://yreyrph44857"
+path="res://.godot/imported/combine_button_spritesheet.png-6198c46a1e1fbe972df74b3aa021f35c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Combine_board-1.png"
-dest_files=["res://.godot/imported/Combine_board-1.png-c0b4bd3b11b72138070298fdf0314813.ctex"]
+source_file="res://assets/combine_button_spritesheet.png"
+dest_files=["res://.godot/imported/combine_button_spritesheet.png-6198c46a1e1fbe972df74b3aa021f35c.ctex"]
 
 [params]
 

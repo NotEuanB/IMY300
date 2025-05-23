@@ -12,3 +12,7 @@ func _on_mouse_exited() -> void:
 
 func _on_pressed() -> void:
 	$FightSprite/FightAnimation.play("Fight_press")
+	# Get the current scene tree
+	var scene_tree = get_tree()
+	# Change to the new scene
+	scene_tree.change_scene_to_file("res://Scenes/CombineBoard/combineboard.tscn")
