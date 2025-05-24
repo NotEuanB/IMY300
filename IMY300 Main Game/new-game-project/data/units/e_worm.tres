@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://dvpqpthujgo04"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_fvhjn"]
+[ext_resource type="Texture2D" uid="uid://dldqv52stul4h" path="res://assets/units/Enemy_worm.png" id="2_kqlbi"]
+[ext_resource type="PackedScene" uid="uid://bqsrb4vun2g3q" path="res://Scenes/Unit/E_Worm.tscn" id="3_oltsc"]
+
+[resource]
+script = ExtResource("1_fvhjn")
+name = "Worm"
+unit_scene = ExtResource("3_oltsc")
+gold_cost = 0
+attack = 2
+health = 1
+pool_count = 0
+skin = ExtResource("2_kqlbi")
+description = ""
+metadata/_custom_type_script = "uid://d2inypj55y68q"
