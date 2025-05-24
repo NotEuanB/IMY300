@@ -24,11 +24,11 @@ func _get_first_available_area() -> PlayArea:
 	
 	return null
 
-func spawn_unit(unit: UnitStats) -> void:
+func spawn_unit(unit: UnitStats) -> Unit:
 	var area := _get_first_available_area()
 	if area == null:
 		print("⚠ No available space to add unit to hand!")
-		return  # Do nothing
+		return null# Do nothing
 	
 	var unit_scene := unit.unit_scene if unit.unit_scene else UNIT
 	var new_unit := unit_scene.instantiate()
@@ -39,3 +39,4 @@ func spawn_unit(unit: UnitStats) -> void:
 	new_unit.global_position = area.get_global_from_tile(tile)
 	new_unit.stats = unit.duplicate()
 	unit_spawned.emit(new_unit)
+	return new_unit

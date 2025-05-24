@@ -9,7 +9,8 @@ const CELL_SIZE := Vector2(180, 305)
 @onready var tooltip: TooltipClass = $Tooltip  # Ensure TooltipClass node exists
 @onready var shop_container: ShopContainer = $ShopUI/ShopContainer
 @onready var combination_page = $CombinationPage
-
+@onready var board_area: PlayArea = $PlayArea
+@onready var hand_area: PlayArea = $HandArea
 
 var hovered_unit: Node = null  # To store the currently hovered unit
 var time_hover_started: float = -1.0  # To track the time when hover started (in milliseconds)
@@ -19,6 +20,7 @@ func _ready() -> void:
 	unit_spawner.unit_spawned.connect(unit_mover.setup_unit)
 	unit_spawner.unit_spawned.connect(sell_portal.setup_unit)
 	shop_container.unit_bought.connect(_on_unit_bought)
+	$FightButton.fight_pressed.connect(_on_fight_button_pressed)
 
 func _on_unit_bought(unit_stats: UnitStats) -> void:
 	unit_spawner.spawn_unit(unit_stats)
@@ -66,7 +68,31 @@ func _process(_delta: float) -> void:
 			tooltip.global_position = get_global_mouse_position() + Vector2(16, 16)  # Position the tooltip near the mouse
 			time_hover_started = -1.0  # Reset so the tooltip isn't shown again
 
+func get_hand_state() -> Array:
+	var hand = []
+	for tile in unit_spawner.hand_area.unit_grid.units:
+		var unit = unit_spawner.hand_area.unit_grid.units[tile]
+		if unit:
+			hand.append({
+				"stats": unit.stats,
+				"tile": tile
+			})
+	return hand
 
-func _on_button_pressed() -> void:
-	combination_page.visible = true
-	$ShopUI.visible = false
+func get_board_state() -> Array:
+	# If you have a board area, replace 'board_area' with the correct variable
+	var board = []
+	for tile in board_area.unit_grid.units:
+		var unit = board_area.unit_grid.units[tile]
+		if unit:
+			board.append({
+				"stats": unit.stats,
+				"tile": tile
+			})
+	return board
+
+func _on_fight_button_pressed() -> void:
+	var board_state = get_board_state()
+	var hand_state = get_hand_state()
+	GameState.save_state(board_state, hand_state)
+	get_tree().change_scene_to_file("res://Scenes/CombineBoard/combineboard.tscn")

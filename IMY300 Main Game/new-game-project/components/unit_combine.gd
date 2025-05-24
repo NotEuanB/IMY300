@@ -5,6 +5,8 @@ var combination_db := {
 	"Golem+Rat": preload("res://data/units/rolet.tres"), 
 }
 
+@onready var unit_mover: UnitMover
+
 @export var slot_one_area: PlayArea
 @export var slot_two_area: PlayArea
 @export var hand_area: PlayArea
@@ -30,7 +32,9 @@ func combine_units() -> void:
 	slot_one_unit.queue_free()
 	slot_two_unit.queue_free()
 	
-	unit_spawner.spawn_unit(combined_stats)
+	# Spawn the new unit (spawner will add to grid and set position)
+	var new_unit = unit_spawner.spawn_unit(combined_stats)
+	unit_mover.setup_unit(new_unit)
 	
 	emit_signal("units_combined")
 
@@ -58,5 +62,5 @@ func _get_combined_stats(slot_one_unit: Unit, slot_two_unit: Unit) -> UnitStats:
 
 func _on_pressed() -> void:
 	combine_units()
-	#print("Current gold = ", PlayerStats.gold)
-	#pass
+	# print("Current gold = ", PlayerStats.gold)
+	pass
