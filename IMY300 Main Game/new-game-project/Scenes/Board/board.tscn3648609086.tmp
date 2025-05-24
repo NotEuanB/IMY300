@@ -189,7 +189,7 @@ unit_spawner = NodePath("../../UnitSpawner")
 [node name="BuySound" type="AudioStreamPlayer2D" parent="ShopUI"]
 
 [node name="SellPortal" parent="." instance=ExtResource("8_qlllu")]
-position = Vector2(-54, 18)
+position = Vector2(-212, 332)
 unit_pool = ExtResource("13_brcfe")
 
 [node name="Button" type="Button" parent="."]

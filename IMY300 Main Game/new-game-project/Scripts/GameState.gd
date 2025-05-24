@@ -1,15 +1,11 @@
 extends Node
+class_name GameState
 
-var inventory: Array = []  # Stores purchased units
+# the list of units (or cards) the player has bought:
+var owned_units : Array = []
+# e.g. your gold counter
+var gold : int = 0
 
-# Add a unit to the inventory
-func add_to_inventory(unit: UnitStats) -> void:
-	inventory.append(unit)
-
-# Get the current inventory
-func get_inventory() -> Array:
-	return inventory
-
-# Remove a unit from the inventory
-func remove_from_inventory(unit: UnitStats) -> void:
-	inventory.erase(unit)
+func reset():
+	owned_units.clear()
+	gold = 0
