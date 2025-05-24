@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://tm1a5rntugg8"]
+
+[ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="2_sah4l"]
+[ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="2_yv7yh"]
+[ext_resource type="Script" uid="uid://g7wq0kfx6iyb" path="res://Scenes/ForestBoard/label.gd" id="3_h8jre"]
+[ext_resource type="Texture2D" uid="uid://bnome0aeiakn7" path="res://assets/Health.png" id="4_j7mja"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_yv7yh"]
+font = ExtResource("2_sah4l")
+font_size = 48
+shadow_color = Color(0, 0, 0, 0.568627)
+
+[node name="HealthDisplay" type="HBoxContainer"]
+offset_right = 28.0
+offset_bottom = 18.0
+
+[node name="HealthIcon" type="Sprite2D" parent="."]
+position = Vector2(-29, -23)
+texture = ExtResource("4_j7mja")
+offset = Vector2(50, 50)
+
+[node name="Health" type="Label" parent="."]
+layout_mode = 2
+text = "99"
+label_settings = SubResource("LabelSettings_yv7yh")
+script = ExtResource("3_h8jre")
+player_stats = ExtResource("2_yv7yh")
