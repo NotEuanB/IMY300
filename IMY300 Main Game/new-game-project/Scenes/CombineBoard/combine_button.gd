@@ -4,7 +4,7 @@ func _ready() -> void:
 	$CombineSprite/CombineAnimation.play("Combine_idle")
 
 func _on_pressed() -> void:
-	#$CombineSprite/CombineAnimation.play("Reroll_press")
+	$CombineSprite/CombineAnimation.play("Combine_press")
 	await get_tree().create_timer(2.5).timeout
 	# Get the current scene tree
 	var scene_tree = get_tree()
