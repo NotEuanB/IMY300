@@ -145,22 +145,22 @@ hand_area = NodePath("../HandArea")
 
 [node name="Tooltip" parent="." instance=ExtResource("11_gti8d")]
 
-[node name="ShopUI" type="CanvasLayer" parent="."]
-
-[node name="ShopContainer" parent="ShopUI" node_paths=PackedStringArray("unit_spawner") instance=ExtResource("12_dkxek")]
-offset_left = 348.0
-offset_top = 155.0
-offset_right = 1578.0
-offset_bottom = 530.0
-theme_override_constants/separation = 28
-unit_spawner = NodePath("../../UnitSpawner")
-
-[node name="BuySound" type="AudioStreamPlayer2D" parent="ShopUI"]
-
 [node name="SellPortal" parent="." instance=ExtResource("8_qlllu")]
 position = Vector2(-54, 18)
 unit_pool = ExtResource("13_brcfe")
 player_stats = ExtResource("9_me64r")
+
+[node name="ShopUI" type="CanvasLayer" parent="."]
+
+[node name="ShopContainer" parent="ShopUI" node_paths=PackedStringArray("unit_spawner") instance=ExtResource("12_dkxek")]
+offset_left = 348.0
+offset_top = 147.0
+offset_right = 1573.0
+offset_bottom = 528.0
+theme_override_constants/separation = 28
+unit_spawner = NodePath("../../UnitSpawner")
+
+[node name="BuySound" type="AudioStreamPlayer2D" parent="ShopUI"]
 
 [node name="FightButton" type="TextureButton" parent="."]
 offset_left = 1615.0
