@@ -6,9 +6,13 @@ func _ready() -> void:
 func _on_pressed() -> void:
 	$CombineSprite/CombineAnimation.play("Combine_press")
 	combine_units()
-	await get_tree().create_timer(2.5).timeout
-	var scene_tree = get_tree()
-	scene_tree.change_scene_to_file("res://Scenes/ForestBoard/forestboard.tscn")
+	go_to_fight_scene()
+
+func go_to_fight_scene():
+	var board_state = get_board_state()
+	var hand_state = get_hand_state()
+	GameState.save_state(board_state, hand_state)
+	get_tree().change_scene_to_file("res://Scenes/ForestBoard/forestboard.tscn")
 
 func _on_mouse_entered() -> void:
 	$CombineSprite/CombineAnimation.play("Combine_hover")
@@ -72,3 +76,28 @@ func _get_combined_stats(slot_one_unit: Unit, slot_two_unit: Unit) -> UnitStats:
 		push_error("No combination found for %s + %s" % [slot_one_unit.stats.name, slot_two_unit.stats.name])
 		return null
 	return result_stats
+
+
+func get_hand_state() -> Array:
+	var hand = []
+	for tile in hand_area.unit_grid.units:
+		var unit = hand_area.unit_grid.units[tile]
+		if unit:
+			hand.append({
+				"stats": unit.stats,
+				"tile": tile
+			})
+	return hand
+
+func get_board_state() -> Array:
+	var board = []
+	if has_node("../PlayArea"):
+		var board_area = get_node("../PlayArea") as PlayArea
+		for tile in board_area.unit_grid.units:
+			var unit = board_area.unit_grid.units[tile]
+			if unit:
+				board.append({
+					"stats": unit.stats,
+					"tile": tile
+				})
+	return board
