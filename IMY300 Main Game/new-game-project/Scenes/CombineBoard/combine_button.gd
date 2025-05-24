@@ -5,7 +5,7 @@ func _ready() -> void:
 
 func _on_pressed() -> void:
 	#$CombineSprite/CombineAnimation.play("Reroll_press")
-	await get_tree().create_timer(5).timeout
+	await get_tree().create_timer(2.5).timeout
 	# Get the current scene tree
 	var scene_tree = get_tree()
 	# Change to the new scene

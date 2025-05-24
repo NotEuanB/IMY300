@@ -6,7 +6,7 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_glm6i"]
 atlas = ExtResource("3_glm6i")
-region = Rect2(-1.235, 0, 767.915, 484.695)
+region = Rect2(-1.235, 0, 770.64, 481.115)
 
 [sub_resource type="Animation" id="Animation_q8vrn"]
 length = 0.001
@@ -92,6 +92,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.00999
+offset_bottom = -0.139999
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -99,7 +102,8 @@ theme_override_constants/separation = 10
 alignment = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="HBoxContainer"]
-position = Vector2(94, -1)
+position = Vector2(91.5, -0.5)
+scale = Vector2(0.973958, 0.989583)
 texture = SubResource("AtlasTexture_glm6i")
 hframes = 4
 vframes = 5
