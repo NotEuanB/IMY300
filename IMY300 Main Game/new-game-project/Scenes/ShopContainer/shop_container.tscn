@@ -12,16 +12,16 @@
 [node name="ShopContainer" type="VBoxContainer"]
 offset_left = 63.0
 offset_top = 29.0
-offset_right = 479.0
-offset_bottom = 109.0
-theme_override_constants/separation = 30
+offset_right = 1288.0
+offset_bottom = 442.0
+theme_override_constants/separation = 60
 script = ExtResource("1_fkysy")
 unit_pool = ExtResource("2_q8x0b")
 player_stats = ExtResource("3_88t2e")
 
 [node name="Top" type="HBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 980
+theme_override_constants/separation = 900
 
 [node name="RerollButton" parent="Top" instance=ExtResource("1_f18wc")]
 custom_minimum_size = Vector2(184.51, 48)
