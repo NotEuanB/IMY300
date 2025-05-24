@@ -1,0 +1,68 @@
+[gd_scene load_steps=8 format=3 uid="uid://bs8vkfyk56sd1"]
+
+[ext_resource type="Script" uid="uid://3x7dbeeeixhh" path="res://Scenes/Fighting/fighting_board.gd" id="1_rjd1f"]
+[ext_resource type="Texture2D" uid="uid://th841nl8m0hy" path="res://assets/Our Assets/Untitled-2.svg" id="2_il34r"]
+[ext_resource type="Texture2D" uid="uid://dojcgy3vl3n12" path="res://assets/Our Assets/board.svg" id="2_rjd1f"]
+[ext_resource type="Texture2D" uid="uid://bimqtsk86xy1p" path="res://assets/Our Assets/knight_base.svg" id="3_il34r"]
+[ext_resource type="TileSet" uid="uid://b77a7ss6h0c2m" path="res://new_tile_set.tres" id="4_s8hk7"]
+[ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="5_rjd1f"]
+[ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="6_6whw1"]
+
+[node name="fightingScene" type="Node2D"]
+script = ExtResource("1_rjd1f")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_top = -140.0
+offset_right = 640.0
+offset_bottom = 500.0
+texture = ExtResource("2_rjd1f")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Necromancer" type="Sprite2D" parent="."]
+position = Vector2(317, 294)
+scale = Vector2(0.024, 0.024)
+texture = ExtResource("2_il34r")
+
+[node name="KnightBase" type="Sprite2D" parent="."]
+position = Vector2(317, 52)
+scale = Vector2(0.024, 0.024)
+texture = ExtResource("3_il34r")
+
+[node name="PlayerArea" type="TileMapLayer" parent="." node_paths=PackedStringArray("unit_grid")]
+position = Vector2(128, 192)
+tile_set = ExtResource("4_s8hk7")
+script = ExtResource("5_rjd1f")
+unit_grid = NodePath("PlayerUnitGrid")
+
+[node name="PlayerUnitGrid" type="Node2D" parent="PlayerArea"]
+script = ExtResource("6_6whw1")
+size = Vector2i(6, 1)
+
+[node name="HandArea" type="TileMapLayer" parent="." node_paths=PackedStringArray("unit_grid")]
+position = Vector2(13, 273)
+tile_set = ExtResource("4_s8hk7")
+script = ExtResource("5_rjd1f")
+unit_grid = NodePath("HandUnitGrid")
+
+[node name="HandUnitGrid" type="Node2D" parent="HandArea"]
+script = ExtResource("6_6whw1")
+size = Vector2i(4, 1)
+
+[node name="EnemyArea" type="TileMapLayer" parent="HandArea" node_paths=PackedStringArray("unit_grid")]
+position = Vector2(115, -164)
+tile_set = ExtResource("4_s8hk7")
+script = ExtResource("5_rjd1f")
+unit_grid = NodePath("../../PlayerArea/PlayerUnitGrid")
+
+[node name="EnemyUnitGrid" type="Node2D" parent="HandArea/EnemyArea"]
+position = Vector2(-13, -273)
+script = ExtResource("6_6whw1")
+size = Vector2i(6, 1)
+
+[node name="FightButton" type="Button" parent="."]
+offset_left = 557.0
+offset_top = 166.0
+offset_right = 599.0
+offset_bottom = 192.0
+text = "Fight"
