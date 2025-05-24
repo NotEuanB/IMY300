@@ -6,9 +6,9 @@ func _ready() -> void:
 func _on_pressed() -> void:
 	$CombineSprite/CombineAnimation.play("Combine_press")
 	combine_units()
-	await get_tree().create_timer(2.5).timeout
-	var scene_tree = get_tree()
-	scene_tree.change_scene_to_file("res://Scenes/ForestBoard/forestboard.tscn")
+	#await get_tree().create_timer(2.5).timeout
+	#var scene_tree = get_tree()
+	#scene_tree.change_scene_to_file("res://Scenes/ForestBoard/forestboard.tscn")
 
 func _on_mouse_entered() -> void:
 	$CombineSprite/CombineAnimation.play("Combine_hover")

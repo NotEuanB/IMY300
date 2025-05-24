@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=23 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://Scenes/Board/board.gd" id="1_ef5ss"]
 [ext_resource type="Texture2D" uid="uid://c6xr4umn1qegw" path="res://assets/board.png" id="2_brcfe"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://sqnjequuj6jv" path="res://components/unit_combine.gd" id="7_s2gku"]
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="7_x1pfr"]
 [ext_resource type="PackedScene" uid="uid://lqm5228wqvl6" path="res://Scenes/Sell Portal/sell_portal.tscn" id="8_qlllu"]
+[ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="9_me64r"]
 [ext_resource type="PackedScene" uid="uid://cnhx7egcrqt28" path="res://Scenes/Tooltip/tooltip.tscn" id="11_gti8d"]
 [ext_resource type="PackedScene" uid="uid://ehcpt7j0kkj3" path="res://Scenes/ShopContainer/shop_container.tscn" id="12_dkxek"]
 [ext_resource type="Resource" uid="uid://bn1waem751oqp" path="res://data/unit_pool/unit_pool.tres" id="13_brcfe"]
@@ -189,8 +190,9 @@ unit_spawner = NodePath("../../UnitSpawner")
 [node name="BuySound" type="AudioStreamPlayer2D" parent="ShopUI"]
 
 [node name="SellPortal" parent="." instance=ExtResource("8_qlllu")]
-position = Vector2(-212, 332)
+position = Vector2(-54, 18)
 unit_pool = ExtResource("13_brcfe")
+player_stats = ExtResource("9_me64r")
 
 [node name="Button" type="Button" parent="."]
 modulate = Color(0.0941176, 0.0941176, 0.0941176, 0.376471)
