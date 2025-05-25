@@ -55,23 +55,7 @@ func get_living_unit_count(unit_grid) -> int:
 
 func start_combat() -> void:
 	while get_living_unit_count(player_area.unit_grid) > 0 and get_living_unit_count(enemy_area.unit_grid) > 0:		
-		# Player turn
-		_player_turn()
-		await get_tree().create_timer(4.0).timeout  # Add delay between turns
-
-		# Check if the enemy has units left (again, after player turn)
-		if get_living_unit_count(enemy_area.unit_grid) == 0:
-			print("Combat loop breaking: enemy units are 0 (after player turn)")
-			break
-
-		# Enemy turn
-		_enemy_turn()
-		await get_tree().create_timer(4.0).timeout  # Add delay between turns
-
-		# Check if the player has units left (after enemy turn)
-		if get_living_unit_count(player_area.unit_grid) == 0:
-			print("Combat loop breaking: player units are 0 (after enemy turn)")
-			break
+		await _combat_round()
 
 	# Determine the winner
 	if get_living_unit_count(player_area.unit_grid) == 0:
@@ -136,6 +120,11 @@ func _enemy_turn() -> void:
 	_attack(enemy_unit, player_unit)
 
 func _attack(attacker, defender) -> void:
+	if attacker == null or defender == null:
+		return
+	if not is_instance_valid(attacker) or not is_instance_valid(defender):
+		return
+
 	var original_pos = attacker.global_position
 	var target_pos = defender.global_position
 	var original_z = attacker.z_index
@@ -210,3 +199,55 @@ func _set_all_drag_and_drop_enabled(enabled: bool) -> void:
 	for unit in enemy_area.unit_grid.units.values():
 		if unit and unit.has_node("DragAndDrop"):
 			unit.get_node("DragAndDrop").enabled = enabled
+
+func _combat_round() -> void:
+	var player_tiles := []
+	for tile in player_area.unit_grid.units.keys():
+		var unit = player_area.unit_grid.units[tile]
+		if unit and unit.stats and unit.stats.health > 0:
+			player_tiles.append(tile)
+	player_tiles.sort_custom(func(a, b): return a.y < b.y if a.x == b.x else a.x < b.x)
+
+	var enemy_tiles := []
+	for tile in enemy_area.unit_grid.units.keys():
+		var unit = enemy_area.unit_grid.units[tile]
+		if unit and unit.stats and unit.stats.health > 0:
+			enemy_tiles.append(tile)
+	enemy_tiles.sort_custom(func(a, b): return a.y < b.y if a.x == b.x else a.x < b.x)
+
+	var i = 0
+	var j = 0
+	while i < player_tiles.size() or j < enemy_tiles.size():
+		# Player attacks
+		if i < player_tiles.size() and enemy_tiles.size() > 0:
+			var player_unit = player_area.unit_grid.units[player_tiles[i]]
+			# Refresh living enemy tiles
+			var living_enemy_tiles = []
+			for tile in enemy_area.unit_grid.units.keys():
+				var unit = enemy_area.unit_grid.units[tile]
+				if unit and unit.stats and unit.stats.health > 0:
+					living_enemy_tiles.append(tile)
+			if living_enemy_tiles.size() == 0:
+				break
+			var enemy_tile = living_enemy_tiles[randi() % living_enemy_tiles.size()]
+			var enemy_unit = enemy_area.unit_grid.units[enemy_tile]
+			await _attack(player_unit, enemy_unit)
+			await get_tree().create_timer(0.5).timeout
+		i += 1
+
+		# Enemy attacks
+		if j < enemy_tiles.size() and player_tiles.size() > 0:
+			var enemy_unit = enemy_area.unit_grid.units[enemy_tiles[j]]
+			# Refresh living player tiles
+			var living_player_tiles = []
+			for tile in player_area.unit_grid.units.keys():
+				var unit = player_area.unit_grid.units[tile]
+				if unit and unit.stats and unit.stats.health > 0:
+					living_player_tiles.append(tile)
+			if living_player_tiles.size() == 0:
+				break
+			var player_tile = living_player_tiles[randi() % living_player_tiles.size()]
+			var player_unit = player_area.unit_grid.units[player_tile]
+			await _attack(enemy_unit, player_unit)
+			await get_tree().create_timer(0.5).timeout
+		j += 1
