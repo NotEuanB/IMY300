@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://3so8lnmdjcjo"]
+[gd_scene load_steps=17 format=3 uid="uid://3so8lnmdjcjo"]
 
 [ext_resource type="Script" uid="uid://bbhwy2e8n6afe" path="res://Scenes/ForestBoard/forestboard.gd" id="1_6whip"]
 [ext_resource type="Texture2D" uid="uid://bmg1gbvddjd4a" path="res://assets/Forest_board.png" id="1_7wfkq"]
@@ -13,8 +13,9 @@
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="8_ltt0n"]
 [ext_resource type="AudioStream" uid="uid://c8msd2v5ehaox" path="res://assets/sfx/place_on_board.mp3" id="10_2h058"]
 [ext_resource type="AudioStream" uid="uid://bcml1kme2pdlf" path="res://assets/sfx/attack.wav" id="13_trglm"]
-[ext_resource type="AudioStream" uid="uid://nw3c4mp3nao2" path="res://assets/sfx/forest_ambience.mp3" id="13_wha1q"]
 [ext_resource type="AudioStream" uid="uid://cck8y8ttv2i3r" path="res://assets/sfx/damage.mp3" id="14_wha1q"]
+[ext_resource type="AudioStream" uid="uid://5uchen6u0i0k" path="res://assets/sfx/forest_ambience.mp3" id="15_wha1q"]
+[ext_resource type="AudioStream" uid="uid://b2jyrgw6375gj" path="res://assets/sfx/win.wav" id="16_p7wka"]
 
 [node name="Forestboard" type="Node2D"]
 script = ExtResource("1_6whip")
@@ -86,13 +87,23 @@ stream = ExtResource("10_2h058")
 script = ExtResource("8_ltt0n")
 hand_area = NodePath("../HandArea")
 
-[node name="Ambience" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("13_wha1q")
-autoplay = true
-parameters/looping = true
-
 [node name="Attack" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("13_trglm")
 
 [node name="Lose" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("14_wha1q")
+
+[node name="Ambience" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("15_wha1q")
+volume_db = -20.0
+autoplay = true
+parameters/looping = true
+
+[node name="Win" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("16_p7wka")
+
+[node name="Dimmer" type="ColorRect" parent="."]
+visible = false
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0, 0, 0.5)

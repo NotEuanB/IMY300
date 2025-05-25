@@ -168,7 +168,6 @@ func _attack(attacker, defender) -> void:
 	# Animate attacker moving back to original position
 	var tween_back = create_tween()
 	tween_back.tween_property(attacker, "global_position", original_pos, 0.5)
-	$Attack.play()
 	await tween_back.finished
 
 	# Restore original z_index
@@ -192,7 +191,7 @@ func _attack(attacker, defender) -> void:
 			var tile = enemy_area.unit_grid.units.keys()[enemy_area.unit_grid.units.values().find(attacker)]
 			enemy_area.unit_grid.remove_unit(tile)
 		attacker.queue_free()
-	
+	$Attack.play()
 
 func _update_health_display(unit):
 	if unit.has_node("Stats/HealthStat"):
@@ -237,45 +236,37 @@ func _combat_round() -> void:
 
 	var i = 0
 	var j = 0
-	while true:
+	while i < player_tiles.size() or j < enemy_tiles.size():
 		# Player attacks
-		if i < player_tiles.size():
-			# Check if player unit is still alive
-			var player_unit = player_area.unit_grid.units.get(player_tiles[i], null)
-			if player_unit and player_unit.stats and player_unit.stats.health > 0:
-				# Refresh living enemy tiles
-				var living_enemy_tiles = []
-				for tile in enemy_area.unit_grid.units.keys():
-					var unit = enemy_area.unit_grid.units[tile]
-					if unit and unit.stats and unit.stats.health > 0:
-						living_enemy_tiles.append(tile)
-				if living_enemy_tiles.size() == 0:
-					break
-				var enemy_tile = living_enemy_tiles[randi() % living_enemy_tiles.size()]
-				var enemy_unit = enemy_area.unit_grid.units[enemy_tile]
-				await _attack(player_unit, enemy_unit)
-				await get_tree().create_timer(0.5).timeout
-			i += 1
+		if i < player_tiles.size() and enemy_tiles.size() > 0:
+			var player_unit = player_area.unit_grid.units[player_tiles[i]]
+			# Refresh living enemy tiles
+			var living_enemy_tiles = []
+			for tile in enemy_area.unit_grid.units.keys():
+				var unit = enemy_area.unit_grid.units[tile]
+				if unit and unit.stats and unit.stats.health > 0:
+					living_enemy_tiles.append(tile)
+			if living_enemy_tiles.size() == 0:
+				break
+			var enemy_tile = living_enemy_tiles[randi() % living_enemy_tiles.size()]
+			var enemy_unit = enemy_area.unit_grid.units[enemy_tile]
+			await _attack(player_unit, enemy_unit)
+			await get_tree().create_timer(0.5).timeout
+		i += 1
 
 		# Enemy attacks
-		if j < enemy_tiles.size():
-			# Check if enemy unit is still alive
-			var enemy_unit = enemy_area.unit_grid.units.get(enemy_tiles[j], null)
-			if enemy_unit and enemy_unit.stats and enemy_unit.stats.health > 0:
-				# Refresh living player tiles
-				var living_player_tiles = []
-				for tile in player_area.unit_grid.units.keys():
-					var unit = player_area.unit_grid.units[tile]
-					if unit and unit.stats and unit.stats.health > 0:
-						living_player_tiles.append(tile)
-				if living_player_tiles.size() == 0:
-					break
-				var player_tile = living_player_tiles[randi() % living_player_tiles.size()]
-				var player_unit = player_area.unit_grid.units[player_tile]
-				await _attack(enemy_unit, player_unit)
-				await get_tree().create_timer(0.5).timeout
-			j += 1
-
-		# Stop if both sides are done
-		if i >= player_tiles.size() and j >= enemy_tiles.size():
-			break
+		if j < enemy_tiles.size() and player_tiles.size() > 0:
+			var enemy_unit = enemy_area.unit_grid.units[enemy_tiles[j]]
+			# Refresh living player tiles
+			var living_player_tiles = []
+			for tile in player_area.unit_grid.units.keys():
+				var unit = player_area.unit_grid.units[tile]
+				if unit and unit.stats and unit.stats.health > 0:
+					living_player_tiles.append(tile)
+			if living_player_tiles.size() == 0:
+				break
+			var player_tile = living_player_tiles[randi() % living_player_tiles.size()]
+			var player_unit = player_area.unit_grid.units[player_tile]
+			await _attack(enemy_unit, player_unit)
+			await get_tree().create_timer(0.5).timeout
+		j += 1
