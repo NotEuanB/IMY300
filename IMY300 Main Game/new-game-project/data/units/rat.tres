@@ -14,4 +14,5 @@ health = 1
 pool_count = 100
 skin = ExtResource("2_yr27n")
 description = "On entering: Choose a unit to give +1/+1"
+buff_used = false
 metadata/_custom_type_script = "uid://d2inypj55y68q"
