@@ -137,7 +137,7 @@ size = Vector2i(6, 1)
 
 [node name="UnitMover" type="Node" parent="."]
 script = ExtResource("6_7ohde")
-play_area_paths = Array[NodePath]([NodePath("../HandArea"), NodePath("../PlayArea"), NodePath(""), NodePath("")])
+play_area_paths = Array[NodePath]([NodePath("../HandArea"), NodePath("../PlayArea")])
 
 [node name="UnitSpawner" type="Node" parent="." node_paths=PackedStringArray("hand_area")]
 script = ExtResource("7_x1pfr")

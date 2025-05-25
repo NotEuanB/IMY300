@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://3so8lnmdjcjo"]
+[gd_scene load_steps=11 format=3 uid="uid://3so8lnmdjcjo"]
 
-[ext_resource type="Script" path="res://Scenes/ForestBoard/forestboard.gd" id="1_6whip"]
+[ext_resource type="Script" uid="uid://bbhwy2e8n6afe" path="res://Scenes/ForestBoard/forestboard.gd" id="1_6whip"]
 [ext_resource type="Texture2D" uid="uid://bmg1gbvddjd4a" path="res://assets/Forest_board.png" id="1_7wfkq"]
 [ext_resource type="Texture2D" uid="uid://bxvnsqfsenlnl" path="res://assets/Player_avatar.png" id="2_kk7ri"]
 [ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="2_t7ggh"]
+[ext_resource type="Resource" uid="uid://dyf6vcx6ocetc" path="res://data/enemy/goblin.tres" id="2_w21hk"]
 [ext_resource type="Texture2D" uid="uid://u3n13mxow2g6" path="res://assets/enemy_avatar.png" id="3_6whip"]
 [ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="3_l4id5"]
 [ext_resource type="PackedScene" uid="uid://tm1a5rntugg8" path="res://Scenes/Health Display/health_display.tscn" id="5_l4id5"]
@@ -12,6 +13,7 @@
 
 [node name="Forestboard" type="Node2D"]
 script = ExtResource("1_6whip")
+enemy_stats = ExtResource("2_w21hk")
 
 [node name="Visuals" type="Node2D" parent="."]
 
@@ -53,6 +55,17 @@ cell_size = Vector2(209, 305)
 area_type = "board"
 
 [node name="PlayerUnitGrid" type="Node2D" parent="PlayArea"]
+script = ExtResource("3_l4id5")
+size = Vector2i(6, 1)
+
+[node name="EnemyArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
+position = Vector2(337, 223)
+script = ExtResource("2_t7ggh")
+unit_grid = NodePath("EnemyUnitGrid")
+cell_size = Vector2(209, 305)
+area_type = "hand"
+
+[node name="EnemyUnitGrid" type="Node2D" parent="EnemyArea"]
 script = ExtResource("3_l4id5")
 size = Vector2i(6, 1)
 

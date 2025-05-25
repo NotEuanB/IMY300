@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bqsrb4vun2g3q"]
+[gd_scene load_steps=10 format=3 uid="uid://bqsrb4vun2g3q"]
 
 [ext_resource type="Script" uid="uid://navurmx1e1fi" path="res://Scenes/Unit/unit.gd" id="1_pjoo4"]
+[ext_resource type="Resource" uid="uid://cqg3k4j47hv5s" path="res://data/units/e_worm.tres" id="2_usuqk"]
 [ext_resource type="Texture2D" uid="uid://br881ewjuyyb4" path="res://assets/units/frame.png" id="3_r0bnu"]
-[ext_resource type="Texture2D" uid="uid://dh1hx2aib8w8y" path="res://assets/units/Rat.png" id="3_r4dve"]
+[ext_resource type="Texture2D" uid="uid://dldqv52stul4h" path="res://assets/units/Enemy_worm.png" id="4_6y1bm"]
 [ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="5_6y1bm"]
 [ext_resource type="LabelSettings" uid="uid://hmjcs0b768nu" path="res://assets/font/font_stat.tres" id="5_r0bnu"]
 [ext_resource type="LabelSettings" uid="uid://w0i76r03armr" path="res://assets/font/font_name.tres" id="6_usuqk"]
@@ -13,6 +14,7 @@ size = Vector2(177, 303)
 
 [node name="Unit" type="Area2D" groups=["units"]]
 script = ExtResource("1_pjoo4")
+stats = ExtResource("2_usuqk")
 metadata/_edit_group_ = true
 
 [node name="CardBack" type="TextureRect" parent="."]
@@ -22,7 +24,7 @@ texture = ExtResource("3_r0bnu")
 
 [node name="Skin" type="Sprite2D" parent="."]
 position = Vector2(100, 153)
-texture = ExtResource("3_r4dve")
+texture = ExtResource("4_6y1bm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(99.5, 152.5)
@@ -58,7 +60,7 @@ offset_left = 23.0
 offset_top = 206.0
 offset_right = 197.0
 offset_bottom = 234.0
-text = "Rat"
+text = "Worm"
 label_settings = ExtResource("6_usuqk")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -68,7 +70,6 @@ offset_left = 23.0
 offset_top = 236.0
 offset_right = 200.0
 offset_bottom = 302.0
-text = "On entering: Choose a unit to give +1/+1"
 label_settings = ExtResource("7_6y1bm")
 horizontal_alignment = 1
 vertical_alignment = 1

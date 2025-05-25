@@ -7,6 +7,11 @@ static var selecting_rat: RatUnit = null
 
 var play_areas: Array[PlayArea] = []
 
+var enabled: bool = true
+
+func set_enabled(value: bool) -> void:
+	enabled = value
+
 func _ready() -> void:
 	play_areas.clear()
 	for path in play_area_paths:
@@ -32,7 +37,6 @@ func _get_play_area_for_position(global: Vector2) -> int:
 	for i in range(play_areas.size()):
 		var tile := play_areas[i].get_tile_from_global(global)
 		if play_areas[i].is_tile_in_bounds(tile):
-			print("Selected play area:", i, "tile:", tile)
 			return i
 	return -1
 
@@ -57,6 +61,8 @@ func _move_unit(unit: Unit, play_area: PlayArea, tile: Vector2i) -> void:
 
 
 func _on_unit_drag_started(unit: Unit) -> void:
+	if not enabled:
+		return
 	for i in play_areas.size():
 		if unit.get_parent() == play_areas[i].unit_grid:
 			# Find the tile in this grid that contains the unit
@@ -65,17 +71,20 @@ func _on_unit_drag_started(unit: Unit) -> void:
 					play_areas[i].unit_grid.remove_unit(tile)
 					unit.set_meta("last_grid_index", i)
 					unit.set_meta("last_tile", tile)
-					print("Drag started from play area", i, "tile", tile)
 					if unit is GolemUnit:
 						unit.on_removed_from_board(play_areas[i])
 					return
 
 
 func _on_unit_drag_canceled(starting_position: Vector2, unit: Unit) -> void:
+	if not enabled:
+		return
 	_reset_unit_to_starting_position(starting_position, unit)
 
 
 func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
+	if not enabled:
+		return
 	var mouse_pos := get_viewport().get_mouse_position()
 	var old_area_index := int(unit.get_meta("last_grid_index", -1))
 	var old_tile_variant = unit.get_meta("last_tile", null)
@@ -92,16 +101,24 @@ func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
 		_reset_unit_to_starting_position(starting_position, unit)
 		return		
 	
+	# Prevent swapping between hand and board
 	var hand_area_index = 0
-	if old_area_index == hand_area_index and drop_area_index != hand_area_index:
-		unit.set_meta("left_hand", true)
-	if drop_area_index == hand_area_index and unit.get_meta("left_hand", false):
+	var is_drag_from_hand = (old_area_index == hand_area_index)
+	var is_drop_to_hand = (drop_area_index == hand_area_index)
+
+	# Prevent dropping units into hand unless they came from hand
+	if is_drop_to_hand and not is_drag_from_hand:
 		_reset_unit_to_starting_position(starting_position, unit)
 		return
 
-	# swap units if we have to
 	if new_area.unit_grid.is_tile_occupied(new_tile):
 		var old_unit: Unit = new_area.unit_grid.units[new_tile]
+		var is_target_in_hand = (new_area == play_areas[hand_area_index])
+		# Block swap if either dragged unit or target unit is in hand
+		if is_drag_from_hand or is_target_in_hand:
+			_reset_unit_to_starting_position(starting_position, unit)
+			return
+		# Otherwise, allow swap on board
 		new_area.unit_grid.remove_unit(new_tile)
 		_move_unit(old_unit, old_area, old_tile)
 	_move_unit(unit, new_area, new_tile)
