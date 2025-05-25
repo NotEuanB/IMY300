@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bt0uy01056sim"]
+[gd_scene load_steps=10 format=3 uid="uid://bt0uy01056sim"]
 
 [ext_resource type="Script" uid="uid://dcccasptyoysi" path="res://Scenes/UnitCard/unit_card.gd" id="1_fxb4e"]
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="2_apj8s"]
@@ -7,6 +7,7 @@
 [ext_resource type="LabelSettings" uid="uid://hmjcs0b768nu" path="res://assets/font/font_stat.tres" id="5_f1w4f"]
 [ext_resource type="LabelSettings" uid="uid://w0i76r03armr" path="res://assets/font/font_name.tres" id="6_j1fqa"]
 [ext_resource type="LabelSettings" uid="uid://d3kcq1iyjj6cf" path="res://assets/font/font_desc.tres" id="7_j0lwh"]
+[ext_resource type="AudioStream" uid="uid://05sgyew2ynsi" path="res://assets/sfx/buy.ogg" id="8_j1fqa"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hd16a"]
 bg_color = Color(0, 0, 0, 1)
@@ -92,6 +93,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_hd16a")
+
+[node name="Buy" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_j1fqa")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
