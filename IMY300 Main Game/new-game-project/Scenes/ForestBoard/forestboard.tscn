@@ -13,8 +13,8 @@
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="8_ltt0n"]
 [ext_resource type="AudioStream" uid="uid://c8msd2v5ehaox" path="res://assets/sfx/place_on_board.mp3" id="10_2h058"]
 [ext_resource type="AudioStream" uid="uid://bcml1kme2pdlf" path="res://assets/sfx/attack.wav" id="13_trglm"]
+[ext_resource type="AudioStream" uid="uid://5uchen6u0i0k" path="res://assets/sfx/forest_ambience.mp3" id="13_wha1q"]
 [ext_resource type="AudioStream" uid="uid://cck8y8ttv2i3r" path="res://assets/sfx/damage.mp3" id="14_wha1q"]
-[ext_resource type="AudioStream" uid="uid://5uchen6u0i0k" path="res://assets/sfx/forest_ambience.mp3" id="15_wha1q"]
 [ext_resource type="AudioStream" uid="uid://b2jyrgw6375gj" path="res://assets/sfx/win.wav" id="16_p7wka"]
 
 [node name="Forestboard" type="Node2D"]
@@ -44,11 +44,12 @@ offset_right = 267.0
 offset_bottom = 872.0
 
 [node name="HandArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(337, 871)
+position = Vector2(336, 889)
 script = ExtResource("2_t7ggh")
 unit_grid = NodePath("HandUnitGrid")
 cell_size = Vector2(209, 305)
 area_type = "hand"
+metadata/_edit_lock_ = true
 
 [node name="HandUnitGrid" type="Node2D" parent="HandArea"]
 script = ExtResource("3_l4id5")
@@ -60,6 +61,7 @@ script = ExtResource("2_t7ggh")
 unit_grid = NodePath("PlayerUnitGrid")
 cell_size = Vector2(209, 305)
 area_type = "board"
+metadata/_edit_lock_ = true
 
 [node name="PlayerUnitGrid" type="Node2D" parent="PlayArea"]
 script = ExtResource("3_l4id5")
@@ -71,6 +73,7 @@ script = ExtResource("2_t7ggh")
 unit_grid = NodePath("EnemyUnitGrid")
 cell_size = Vector2(209, 305)
 area_type = "hand"
+metadata/_edit_lock_ = true
 
 [node name="EnemyUnitGrid" type="Node2D" parent="EnemyArea"]
 script = ExtResource("3_l4id5")
@@ -87,22 +90,23 @@ stream = ExtResource("10_2h058")
 script = ExtResource("8_ltt0n")
 hand_area = NodePath("../HandArea")
 
+[node name="Ambience" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("13_wha1q")
+autoplay = true
+parameters/looping = true
+
 [node name="Attack" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("13_trglm")
 
 [node name="Lose" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("14_wha1q")
 
-[node name="Ambience" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("15_wha1q")
-volume_db = -20.0
-autoplay = true
-parameters/looping = true
-
 [node name="Win" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("16_p7wka")
 
-[node name="Dimmer" type="ColorRect" parent="."]
+[node name="OverlayLayer" type="CanvasLayer" parent="."]
+
+[node name="Dimmer" type="ColorRect" parent="OverlayLayer"]
 visible = false
 offset_right = 1920.0
 offset_bottom = 1080.0

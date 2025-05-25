@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=27 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://Scenes/Board/board.gd" id="1_ef5ss"]
 [ext_resource type="Texture2D" uid="uid://c6xr4umn1qegw" path="res://assets/board.png" id="2_brcfe"]
@@ -18,6 +18,7 @@
 [ext_resource type="AudioStream" uid="uid://chk0wkaflbage" path="res://assets/sfx/tavern_ambience.mp3" id="16_dqnt6"]
 [ext_resource type="Texture2D" uid="uid://bwfymqvnuum0x" path="res://assets/button_spritesheet.png" id="16_xqaal"]
 [ext_resource type="AudioStream" uid="uid://ju6kya03qjrf" path="res://assets/sfx/button.mp3" id="17_63xfs"]
+[ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="19_a1ark"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqnt6"]
 atlas = ExtResource("16_xqaal")
@@ -93,6 +94,10 @@ _data = {
 &"RESET": SubResource("Animation_xqaal")
 }
 
+[sub_resource type="LabelSettings" id="LabelSettings_rt3kt"]
+font = ExtResource("19_a1ark")
+font_size = 42
+
 [node name="Shop" type="Node2D"]
 script = ExtResource("1_ef5ss")
 metadata/_edit_lock_ = true
@@ -122,17 +127,19 @@ script = ExtResource("3_dkvsl")
 unit_grid = NodePath("PlayerUnitGrid")
 cell_size = Vector2(209, 305)
 area_type = "board"
+metadata/_edit_lock_ = true
 
 [node name="PlayerUnitGrid" type="Node2D" parent="PlayArea"]
 script = ExtResource("3_ffhyd")
 size = Vector2i(6, 1)
 
 [node name="HandArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(338, 871)
+position = Vector2(336, 890)
 script = ExtResource("3_dkvsl")
 unit_grid = NodePath("HandUnitGrid")
 cell_size = Vector2(209, 305)
 area_type = "hand"
+metadata/_edit_lock_ = true
 
 [node name="HandUnitGrid" type="Node2D" parent="HandArea"]
 script = ExtResource("3_ffhyd")
@@ -195,6 +202,14 @@ stream = ExtResource("16_dqnt6")
 volume_db = -20.0
 autoplay = true
 parameters/looping = true
+
+[node name="Label" type="Label" parent="."]
+offset_left = 828.0
+offset_top = 76.0
+offset_right = 1102.0
+offset_bottom = 122.0
+text = "Drag here to sell"
+label_settings = SubResource("LabelSettings_rt3kt")
 
 [connection signal="mouse_entered" from="FightButton" to="FightButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="FightButton" to="FightButton" method="_on_mouse_exited"]

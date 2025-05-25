@@ -55,17 +55,17 @@ func get_living_unit_count(unit_grid) -> int:
 	return count
 
 func show_reward_ui(title_text: String, description_text: String) -> void:
-	$Dimmer.visible = true  # Show the dimmer	
+	$OverlayLayer/Dimmer.visible = true  # Show the dimmer
 	var reward_ui_scene = preload("res://Scenes/Rewards/RewardUi.tscn")
 	var reward_ui = reward_ui_scene.instantiate()
-	get_tree().current_scene.add_child(reward_ui)
+	$OverlayLayer.add_child(reward_ui)
 	reward_ui.get_node("Title").text = title_text
 	reward_ui.get_node("Description").text = description_text	
 	# Optionally, hide the dimmer when the reward UI is closed
 	reward_ui.connect("tree_exited", Callable(self, "_on_reward_ui_closed"))
 
 func _on_reward_ui_closed():
-	$Dimmer.visible = false
+	$OverlayLayer/Dimmer.visible = false
 
 func start_combat() -> void:
 	while get_living_unit_count(player_area.unit_grid) > 0 and get_living_unit_count(enemy_area.unit_grid) > 0:		
