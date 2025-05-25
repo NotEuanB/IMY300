@@ -6,7 +6,7 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_glm6i"]
 atlas = ExtResource("3_glm6i")
-region = Rect2(-1.235, 0, 767.915, 484.695)
+region = Rect2(-1.235, 0, 770.225, 481.91)
 
 [sub_resource type="Animation" id="Animation_q8vrn"]
 length = 0.001

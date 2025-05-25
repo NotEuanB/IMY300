@@ -54,6 +54,19 @@ func get_living_unit_count(unit_grid) -> int:
 			count += 1
 	return count
 
+func show_reward_ui(title_text: String, description_text: String) -> void:
+	$Dimmer.visible = true  # Show the dimmer	
+	var reward_ui_scene = preload("res://Scenes/Rewards/RewardUi.tscn")
+	var reward_ui = reward_ui_scene.instantiate()
+	get_tree().current_scene.add_child(reward_ui)
+	reward_ui.get_node("Title").text = title_text
+	reward_ui.get_node("Description").text = description_text	
+	# Optionally, hide the dimmer when the reward UI is closed
+	reward_ui.connect("tree_exited", Callable(self, "_on_reward_ui_closed"))
+
+func _on_reward_ui_closed():
+	$Dimmer.visible = false
+
 func start_combat() -> void:
 	while get_living_unit_count(player_area.unit_grid) > 0 and get_living_unit_count(enemy_area.unit_grid) > 0:		
 		await _combat_round()
@@ -61,10 +74,12 @@ func start_combat() -> void:
 	# Determine the winner
 	if get_living_unit_count(player_area.unit_grid) == 0:
 		player_stats.health -= 2
+		$Visuals/HealthDisplay/Health.text = str(player_stats.health)
 		$Lose.play()
-		print("Enemy wins!")
+		show_reward_ui("You Lose", "You lost 2 HP!")
 	elif get_living_unit_count(enemy_area.unit_grid) == 0:
-		print("Player wins!")
+		$Win.play()
+		show_reward_ui("You Win", "You got 4 gold!")
 
 func _player_turn() -> void:
 	var living_player_tiles = []
