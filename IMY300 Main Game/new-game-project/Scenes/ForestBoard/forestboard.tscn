@@ -104,7 +104,9 @@ stream = ExtResource("14_wha1q")
 [node name="Win" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("16_p7wka")
 
-[node name="Dimmer" type="ColorRect" parent="."]
+[node name="OverlayLayer" type="CanvasLayer" parent="."]
+
+[node name="Dimmer" type="ColorRect" parent="OverlayLayer"]
 visible = false
 offset_right = 1920.0
 offset_bottom = 1080.0
