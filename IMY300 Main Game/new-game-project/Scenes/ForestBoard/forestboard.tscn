@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://3so8lnmdjcjo"]
+[gd_scene load_steps=17 format=3 uid="uid://3so8lnmdjcjo"]
 
 [ext_resource type="Script" uid="uid://bbhwy2e8n6afe" path="res://Scenes/ForestBoard/forestboard.gd" id="1_6whip"]
 [ext_resource type="Texture2D" uid="uid://bmg1gbvddjd4a" path="res://assets/Forest_board.png" id="1_7wfkq"]
@@ -15,6 +15,7 @@
 [ext_resource type="AudioStream" uid="uid://bcml1kme2pdlf" path="res://assets/sfx/attack.wav" id="13_trglm"]
 [ext_resource type="AudioStream" uid="uid://nw3c4mp3nao2" path="res://assets/sfx/forest_ambience.mp3" id="13_wha1q"]
 [ext_resource type="AudioStream" uid="uid://cck8y8ttv2i3r" path="res://assets/sfx/damage.mp3" id="14_wha1q"]
+[ext_resource type="AudioStream" uid="uid://b2jyrgw6375gj" path="res://assets/sfx/win.wav" id="16_p7wka"]
 
 [node name="Forestboard" type="Node2D"]
 script = ExtResource("1_6whip")
@@ -102,3 +103,6 @@ visible = false
 offset_right = 1920.0
 offset_bottom = 1080.0
 color = Color(0, 0, 0, 0.5)
+
+[node name="Win" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("16_p7wka")
