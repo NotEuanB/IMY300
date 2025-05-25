@@ -1,8 +1,0 @@
-[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://w0i76r03armr"]
-
-[ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="1_8m70b"]
-
-[resource]
-font = ExtResource("1_8m70b")
-font_size = 20
-font_color = Color(0.000835145, 0.000688611, 0.000347056, 1)
