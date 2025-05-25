@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cc03g1urqt55u"]
+[gd_scene load_steps=19 format=3 uid="uid://cc03g1urqt55u"]
 
 [ext_resource type="Texture2D" uid="uid://yreyrph44857" path="res://assets/combine_button_spritesheet.png" id="1_ast70"]
 [ext_resource type="Texture2D" uid="uid://cefn0xha7tq81" path="res://assets/combine_board.png" id="1_fmpw1"]
@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="4_7n45d"]
 [ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="5_a4yca"]
 [ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="6_a4yca"]
-[ext_resource type="Script" uid="uid://sqnjequuj6jv" path="res://components/unit_combine.gd" id="6_lw3kx"]
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="7_lw3kx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ar1ei"]
@@ -214,16 +213,6 @@ play_area_paths = Array[NodePath]([NodePath("../HandArea"), NodePath("../PlayAre
 script = ExtResource("7_lw3kx")
 hand_area = NodePath("../HandArea")
 
-[node name="TestButton" type="Button" parent="."]
-visible = false
-offset_left = 78.0
-offset_top = 969.0
-offset_right = 228.0
-offset_bottom = 1029.0
-text = "testing"
-script = ExtResource("6_lw3kx")
-
 [connection signal="mouse_entered" from="CombineButton" to="CombineButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="CombineButton" to="CombineButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="CombineButton" to="CombineButton" method="_on_pressed"]
-[connection signal="pressed" from="TestButton" to="TestButton" method="_on_pressed"]
