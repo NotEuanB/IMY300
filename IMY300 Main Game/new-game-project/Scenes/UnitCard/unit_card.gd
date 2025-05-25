@@ -70,3 +70,4 @@ func _on_pressed() -> void:
 	placeholder.show()
 	player_stats.gold -= unit_stats.gold_cost
 	unit_bought.emit(unit_stats)
+	$Buy.play()

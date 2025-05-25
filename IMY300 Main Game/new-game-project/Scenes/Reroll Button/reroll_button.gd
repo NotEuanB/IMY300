@@ -8,7 +8,7 @@ extends Button
 func _ready() -> void:
 	player_stats.changed.connect(_on_player_stats_changed)
 	_on_player_stats_changed()
-	$RerollSprite/RerollAnimation.play("Reroll_idle")
+	$HBoxContainer/Sprite2D/AnimationPlayer.play("Reroll_idle")
 
 func _on_player_stats_changed() -> void:
 	var has_enough_gold := player_stats.gold >= 2
@@ -21,3 +21,12 @@ func _on_player_stats_changed() -> void:
 
 func _on_pressed() -> void:
 	player_stats.gold -= 2
+	$HBoxContainer/Sprite2D/AnimationPlayer.play("Reroll_press")
+	$Reroll.play()
+	
+
+func _on_mouse_entered() -> void:
+	$HBoxContainer/Sprite2D/AnimationPlayer.play("Reroll_hover")
+
+func _on_mouse_exited() -> void:
+	$HBoxContainer/Sprite2D/AnimationPlayer.play("Reroll_idle")

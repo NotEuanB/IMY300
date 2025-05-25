@@ -1,0 +1,109 @@
+[gd_scene load_steps=17 format=3 uid="uid://3so8lnmdjcjo"]
+
+[ext_resource type="Script" uid="uid://bbhwy2e8n6afe" path="res://Scenes/ForestBoard/forestboard.gd" id="1_6whip"]
+[ext_resource type="Texture2D" uid="uid://bmg1gbvddjd4a" path="res://assets/Forest_board.png" id="1_7wfkq"]
+[ext_resource type="Texture2D" uid="uid://bxvnsqfsenlnl" path="res://assets/Player_avatar.png" id="2_kk7ri"]
+[ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="2_t7ggh"]
+[ext_resource type="Resource" uid="uid://dyf6vcx6ocetc" path="res://data/enemy/goblin.tres" id="2_w21hk"]
+[ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="2_wha1q"]
+[ext_resource type="Texture2D" uid="uid://u3n13mxow2g6" path="res://assets/enemy_avatar.png" id="3_6whip"]
+[ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="3_l4id5"]
+[ext_resource type="PackedScene" uid="uid://tm1a5rntugg8" path="res://Scenes/Health Display/health_display.tscn" id="5_l4id5"]
+[ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="7_w21hk"]
+[ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="8_ltt0n"]
+[ext_resource type="AudioStream" uid="uid://c8msd2v5ehaox" path="res://assets/sfx/place_on_board.mp3" id="10_2h058"]
+[ext_resource type="AudioStream" uid="uid://bcml1kme2pdlf" path="res://assets/sfx/attack.wav" id="13_trglm"]
+[ext_resource type="AudioStream" uid="uid://cck8y8ttv2i3r" path="res://assets/sfx/damage.mp3" id="14_wha1q"]
+[ext_resource type="AudioStream" uid="uid://5uchen6u0i0k" path="res://assets/sfx/forest_ambience.mp3" id="15_wha1q"]
+[ext_resource type="AudioStream" uid="uid://b2jyrgw6375gj" path="res://assets/sfx/win.wav" id="16_p7wka"]
+
+[node name="Forestboard" type="Node2D"]
+script = ExtResource("1_6whip")
+player_stats = ExtResource("2_wha1q")
+enemy_stats = ExtResource("2_w21hk")
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="Forestbackground" type="TextureRect" parent="Visuals"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("1_7wfkq")
+
+[node name="Necromancer" type="Sprite2D" parent="Visuals"]
+position = Vector2(138, 954)
+texture = ExtResource("2_kk7ri")
+
+[node name="Goblin" type="Sprite2D" parent="Visuals"]
+position = Vector2(1779, 130)
+texture = ExtResource("3_6whip")
+
+[node name="HealthDisplay" parent="Visuals" instance=ExtResource("5_l4id5")]
+offset_left = 239.0
+offset_top = 849.0
+offset_right = 267.0
+offset_bottom = 872.0
+
+[node name="HandArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
+position = Vector2(337, 871)
+script = ExtResource("2_t7ggh")
+unit_grid = NodePath("HandUnitGrid")
+cell_size = Vector2(209, 305)
+area_type = "hand"
+
+[node name="HandUnitGrid" type="Node2D" parent="HandArea"]
+script = ExtResource("3_l4id5")
+size = Vector2i(6, 1)
+
+[node name="PlayArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
+position = Vector2(336, 552)
+script = ExtResource("2_t7ggh")
+unit_grid = NodePath("PlayerUnitGrid")
+cell_size = Vector2(209, 305)
+area_type = "board"
+
+[node name="PlayerUnitGrid" type="Node2D" parent="PlayArea"]
+script = ExtResource("3_l4id5")
+size = Vector2i(6, 1)
+
+[node name="EnemyArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
+position = Vector2(337, 223)
+script = ExtResource("2_t7ggh")
+unit_grid = NodePath("EnemyUnitGrid")
+cell_size = Vector2(209, 305)
+area_type = "hand"
+
+[node name="EnemyUnitGrid" type="Node2D" parent="EnemyArea"]
+script = ExtResource("3_l4id5")
+size = Vector2i(6, 1)
+
+[node name="UnitMover" type="Node" parent="."]
+script = ExtResource("7_w21hk")
+play_area_paths = Array[NodePath]([NodePath("../HandArea"), NodePath("../PlayArea")])
+
+[node name="Place" type="AudioStreamPlayer2D" parent="UnitMover"]
+stream = ExtResource("10_2h058")
+
+[node name="UnitSpawner" type="Node" parent="." node_paths=PackedStringArray("hand_area")]
+script = ExtResource("8_ltt0n")
+hand_area = NodePath("../HandArea")
+
+[node name="Attack" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("13_trglm")
+
+[node name="Lose" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("14_wha1q")
+
+[node name="Ambience" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("15_wha1q")
+volume_db = -20.0
+autoplay = true
+parameters/looping = true
+
+[node name="Win" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("16_p7wka")
+
+[node name="Dimmer" type="ColorRect" parent="."]
+visible = false
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0, 0, 0.5)

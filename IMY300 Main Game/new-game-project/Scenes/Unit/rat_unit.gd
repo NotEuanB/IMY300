@@ -20,15 +20,22 @@ func on_played(play_area: PlayArea) -> void:
 	UnitMover.selecting_rat = self
 
 	for unit in candidates:
-		unit.set_selectable(true)
-		unit.connect("selected", Callable(self, "_on_target_selected").bind(candidates), CONNECT_ONE_SHOT)
+		if is_instance_valid(unit):
+			unit.set_selectable(true)
+			var callable = Callable(self, "_on_target_selected").bind(candidates)
+			# Disconnect previous connections to avoid stacking
+			if unit.is_connected("selected", callable):
+				unit.disconnect("selected", callable)
+			unit.connect("selected", callable, CONNECT_ONE_SHOT)
 
 func _on_target_selected(emitter, candidates):
 	emitter.stats.attack += 1
 	emitter.stats.health += 1
 	emitter.set_stats(emitter.stats)
 	for unit in candidates:
-		unit.set_selectable(false)
+		if is_instance_valid(unit):
+			unit.set_selectable(false)
 	buff_used = true
 	UnitMover.is_selecting_target = false
 	UnitMover.selecting_rat = null
+	$Buff.play()

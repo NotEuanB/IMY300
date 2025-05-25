@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EnemyStats" load_steps=6 format=3 uid="uid://dyf6vcx6ocetc"]
+
+[ext_resource type="Script" uid="uid://crbjf0i6q7xqi" path="res://data/enemy/enemy_stats.gd" id="1_ab4bv"]
+[ext_resource type="Texture2D" uid="uid://u3n13mxow2g6" path="res://assets/enemy_avatar.png" id="2_fir5i"]
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="3_fbjpd"]
+[ext_resource type="Resource" uid="uid://cqg3k4j47hv5s" path="res://data/units/e_worm.tres" id="4_n36dg"]
+[ext_resource type="PackedScene" uid="uid://5htrjvrecufi" path="res://Scenes/Unit/EWormUnit.tscn" id="5_dx6gb"]
+
+[resource]
+script = ExtResource("1_ab4bv")
+skin = ExtResource("2_fir5i")
+units = Array[PackedScene]([ExtResource("5_dx6gb"), ExtResource("5_dx6gb"), ExtResource("5_dx6gb")])
+unit_stats = Array[ExtResource("3_fbjpd")]([ExtResource("4_n36dg"), ExtResource("4_n36dg"), ExtResource("4_n36dg")])
+metadata/_custom_type_script = "uid://crbjf0i6q7xqi"

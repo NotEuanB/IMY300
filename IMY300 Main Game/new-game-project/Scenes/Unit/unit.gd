@@ -15,16 +15,19 @@ signal hovered(stats: UnitStats)
 signal selected(unit)
 
 var selectable: bool = false
-
-func _ready():
-	print_tree_pretty()
-	print("unit_description: ", unit_description)
+var enabled: bool = true
 
 func set_selectable(value: bool) -> void:
 	selectable = value
 	modulate = Color(1, 0.5, 1, 1) if value else Color(1, 1, 1, 1)
 
+func set_enabled(value: bool) -> void:
+	enabled = value
+
 func _input_event(_viewport, event, _shape_idx):
+	if not enabled:
+		return
+	
 	if selectable and event is InputEventMouseButton and event.pressed:
 		emit_signal("selected", self)
 

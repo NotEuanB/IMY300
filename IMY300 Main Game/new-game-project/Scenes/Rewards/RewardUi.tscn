@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8efhd0prtmna"]
+
+[ext_resource type="Texture2D" uid="uid://d1cd64t4tllfc" path="res://assets/Rewards.png" id="1_lhkrr"]
+[ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="2_kyyji"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_v2206"]
+font = ExtResource("2_kyyji")
+font_size = 128
+
+[sub_resource type="LabelSettings" id="LabelSettings_buxoo"]
+font = ExtResource("2_kyyji")
+font_size = 64
+
+[node name="RewardUi" type="Node2D"]
+
+[node name="Reward" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_lhkrr")
+
+[node name="Title" type="Label" parent="."]
+offset_left = 725.0
+offset_top = 14.0
+offset_right = 1007.0
+offset_bottom = 152.0
+text = "Label"
+label_settings = SubResource("LabelSettings_v2206")
+
+[node name="Description" type="Label" parent="."]
+offset_left = 656.0
+offset_top = 224.0
+offset_right = 1253.0
+offset_bottom = 294.0
+text = "Here are your rewards"
+label_settings = SubResource("LabelSettings_buxoo")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(1, 1, 1, 0)
