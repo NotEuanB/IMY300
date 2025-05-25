@@ -4,12 +4,35 @@ func _ready() -> void:
 	$CombineSprite/CombineAnimation.play("Combine_idle")
 
 func _on_pressed() -> void:
-	#$CombineSprite/CombineAnimation.play("Combine_press")
-	var combined = combine_units()
-	if combined:
+	var HAND_LIMIT = 6  # Set this to your actual hand size limit
+
+	# Count units in hand (ignore nulls)
+	var hand_count = 0
+	for unit in hand_area.unit_grid.units.values():
+		if unit:
+			hand_count += 1
+
+	# If hand is full, do nothing
+	if hand_count >= HAND_LIMIT:
+		return
+
+	var slot_one_unit = _get_unit_in_slot(slot_one_area)
+	var slot_two_unit = _get_unit_in_slot(slot_two_area)
+	
+	# Allow to continue if both slots are empty or only one is filled
+	if not slot_one_unit or not slot_two_unit:
 		$Button.play()
 		await get_tree().create_timer(3).timeout
 		go_to_fight_scene()
+		return
+	
+	# Both slots filled, try to combine
+	var valid = combine_units()
+	if valid:
+		$Button.play()
+		await get_tree().create_timer(3).timeout
+		go_to_fight_scene()
+	# else: invalid combo, do nothing
 
 func go_to_fight_scene():
 	var board_state = get_board_state()
@@ -40,10 +63,6 @@ signal units_combined(combined_unit: Unit)
 func combine_units() -> bool:
 	var slot_one_unit = _get_unit_in_slot(slot_one_area)
 	var slot_two_unit = _get_unit_in_slot(slot_two_area)
-	
-	if not slot_one_unit or not slot_two_unit:
-		push_error("Both slots must have a unit to combine.")
-		return false
 	
 	var combined_stats = _get_combined_stats(slot_one_unit, slot_two_unit)
 	if combined_stats == null:

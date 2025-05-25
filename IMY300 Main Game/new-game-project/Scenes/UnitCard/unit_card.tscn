@@ -12,7 +12,7 @@
 [ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="10_hd16a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hd16a"]
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0.34902, 0.235294, 0.219608, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_43mit"]
 font = ExtResource("10_hd16a")
