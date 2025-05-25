@@ -47,7 +47,7 @@ func _set_unit_stats(value: UnitStats) -> void:
 	unit_atk.text = str(unit_stats.attack)
 	unit_hp.text = str(unit_stats.health)
 	unit_description.text = unit_stats.description
-
+	$TextureRect/Coin.text = str(unit_stats.gold_cost)
 
 func _on_player_stats_changed() -> void:
 	if not unit_stats:
@@ -71,3 +71,4 @@ func _on_pressed() -> void:
 	player_stats.gold -= unit_stats.gold_cost
 	unit_bought.emit(unit_stats)
 	$Buy.play()
+	$TextureRect.visible = false
