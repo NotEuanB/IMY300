@@ -10,6 +10,7 @@ func _ready() -> void:
 	_spawn_units(board_units, $PlayArea)
 	_spawn_units(hand_units, $HandArea)
 
+
 func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 	for unit_data in units_data:
 		var stats = unit_data["stats"]

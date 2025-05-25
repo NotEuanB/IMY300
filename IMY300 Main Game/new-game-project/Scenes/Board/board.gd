@@ -23,7 +23,6 @@ func _ready() -> void:
 
 func _on_unit_bought(unit_stats: UnitStats) -> void:
 	unit_spawner.spawn_unit(unit_stats)
-	$ShopUI/BuySound.play()
 
 # Tooltip handlers
 func _on_unit_hovered(unit: Node) -> void:
@@ -93,5 +92,6 @@ func get_board_state() -> Array:
 func _on_fight_button_pressed() -> void:
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
+	await get_tree().create_timer(0.5).timeout
 	GameState.save_state(board_state, hand_state)
 	get_tree().change_scene_to_file("res://Scenes/CombineBoard/combineboard.tscn")

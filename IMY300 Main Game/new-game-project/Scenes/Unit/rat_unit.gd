@@ -38,3 +38,4 @@ func _on_target_selected(emitter, candidates):
 	buff_used = true
 	UnitMover.is_selecting_target = false
 	UnitMover.selecting_rat = null
+	$Buff.play()

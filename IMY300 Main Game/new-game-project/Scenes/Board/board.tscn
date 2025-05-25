@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=25 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://Scenes/Board/board.gd" id="1_ef5ss"]
 [ext_resource type="Texture2D" uid="uid://c6xr4umn1qegw" path="res://assets/board.png" id="2_brcfe"]
@@ -8,13 +8,16 @@
 [ext_resource type="Texture2D" uid="uid://c0vwltgy65xru" path="res://assets/tavern_avatar.png" id="4_s2gku"]
 [ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="6_7ohde"]
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="7_x1pfr"]
+[ext_resource type="AudioStream" uid="uid://c8msd2v5ehaox" path="res://assets/sfx/place_on_board.mp3" id="8_dqnt6"]
 [ext_resource type="PackedScene" uid="uid://lqm5228wqvl6" path="res://Scenes/Sell Portal/sell_portal.tscn" id="8_qlllu"]
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="9_me64r"]
 [ext_resource type="PackedScene" uid="uid://cnhx7egcrqt28" path="res://Scenes/Tooltip/tooltip.tscn" id="11_gti8d"]
 [ext_resource type="PackedScene" uid="uid://ehcpt7j0kkj3" path="res://Scenes/ShopContainer/shop_container.tscn" id="12_dkxek"]
 [ext_resource type="Resource" uid="uid://bn1waem751oqp" path="res://data/unit_pool/unit_pool.tres" id="13_brcfe"]
 [ext_resource type="Script" uid="uid://b1l8sw114f6ua" path="res://Scenes/Board/fight_button.gd" id="15_xqaal"]
+[ext_resource type="AudioStream" uid="uid://chk0wkaflbage" path="res://assets/sfx/tavern_ambience.mp3" id="16_dqnt6"]
 [ext_resource type="Texture2D" uid="uid://bwfymqvnuum0x" path="res://assets/button_spritesheet.png" id="16_xqaal"]
+[ext_resource type="AudioStream" uid="uid://ju6kya03qjrf" path="res://assets/sfx/button.mp3" id="17_63xfs"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqnt6"]
 atlas = ExtResource("16_xqaal")
@@ -139,6 +142,9 @@ size = Vector2i(6, 1)
 script = ExtResource("6_7ohde")
 play_area_paths = Array[NodePath]([NodePath("../HandArea"), NodePath("../PlayArea")])
 
+[node name="Place" type="AudioStreamPlayer2D" parent="UnitMover"]
+stream = ExtResource("8_dqnt6")
+
 [node name="UnitSpawner" type="Node" parent="." node_paths=PackedStringArray("hand_area")]
 script = ExtResource("7_x1pfr")
 hand_area = NodePath("../HandArea")
@@ -160,8 +166,6 @@ offset_bottom = 528.0
 theme_override_constants/separation = 28
 unit_spawner = NodePath("../../UnitSpawner")
 
-[node name="BuySound" type="AudioStreamPlayer2D" parent="ShopUI"]
-
 [node name="FightButton" type="TextureButton" parent="."]
 offset_left = 1615.0
 offset_top = 462.0
@@ -181,6 +185,16 @@ frame = 4
 libraries = {
 &"": SubResource("AnimationLibrary_63xfs")
 }
+
+[node name="Button" type="AudioStreamPlayer2D" parent="FightButton"]
+stream = ExtResource("17_63xfs")
+volume_db = -10.0
+
+[node name="Ambience" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("16_dqnt6")
+volume_db = -20.0
+autoplay = true
+parameters/looping = true
 
 [connection signal="mouse_entered" from="FightButton" to="FightButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="FightButton" to="FightButton" method="_on_mouse_exited"]

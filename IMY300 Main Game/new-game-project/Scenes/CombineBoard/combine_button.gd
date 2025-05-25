@@ -4,8 +4,11 @@ func _ready() -> void:
 	$CombineSprite/CombineAnimation.play("Combine_idle")
 
 func _on_pressed() -> void:
-	$CombineSprite/CombineAnimation.play("Combine_press")
+	#$CombineSprite/CombineAnimation.play("Combine_press")
 	combine_units()
+	$Combination.play()
+	$Button.play()
+	await get_tree().create_timer(3).timeout
 	go_to_fight_scene()
 
 func go_to_fight_scene():
@@ -13,6 +16,7 @@ func go_to_fight_scene():
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
 	get_tree().change_scene_to_file("res://Scenes/ForestBoard/forestboard.tscn")
+	
 
 func _on_mouse_entered() -> void:
 	$CombineSprite/CombineAnimation.play("Combine_hover")

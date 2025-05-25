@@ -8,6 +8,7 @@ func _ready() -> void:
 func _on_pressed() -> void:
 	$FightSprite/FightAnimation.play("Fight_press")
 	emit_signal("fight_pressed")
+	$Button.play()
 
 func _on_mouse_entered() -> void:
 	$FightSprite/FightAnimation.play("Fight_hover")
