@@ -44,7 +44,7 @@ offset_right = 267.0
 offset_bottom = 872.0
 
 [node name="HandArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(337, 871)
+position = Vector2(336, 889)
 script = ExtResource("2_t7ggh")
 unit_grid = NodePath("HandUnitGrid")
 cell_size = Vector2(209, 305)
@@ -98,11 +98,11 @@ stream = ExtResource("13_trglm")
 [node name="Lose" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("14_wha1q")
 
+[node name="Win" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("16_p7wka")
+
 [node name="Dimmer" type="ColorRect" parent="."]
 visible = false
 offset_right = 1920.0
 offset_bottom = 1080.0
 color = Color(0, 0, 0, 0.5)
-
-[node name="Win" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("16_p7wka")

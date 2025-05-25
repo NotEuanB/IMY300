@@ -128,7 +128,7 @@ script = ExtResource("3_ffhyd")
 size = Vector2i(6, 1)
 
 [node name="HandArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(338, 871)
+position = Vector2(336, 890)
 script = ExtResource("3_dkvsl")
 unit_grid = NodePath("HandUnitGrid")
 cell_size = Vector2(209, 305)

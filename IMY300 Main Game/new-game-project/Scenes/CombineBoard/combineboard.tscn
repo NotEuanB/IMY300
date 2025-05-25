@@ -195,7 +195,7 @@ size = Vector2i(1, 1)
 
 [node name="HandArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
 z_index = 100
-position = Vector2(364, 980)
+position = Vector2(336, 982)
 script = ExtResource("4_7n45d")
 unit_grid = NodePath("HandUnitGrid")
 cell_size = Vector2(209, 305)
@@ -206,7 +206,7 @@ script = ExtResource("5_a4yca")
 size = Vector2i(6, 1)
 
 [node name="PlayArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(365, 854)
+position = Vector2(336, 837)
 script = ExtResource("4_7n45d")
 unit_grid = NodePath("PlayerUnitGrid")
 cell_size = Vector2(209, 305)
