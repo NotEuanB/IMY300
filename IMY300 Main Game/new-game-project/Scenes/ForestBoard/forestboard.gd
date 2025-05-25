@@ -5,6 +5,7 @@ extends Node2D
 @onready var player_area: PlayArea = $PlayArea
 @onready var hand_area: PlayArea = $HandArea
 @onready var enemy_area: PlayArea = $EnemyArea
+@export var player_stats: Resource
 
 @export var enemy_stats: EnemyStats
 
@@ -59,6 +60,8 @@ func start_combat() -> void:
 
 	# Determine the winner
 	if get_living_unit_count(player_area.unit_grid) == 0:
+		player_stats.health -= 2
+		$Lose.play()
 		print("Enemy wins!")
 	elif get_living_unit_count(enemy_area.unit_grid) == 0:
 		print("Player wins!")
@@ -173,6 +176,7 @@ func _attack(attacker, defender) -> void:
 			var tile = enemy_area.unit_grid.units.keys()[enemy_area.unit_grid.units.values().find(attacker)]
 			enemy_area.unit_grid.remove_unit(tile)
 		attacker.queue_free()
+	$Attack.play()
 
 func _update_health_display(unit):
 	if unit.has_node("Stats/HealthStat"):

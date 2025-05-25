@@ -6,7 +6,6 @@ func _ready() -> void:
 func _on_pressed() -> void:
 	#$CombineSprite/CombineAnimation.play("Combine_press")
 	combine_units()
-	$Combination.play()
 	$Button.play()
 	await get_tree().create_timer(3).timeout
 	go_to_fight_scene()
@@ -56,7 +55,7 @@ func combine_units() -> void:
 	slot_two_unit.queue_free()
 	
 	unit_spawner.spawn_unit(combined_stats)
-	
+	$Combination.play()
 	emit_signal("units_combined")
 
 func _get_unit_in_slot(area: PlayArea) -> Unit:
