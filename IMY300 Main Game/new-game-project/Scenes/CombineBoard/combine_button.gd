@@ -4,6 +4,18 @@ func _ready() -> void:
 	$CombineSprite/CombineAnimation.play("Combine_idle")
 
 func _on_pressed() -> void:
+	var HAND_LIMIT = 6  # Set this to your actual hand size limit
+
+	# Count units in hand (ignore nulls)
+	var hand_count = 0
+	for unit in hand_area.unit_grid.units.values():
+		if unit:
+			hand_count += 1
+
+	# If hand is full, do nothing
+	if hand_count >= HAND_LIMIT:
+		return
+
 	var slot_one_unit = _get_unit_in_slot(slot_one_area)
 	var slot_two_unit = _get_unit_in_slot(slot_two_area)
 	
