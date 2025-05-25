@@ -154,6 +154,7 @@ slot_one_area = NodePath("../SlotOne")
 slot_two_area = NodePath("../SlotTwo")
 hand_area = NodePath("../HandArea")
 unit_spawner = NodePath("../UnitSpawner")
+metadata/_edit_lock_ = true
 
 [node name="CombineSprite" type="Sprite2D" parent="CombineButton"]
 position = Vector2(219, 55)
@@ -178,6 +179,7 @@ position = Vector2(710, 84)
 script = ExtResource("4_7n45d")
 unit_grid = NodePath("SlotOneGrid")
 area_type = "slotone"
+metadata/_edit_lock_ = true
 
 [node name="SlotOneGrid" type="Node2D" parent="SlotOne"]
 script = ExtResource("5_a4yca")
@@ -188,6 +190,7 @@ position = Vector2(1012, 82)
 script = ExtResource("4_7n45d")
 unit_grid = NodePath("SlotTwoGrid")
 area_type = "slotone"
+metadata/_edit_lock_ = true
 
 [node name="SlotTwoGrid" type="Node2D" parent="SlotTwo"]
 script = ExtResource("5_a4yca")
@@ -200,6 +203,7 @@ script = ExtResource("4_7n45d")
 unit_grid = NodePath("HandUnitGrid")
 cell_size = Vector2(209, 305)
 area_type = "hand"
+metadata/_edit_lock_ = true
 
 [node name="HandUnitGrid" type="Node2D" parent="HandArea"]
 script = ExtResource("5_a4yca")
@@ -211,6 +215,7 @@ script = ExtResource("4_7n45d")
 unit_grid = NodePath("PlayerUnitGrid")
 cell_size = Vector2(209, 305)
 area_type = "board"
+metadata/_edit_lock_ = true
 
 [node name="PlayerUnitGrid" type="Node2D" parent="PlayArea"]
 script = ExtResource("5_a4yca")

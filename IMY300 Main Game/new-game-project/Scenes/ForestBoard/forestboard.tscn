@@ -49,6 +49,7 @@ script = ExtResource("2_t7ggh")
 unit_grid = NodePath("HandUnitGrid")
 cell_size = Vector2(209, 305)
 area_type = "hand"
+metadata/_edit_lock_ = true
 
 [node name="HandUnitGrid" type="Node2D" parent="HandArea"]
 script = ExtResource("3_l4id5")
@@ -60,6 +61,7 @@ script = ExtResource("2_t7ggh")
 unit_grid = NodePath("PlayerUnitGrid")
 cell_size = Vector2(209, 305)
 area_type = "board"
+metadata/_edit_lock_ = true
 
 [node name="PlayerUnitGrid" type="Node2D" parent="PlayArea"]
 script = ExtResource("3_l4id5")
@@ -71,6 +73,7 @@ script = ExtResource("2_t7ggh")
 unit_grid = NodePath("EnemyUnitGrid")
 cell_size = Vector2(209, 305)
 area_type = "hand"
+metadata/_edit_lock_ = true
 
 [node name="EnemyUnitGrid" type="Node2D" parent="EnemyArea"]
 script = ExtResource("3_l4id5")
