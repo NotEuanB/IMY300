@@ -14,4 +14,5 @@ health = 1
 pool_count = 0
 skin = ExtResource("2_kqlbi")
 description = ""
+buff_used = false
 metadata/_custom_type_script = "uid://d2inypj55y68q"

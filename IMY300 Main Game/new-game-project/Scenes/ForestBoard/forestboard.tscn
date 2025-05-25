@@ -96,3 +96,9 @@ stream = ExtResource("13_trglm")
 
 [node name="Lose" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("14_wha1q")
+
+[node name="Dimmer" type="ColorRect" parent="."]
+visible = false
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0, 0, 0.5)
