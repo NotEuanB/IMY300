@@ -174,7 +174,7 @@ stream = ExtResource("6_rfmli")
 volume_db = -10.0
 
 [node name="SlotOne" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(693, 46)
+position = Vector2(710, 84)
 script = ExtResource("4_7n45d")
 unit_grid = NodePath("SlotOneGrid")
 area_type = "slotone"
@@ -184,7 +184,7 @@ script = ExtResource("5_a4yca")
 size = Vector2i(1, 1)
 
 [node name="SlotTwo" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
-position = Vector2(996, 48)
+position = Vector2(1012, 82)
 script = ExtResource("4_7n45d")
 unit_grid = NodePath("SlotTwoGrid")
 area_type = "slotone"
