@@ -153,6 +153,7 @@ func _attack(attacker, defender) -> void:
 	# Animate attacker moving back to original position
 	var tween_back = create_tween()
 	tween_back.tween_property(attacker, "global_position", original_pos, 0.5)
+	$Attack.play()
 	await tween_back.finished
 
 	# Restore original z_index
@@ -176,7 +177,7 @@ func _attack(attacker, defender) -> void:
 			var tile = enemy_area.unit_grid.units.keys()[enemy_area.unit_grid.units.values().find(attacker)]
 			enemy_area.unit_grid.remove_unit(tile)
 		attacker.queue_free()
-	$Attack.play()
+	
 
 func _update_health_display(unit):
 	if unit.has_node("Stats/HealthStat"):

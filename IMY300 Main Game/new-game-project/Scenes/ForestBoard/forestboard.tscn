@@ -88,6 +88,7 @@ hand_area = NodePath("../HandArea")
 
 [node name="Ambience" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("12_4p6v6")
+autoplay = true
 
 [node name="Attack" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("13_trglm")
