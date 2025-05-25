@@ -64,6 +64,7 @@ func start_combat() -> void:
 		$Lose.play()
 		print("Enemy wins!")
 	elif get_living_unit_count(enemy_area.unit_grid) == 0:
+		$Win.play()
 		print("Player wins!")
 
 func _player_turn() -> void:
