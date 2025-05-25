@@ -2,10 +2,8 @@
 class_name RatUnit
 extends Unit
 
-var buff_used := false
-
 func on_played(play_area: PlayArea) -> void:
-	if buff_used or UnitMover.is_selecting_target:
+	if stats.buff_used or UnitMover.is_selecting_target:
 		return
 
 	var candidates: Array = []
@@ -35,7 +33,7 @@ func _on_target_selected(emitter, candidates):
 	for unit in candidates:
 		if is_instance_valid(unit):
 			unit.set_selectable(false)
-	buff_used = true
+	stats.buff_used = true # <-- Mark as used on the stats resource
 	UnitMover.is_selecting_target = false
 	UnitMover.selecting_rat = null
 	$Buff.play()
