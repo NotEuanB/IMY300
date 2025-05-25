@@ -14,5 +14,7 @@ extends Resource
 @export var skin: Texture2D
 @export var description: String = ""
 
+@export var buff_used := false
+
 func _to_string() -> String:
 	return name
