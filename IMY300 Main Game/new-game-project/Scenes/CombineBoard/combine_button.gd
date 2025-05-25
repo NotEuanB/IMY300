@@ -4,11 +4,23 @@ func _ready() -> void:
 	$CombineSprite/CombineAnimation.play("Combine_idle")
 
 func _on_pressed() -> void:
-	#$CombineSprite/CombineAnimation.play("Combine_press")
-	combine_units()
-	$Button.play()
-	await get_tree().create_timer(3).timeout
-	go_to_fight_scene()
+	var slot_one_unit = _get_unit_in_slot(slot_one_area)
+	var slot_two_unit = _get_unit_in_slot(slot_two_area)
+	
+	# Allow to continue if both slots are empty or only one is filled
+	if not slot_one_unit or not slot_two_unit:
+		$Button.play()
+		await get_tree().create_timer(3).timeout
+		go_to_fight_scene()
+		return
+	
+	# Both slots filled, try to combine
+	var valid = combine_units()
+	if valid:
+		$Button.play()
+		await get_tree().create_timer(3).timeout
+		go_to_fight_scene()
+	# else: invalid combo, do nothing
 
 func go_to_fight_scene():
 	var board_state = get_board_state()
@@ -36,17 +48,13 @@ var combination_db := {
 
 signal units_combined(combined_unit: Unit)
 
-func combine_units() -> void:
+func combine_units() -> bool:
 	var slot_one_unit = _get_unit_in_slot(slot_one_area)
 	var slot_two_unit = _get_unit_in_slot(slot_two_area)
 	
-	if not slot_one_unit or not slot_two_unit:
-		push_error("Both slots must have a unit to combine.")
-		return
-	
 	var combined_stats = _get_combined_stats(slot_one_unit, slot_two_unit)
 	if combined_stats == null:
-		return
+		return false
 	
 	# Remove units from slots
 	slot_one_area.unit_grid.remove_unit(_get_unit_tile(slot_one_area, slot_one_unit))
@@ -57,6 +65,7 @@ func combine_units() -> void:
 	unit_spawner.spawn_unit(combined_stats)
 	$Combination.play()
 	emit_signal("units_combined")
+	return true
 
 func _get_unit_in_slot(area: PlayArea) -> Unit:
 	for unit in area.unit_grid.units.values():
