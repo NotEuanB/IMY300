@@ -1,0 +1,107 @@
+[gd_scene load_steps=11 format=3 uid="uid://ehcpt7j0kkj3"]
+
+[ext_resource type="PackedScene" uid="uid://urlrv6wjxn5n" path="res://Scenes/Reroll Button/reroll_button.tscn" id="1_f18wc"]
+[ext_resource type="Script" uid="uid://7sdaeso87g1t" path="res://Scenes/ShopContainer/shop_container.gd" id="1_fkysy"]
+[ext_resource type="PackedScene" uid="uid://df7fpuhmkgi11" path="res://Scenes/Gold Display/gold_display.tscn" id="2_fkysy"]
+[ext_resource type="PackedScene" uid="uid://bt0uy01056sim" path="res://Scenes/UnitCard/unit_card.tscn" id="3_cfpj3"]
+[ext_resource type="Texture2D" uid="uid://boegkyvaykviy" path="res://assets/fight_sheet.png" id="3_urc0y"]
+[ext_resource type="Texture2D" uid="uid://b5l5skypukjgg" path="res://assets/currency.png" id="4_v7apu"]
+[ext_resource type="Resource" uid="uid://cc31lth8kllsv" path="res://data/units/golem.tres" id="5_cfpj3"]
+
+[sub_resource type="Animation" id="Animation_88t2e"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+
+[sub_resource type="Animation" id="Animation_q8x0b"]
+resource_name = "Reroll_idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [2, 5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_75edi"]
+_data = {
+&"RESET": SubResource("Animation_88t2e"),
+&"Reroll_idle": SubResource("Animation_q8x0b")
+}
+
+[node name="ShopContainer" type="VBoxContainer"]
+offset_left = 63.0
+offset_top = 29.0
+offset_right = 479.0
+offset_bottom = 109.0
+theme_override_constants/separation = 30
+script = ExtResource("1_fkysy")
+
+[node name="Top" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 980
+
+[node name="RerollButton" parent="Top" instance=ExtResource("1_f18wc")]
+layout_mode = 2
+
+[node name="RerollSprite" type="Sprite2D" parent="Top/RerollButton"]
+position = Vector2(98, -4)
+texture = ExtResource("3_urc0y")
+hframes = 3
+vframes = 2
+frame = 2
+
+[node name="RerollAnimation" type="AnimationPlayer" parent="Top/RerollButton/RerollSprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_75edi")
+}
+
+[node name="GoldDisplay" parent="Top" instance=ExtResource("2_fkysy")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="Top/GoldDisplay"]
+position = Vector2(76, 17)
+texture = ExtResource("4_v7apu")
+
+[node name="Bottom" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 29
+
+[node name="UnitCard" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard2" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard3" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard4" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard5" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard6" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+unit_stats = ExtResource("5_cfpj3")
+
+[connection signal="pressed" from="Top/RerollButton" to="." method="_on_reroll_button_pressed"]

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_sdp5c"]
 [ext_resource type="Texture2D" uid="uid://d1noeddl70tu1" path="res://assets/units/Rolet.png" id="2_4yqm3"]
-[ext_resource type="PackedScene" uid="uid://qtirc8oll53w" path="res://Scenes/Unit/RoletUnit.tscn" id="3_6ny0q"]
+[ext_resource type="PackedScene" uid="uid://qtirc8oll53w" path="res://scenes/unit/RoletUnit.tscn" id="3_6ny0q"]
 
 [resource]
 script = ExtResource("1_sdp5c")

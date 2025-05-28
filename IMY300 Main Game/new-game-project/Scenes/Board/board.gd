@@ -94,4 +94,4 @@ func _on_fight_button_pressed() -> void:
 	var hand_state = get_hand_state()
 	await get_tree().create_timer(0.5).timeout
 	GameState.save_state(board_state, hand_state)
-	get_tree().change_scene_to_file("res://Scenes/CombineBoard/combineboard.tscn")
+	get_tree().change_scene_to_file("res://scenes/combine_board/combineboard.tscn")
