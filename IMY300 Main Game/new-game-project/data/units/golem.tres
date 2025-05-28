@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_v16q2"]
 [ext_resource type="Texture2D" uid="uid://bbyd14agefhwg" path="res://assets/units/Golem.png" id="2_la75s"]
-[ext_resource type="PackedScene" uid="uid://d1v1e8miycwhf" path="res://Scenes/Unit/GolemUnit.tscn" id="3_hfrm6"]
+[ext_resource type="PackedScene" uid="uid://d1v1e8miycwhf" path="res://scenes/unit/GolemUnit.tscn" id="3_hfrm6"]
 
 [resource]
 script = ExtResource("1_v16q2")
