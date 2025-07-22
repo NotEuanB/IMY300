@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=28 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://scenes/board/board.gd" id="1_ef5ss"]
 [ext_resource type="Texture2D" uid="uid://c6xr4umn1qegw" path="res://assets/board.png" id="2_brcfe"]
@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://bwfymqvnuum0x" path="res://assets/button_spritesheet.png" id="16_xqaal"]
 [ext_resource type="AudioStream" uid="uid://ju6kya03qjrf" path="res://assets/sfx/button.mp3" id="17_63xfs"]
 [ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="19_a1ark"]
+[ext_resource type="PackedScene" uid="uid://dquecal5snr3a" path="res://scenes/pause_menu/pause_menu.tscn" id="20_vq54c"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqnt6"]
 atlas = ExtResource("16_xqaal")
@@ -173,6 +174,13 @@ offset_bottom = 528.0
 theme_override_constants/separation = 28
 unit_spawner = NodePath("../../UnitSpawner")
 
+[node name="PauseMenu" parent="ShopUI" instance=ExtResource("20_vq54c")]
+visible = false
+offset_left = -34.0
+offset_top = -33.0
+offset_right = -34.0
+offset_bottom = -33.0
+
 [node name="FightButton" type="TextureButton" parent="."]
 offset_left = 1615.0
 offset_top = 462.0
@@ -195,7 +203,7 @@ libraries = {
 
 [node name="Button" type="AudioStreamPlayer2D" parent="FightButton"]
 stream = ExtResource("17_63xfs")
-volume_db = -10.0
+volume_db = -20.0
 
 [node name="Ambience" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("16_dqnt6")

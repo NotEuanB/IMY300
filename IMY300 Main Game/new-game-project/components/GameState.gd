@@ -9,3 +9,7 @@ func save_state(board: Array, hand: Array) -> void:
 
 func load_state() -> Array:
 	return [board_units.duplicate(true), hand_units.duplicate(true)]
+
+func reset_state() -> void:
+	board_units = []
+	hand_units = []

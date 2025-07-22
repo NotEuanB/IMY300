@@ -17,3 +17,9 @@ func _set_health(value: int) -> void:
 func _set_level(value: int) -> void:
 	level = value
 	emit_changed()
+
+func reset_stats():
+	gold = 50 # or your starting value
+	level = 1 # or your starting value
+	health = 10 # or your starting value
+	emit_changed()
