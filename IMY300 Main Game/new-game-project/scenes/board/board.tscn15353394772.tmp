@@ -1,0 +1,223 @@
+[gd_scene load_steps=28 format=3 uid="uid://soguh4yny0f0"]
+
+[ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://scenes/board/board.gd" id="1_ef5ss"]
+[ext_resource type="Texture2D" uid="uid://c6xr4umn1qegw" path="res://assets/board.png" id="2_brcfe"]
+[ext_resource type="Texture2D" uid="uid://bxvnsqfsenlnl" path="res://assets/Player_avatar.png" id="3_csi2d"]
+[ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="3_dkvsl"]
+[ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="3_ffhyd"]
+[ext_resource type="Texture2D" uid="uid://c0vwltgy65xru" path="res://assets/tavern_avatar.png" id="4_s2gku"]
+[ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="6_7ohde"]
+[ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="7_x1pfr"]
+[ext_resource type="AudioStream" uid="uid://c8msd2v5ehaox" path="res://assets/sfx/place_on_board.mp3" id="8_dqnt6"]
+[ext_resource type="PackedScene" uid="uid://lqm5228wqvl6" path="res://scenes/sell_portal/sell_portal.tscn" id="8_qlllu"]
+[ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="9_me64r"]
+[ext_resource type="PackedScene" uid="uid://cnhx7egcrqt28" path="res://scenes/tooltip/tooltip.tscn" id="11_gti8d"]
+[ext_resource type="PackedScene" uid="uid://ehcpt7j0kkj3" path="res://scenes/shop_container/shop_container.tscn" id="12_dkxek"]
+[ext_resource type="Resource" uid="uid://bn1waem751oqp" path="res://data/unit_pool/unit_pool.tres" id="13_brcfe"]
+[ext_resource type="Script" uid="uid://b1l8sw114f6ua" path="res://scenes/board/fight_button.gd" id="15_xqaal"]
+[ext_resource type="AudioStream" uid="uid://chk0wkaflbage" path="res://assets/sfx/tavern_ambience.mp3" id="16_dqnt6"]
+[ext_resource type="Texture2D" uid="uid://bwfymqvnuum0x" path="res://assets/button_spritesheet.png" id="16_xqaal"]
+[ext_resource type="AudioStream" uid="uid://ju6kya03qjrf" path="res://assets/sfx/button.mp3" id="17_63xfs"]
+[ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="19_a1ark"]
+[ext_resource type="PackedScene" uid="uid://dquecal5snr3a" path="res://scenes/pause_menu/pause_menu.tscn" id="20_vq54c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqnt6"]
+atlas = ExtResource("16_xqaal")
+region = Rect2(0, 0, 763, 484)
+
+[sub_resource type="Animation" id="Animation_dqnt6"]
+resource_name = "Fight_hover"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.533333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_63xfs"]
+resource_name = "Fight_idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.533333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_a1ark"]
+resource_name = "Fight_press"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [13]
+}
+
+[sub_resource type="Animation" id="Animation_xqaal"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_63xfs"]
+_data = {
+&"Fight_hover": SubResource("Animation_dqnt6"),
+&"Fight_idle": SubResource("Animation_63xfs"),
+&"Fight_press": SubResource("Animation_a1ark"),
+&"RESET": SubResource("Animation_xqaal")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_rt3kt"]
+font = ExtResource("19_a1ark")
+font_size = 42
+
+[node name="Shop" type="Node2D"]
+script = ExtResource("1_ef5ss")
+metadata/_edit_lock_ = true
+
+[node name="Visuals" type="Node2D" parent="."]
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="Board" type="TextureRect" parent="Visuals"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("2_brcfe")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Necromancer" type="Sprite2D" parent="Visuals"]
+position = Vector2(138, 954)
+texture = ExtResource("3_csi2d")
+
+[node name="Travernkeeper" type="Sprite2D" parent="Visuals"]
+position = Vector2(1779, 130)
+texture = ExtResource("4_s2gku")
+
+[node name="PlayArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
+position = Vector2(337, 550)
+script = ExtResource("3_dkvsl")
+unit_grid = NodePath("PlayerUnitGrid")
+cell_size = Vector2(209, 305)
+area_type = "board"
+metadata/_edit_lock_ = true
+
+[node name="PlayerUnitGrid" type="Node2D" parent="PlayArea"]
+script = ExtResource("3_ffhyd")
+size = Vector2i(6, 1)
+
+[node name="HandArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
+position = Vector2(336, 890)
+script = ExtResource("3_dkvsl")
+unit_grid = NodePath("HandUnitGrid")
+cell_size = Vector2(209, 305)
+area_type = "hand"
+metadata/_edit_lock_ = true
+
+[node name="HandUnitGrid" type="Node2D" parent="HandArea"]
+script = ExtResource("3_ffhyd")
+size = Vector2i(6, 1)
+
+[node name="UnitMover" type="Node" parent="."]
+script = ExtResource("6_7ohde")
+play_area_paths = Array[NodePath]([NodePath("../HandArea"), NodePath("../PlayArea")])
+
+[node name="Place" type="AudioStreamPlayer2D" parent="UnitMover"]
+stream = ExtResource("8_dqnt6")
+
+[node name="UnitSpawner" type="Node" parent="." node_paths=PackedStringArray("hand_area")]
+script = ExtResource("7_x1pfr")
+hand_area = NodePath("../HandArea")
+
+[node name="Tooltip" parent="." instance=ExtResource("11_gti8d")]
+
+[node name="SellPortal" parent="." instance=ExtResource("8_qlllu")]
+position = Vector2(-54, 18)
+unit_pool = ExtResource("13_brcfe")
+player_stats = ExtResource("9_me64r")
+
+[node name="ShopUI" type="CanvasLayer" parent="."]
+
+[node name="ShopContainer" parent="ShopUI" node_paths=PackedStringArray("unit_spawner") instance=ExtResource("12_dkxek")]
+offset_left = 348.0
+offset_top = 147.0
+offset_right = 1573.0
+offset_bottom = 528.0
+theme_override_constants/separation = 28
+unit_spawner = NodePath("../../UnitSpawner")
+
+[node name="FightButton" type="TextureButton" parent="."]
+offset_left = 1615.0
+offset_top = 462.0
+offset_right = 1807.0
+offset_bottom = 558.0
+script = ExtResource("15_xqaal")
+
+[node name="FightSprite" type="Sprite2D" parent="FightButton"]
+position = Vector2(0.344971, 0)
+texture = SubResource("AtlasTexture_dqnt6")
+offset = Vector2(95, 48)
+hframes = 4
+vframes = 5
+frame = 4
+
+[node name="FightAnimation" type="AnimationPlayer" parent="FightButton/FightSprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_63xfs")
+}
+
+[node name="Button" type="AudioStreamPlayer2D" parent="FightButton"]
+stream = ExtResource("17_63xfs")
+volume_db = -20.0
+
+[node name="Ambience" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("16_dqnt6")
+volume_db = -20.0
+autoplay = true
+parameters/looping = true
+
+[node name="Label" type="Label" parent="."]
+offset_left = 828.0
+offset_top = 76.0
+offset_right = 1102.0
+offset_bottom = 122.0
+text = "Drag here to sell"
+label_settings = SubResource("LabelSettings_rt3kt")
+
+[node name="PauseMenu" parent="." instance=ExtResource("20_vq54c")]
+offset_left = 926.0
+offset_top = 507.0
+offset_right = 926.0
+offset_bottom = 507.0
+
+[connection signal="mouse_entered" from="FightButton" to="FightButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="FightButton" to="FightButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="FightButton" to="FightButton" method="_on_pressed"]

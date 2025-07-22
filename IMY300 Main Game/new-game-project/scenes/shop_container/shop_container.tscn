@@ -1,0 +1,62 @@
+[gd_scene load_steps=9 format=3 uid="uid://ehcpt7j0kkj3"]
+
+[ext_resource type="PackedScene" uid="uid://bjew0osvaa0rm" path="res://scenes/reroll_button/reroll_button.tscn" id="1_f18wc"]
+[ext_resource type="Script" uid="uid://7sdaeso87g1t" path="res://scenes/shop_container/shop_container.gd" id="1_fkysy"]
+[ext_resource type="PackedScene" uid="uid://df7fpuhmkgi11" path="res://scenes/gold_display/gold_display.tscn" id="2_fkysy"]
+[ext_resource type="Resource" uid="uid://bn1waem751oqp" path="res://data/unit_pool/unit_pool.tres" id="2_q8x0b"]
+[ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="3_88t2e"]
+[ext_resource type="PackedScene" uid="uid://bt0uy01056sim" path="res://scenes/unit_card/unit_card.tscn" id="3_cfpj3"]
+[ext_resource type="Resource" uid="uid://cc31lth8kllsv" path="res://data/units/golem.tres" id="5_cfpj3"]
+[ext_resource type="AudioStream" uid="uid://dh38avwq8jjgm" path="res://assets/sfx/reroll.mp3" id="5_q8x0b"]
+
+[node name="ShopContainer" type="VBoxContainer"]
+offset_left = 63.0
+offset_top = 29.0
+offset_right = 1288.0
+offset_bottom = 442.0
+theme_override_constants/separation = 60
+script = ExtResource("1_fkysy")
+unit_pool = ExtResource("2_q8x0b")
+player_stats = ExtResource("3_88t2e")
+
+[node name="Top" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 900
+
+[node name="RerollButton" parent="Top" instance=ExtResource("1_f18wc")]
+custom_minimum_size = Vector2(184.51, 48)
+layout_mode = 2
+size_flags_stretch_ratio = 0.0
+
+[node name="Reroll" type="AudioStreamPlayer2D" parent="Top/RerollButton"]
+stream = ExtResource("5_q8x0b")
+volume_db = -10.0
+
+[node name="GoldDisplay" parent="Top" instance=ExtResource("2_fkysy")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Bottom" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 29
+
+[node name="UnitCard" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard2" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard3" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard4" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard5" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+
+[node name="UnitCard6" parent="Bottom" instance=ExtResource("3_cfpj3")]
+layout_mode = 2
+unit_stats = ExtResource("5_cfpj3")
+
+[connection signal="pressed" from="Top/RerollButton" to="." method="_on_reroll_button_pressed"]

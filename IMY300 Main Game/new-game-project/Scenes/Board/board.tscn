@@ -1,6 +1,6 @@
-[gd_scene load_steps=27 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=28 format=3 uid="uid://soguh4yny0f0"]
 
-[ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://Scenes/Board/board.gd" id="1_ef5ss"]
+[ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://scenes/board/board.gd" id="1_ef5ss"]
 [ext_resource type="Texture2D" uid="uid://c6xr4umn1qegw" path="res://assets/board.png" id="2_brcfe"]
 [ext_resource type="Texture2D" uid="uid://bxvnsqfsenlnl" path="res://assets/Player_avatar.png" id="3_csi2d"]
 [ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="3_dkvsl"]
@@ -9,16 +9,17 @@
 [ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="6_7ohde"]
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="7_x1pfr"]
 [ext_resource type="AudioStream" uid="uid://c8msd2v5ehaox" path="res://assets/sfx/place_on_board.mp3" id="8_dqnt6"]
-[ext_resource type="PackedScene" uid="uid://lqm5228wqvl6" path="res://Scenes/Sell Portal/sell_portal.tscn" id="8_qlllu"]
+[ext_resource type="PackedScene" uid="uid://lqm5228wqvl6" path="res://scenes/sell_portal/sell_portal.tscn" id="8_qlllu"]
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="9_me64r"]
-[ext_resource type="PackedScene" uid="uid://cnhx7egcrqt28" path="res://Scenes/Tooltip/tooltip.tscn" id="11_gti8d"]
-[ext_resource type="PackedScene" uid="uid://ehcpt7j0kkj3" path="res://Scenes/ShopContainer/shop_container.tscn" id="12_dkxek"]
+[ext_resource type="PackedScene" uid="uid://cnhx7egcrqt28" path="res://scenes/tooltip/tooltip.tscn" id="11_gti8d"]
+[ext_resource type="PackedScene" uid="uid://ehcpt7j0kkj3" path="res://scenes/shop_container/shop_container.tscn" id="12_dkxek"]
 [ext_resource type="Resource" uid="uid://bn1waem751oqp" path="res://data/unit_pool/unit_pool.tres" id="13_brcfe"]
-[ext_resource type="Script" uid="uid://b1l8sw114f6ua" path="res://Scenes/Board/fight_button.gd" id="15_xqaal"]
+[ext_resource type="Script" uid="uid://b1l8sw114f6ua" path="res://scenes/board/fight_button.gd" id="15_xqaal"]
 [ext_resource type="AudioStream" uid="uid://chk0wkaflbage" path="res://assets/sfx/tavern_ambience.mp3" id="16_dqnt6"]
 [ext_resource type="Texture2D" uid="uid://bwfymqvnuum0x" path="res://assets/button_spritesheet.png" id="16_xqaal"]
 [ext_resource type="AudioStream" uid="uid://ju6kya03qjrf" path="res://assets/sfx/button.mp3" id="17_63xfs"]
 [ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="19_a1ark"]
+[ext_resource type="PackedScene" uid="uid://dquecal5snr3a" path="res://scenes/pause_menu/pause_menu.tscn" id="20_vq54c"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqnt6"]
 atlas = ExtResource("16_xqaal")
@@ -173,6 +174,13 @@ offset_bottom = 528.0
 theme_override_constants/separation = 28
 unit_spawner = NodePath("../../UnitSpawner")
 
+[node name="PauseMenu" parent="ShopUI" instance=ExtResource("20_vq54c")]
+visible = false
+offset_left = -34.0
+offset_top = -33.0
+offset_right = -34.0
+offset_bottom = -33.0
+
 [node name="FightButton" type="TextureButton" parent="."]
 offset_left = 1615.0
 offset_top = 462.0
@@ -195,7 +203,7 @@ libraries = {
 
 [node name="Button" type="AudioStreamPlayer2D" parent="FightButton"]
 stream = ExtResource("17_63xfs")
-volume_db = -10.0
+volume_db = -20.0
 
 [node name="Ambience" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("16_dqnt6")
