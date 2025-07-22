@@ -10,6 +10,8 @@ const CELL_SIZE := Vector2(180, 305)
 @onready var shop_container: ShopContainer = $ShopUI/ShopContainer
 @onready var board_area: PlayArea = $PlayArea
 @onready var hand_area: PlayArea = $HandArea
+@onready var pause_menu = $ShopUI/PauseMenu
+var paused = false
 
 var hovered_unit: Node = null  # To store the currently hovered unit
 var time_hover_started: float = -1.0  # To track the time when hover started (in milliseconds)
@@ -47,9 +49,21 @@ func _on_unit_drag_started() -> void:
 	# Hide the tooltip when the unit starts dragging
 	tooltip.hide_tooltip()  # Hide the tooltip during dragging
 
+func pauseMenu():
+	if paused:
+		pause_menu.hide()
+		Engine.time_scale = 1
+	else:
+		pause_menu.show()
+		Engine.time_scale = 0
+	
+	paused = !paused
 
 # Check the hover time each frame
 func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("pause"):
+		pauseMenu()
+		
 	if hovered_unit != null and time_hover_started >= 0:
 		# Calculate how much time has passed since hover started (in milliseconds)
 		var hover_duration = Time.get_ticks_msec() - time_hover_started
