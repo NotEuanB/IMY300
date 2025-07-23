@@ -72,8 +72,8 @@ tracks/0/keys = {
 "values": [0, 1]
 }
 
-[sub_resource type="Animation" id="Animation_3ovsr"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_5seab"]
+resource_name = "NewRun_idle"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -87,8 +87,8 @@ tracks/0/keys = {
 "values": [0]
 }
 
-[sub_resource type="Animation" id="Animation_5seab"]
-resource_name = "NewRun_idle"
+[sub_resource type="Animation" id="Animation_3ovsr"]
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -112,6 +112,22 @@ _data = {
 [sub_resource type="AtlasTexture" id="AtlasTexture_wem23"]
 atlas = ExtResource("3_ob46e")
 region = Rect2(0, 32, 384, 448)
+
+[sub_resource type="Animation" id="Animation_x2yjq"]
+resource_name = "Continue_hover"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [2, 3]
+}
 
 [sub_resource type="Animation" id="Animation_4xg86"]
 resource_name = "Continue_idle"
@@ -143,8 +159,19 @@ tracks/0/keys = {
 "values": [2]
 }
 
-[sub_resource type="Animation" id="Animation_x2yjq"]
-resource_name = "Continue_hover"
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lqpn7"]
+_data = {
+&"Continue_hover": SubResource("Animation_x2yjq"),
+&"Continue_idle": SubResource("Animation_4xg86"),
+&"RESET": SubResource("Animation_thkx5")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ovsr"]
+atlas = ExtResource("3_ob46e")
+region = Rect2(0, 32, 384, 448)
+
+[sub_resource type="Animation" id="Animation_rrgl4"]
+resource_name = "Options_hover"
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -156,19 +183,8 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [2, 3]
+"values": [4, 5]
 }
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_lqpn7"]
-_data = {
-&"Continue_hover": SubResource("Animation_x2yjq"),
-&"Continue_idle": SubResource("Animation_4xg86"),
-&"RESET": SubResource("Animation_thkx5")
-}
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3ovsr"]
-atlas = ExtResource("3_ob46e")
-region = Rect2(0, 32, 384, 448)
 
 [sub_resource type="Animation" id="Animation_lqpn7"]
 resource_name = "Options_idle"
@@ -200,22 +216,6 @@ tracks/0/keys = {
 "values": [4]
 }
 
-[sub_resource type="Animation" id="Animation_rrgl4"]
-resource_name = "Options_hover"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [4, 5]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dn3lk"]
 _data = {
 &"Options_hover": SubResource("Animation_rrgl4"),
@@ -243,8 +243,8 @@ tracks/0/keys = {
 "values": [6, 7]
 }
 
-[sub_resource type="Animation" id="Animation_4ujhu"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_vnpsp"]
+resource_name = "Credits_idle"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -258,8 +258,8 @@ tracks/0/keys = {
 "values": [6]
 }
 
-[sub_resource type="Animation" id="Animation_vnpsp"]
-resource_name = "Credits_idle"
+[sub_resource type="Animation" id="Animation_4ujhu"]
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -300,21 +300,6 @@ tracks/0/keys = {
 "values": [8, 9]
 }
 
-[sub_resource type="Animation" id="Animation_bq5lc"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [20]
-}
-
 [sub_resource type="Animation" id="Animation_xac7c"]
 resource_name = "Exit_idle"
 tracks/0/type = "value"
@@ -328,6 +313,21 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [8]
+}
+
+[sub_resource type="Animation" id="Animation_bq5lc"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [20]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_bq5lc"]
@@ -476,6 +476,7 @@ stream = ExtResource("5_x2yjq")
 volume_db = -20.0
 
 [node name="ColorRect" type="ColorRect" parent="CreditsButton"]
+layout_mode = 0
 offset_right = 385.205
 offset_bottom = 95.545
 color = Color(0, 0, 0, 0.735)
