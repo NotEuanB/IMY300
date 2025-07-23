@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://dh2dbq6xklqss"]
+
+[node name="TutorialPopup" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Popup" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -135.0
+offset_right = 240.0
+offset_bottom = 135.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2, 0.2, 0.2, 0.7)
+
+[node name="Text" type="Label" parent="Popup"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Next" type="Button" parent="Popup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -45.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1.25, 1.25)
+pivot_offset = Vector2(45, 31)
+text = "Next"
+
+[node name="Skip" type="Button" parent="Popup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 48.0
+grow_vertical = 0
+scale = Vector2(1.25, 1.25)
+pivot_offset = Vector2(0, 31)
+text = "Skip
+"
