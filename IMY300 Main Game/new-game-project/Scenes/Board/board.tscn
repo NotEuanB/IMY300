@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=29 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://scenes/board/board.gd" id="1_ef5ss"]
 [ext_resource type="Texture2D" uid="uid://c6xr4umn1qegw" path="res://assets/board.png" id="2_brcfe"]
@@ -20,6 +20,7 @@
 [ext_resource type="AudioStream" uid="uid://ju6kya03qjrf" path="res://assets/sfx/button.mp3" id="17_63xfs"]
 [ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="19_a1ark"]
 [ext_resource type="PackedScene" uid="uid://dquecal5snr3a" path="res://scenes/pause_menu/pause_menu.tscn" id="20_vq54c"]
+[ext_resource type="PackedScene" uid="uid://dh2dbq6xklqss" path="res://scenes/tutorial/tutorial_popup.tscn" id="21_jngt6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqnt6"]
 atlas = ExtResource("16_xqaal")
@@ -164,22 +165,13 @@ position = Vector2(-54, 18)
 unit_pool = ExtResource("13_brcfe")
 player_stats = ExtResource("9_me64r")
 
-[node name="ShopUI" type="CanvasLayer" parent="."]
-
-[node name="ShopContainer" parent="ShopUI" node_paths=PackedStringArray("unit_spawner") instance=ExtResource("12_dkxek")]
+[node name="ShopContainer" parent="." node_paths=PackedStringArray("unit_spawner") instance=ExtResource("12_dkxek")]
 offset_left = 348.0
 offset_top = 147.0
 offset_right = 1573.0
-offset_bottom = 528.0
+offset_bottom = 532.0
 theme_override_constants/separation = 28
-unit_spawner = NodePath("../../UnitSpawner")
-
-[node name="PauseMenu" parent="ShopUI" instance=ExtResource("20_vq54c")]
-visible = false
-offset_left = -34.0
-offset_top = -33.0
-offset_right = -34.0
-offset_bottom = -33.0
+unit_spawner = NodePath("../UnitSpawner")
 
 [node name="FightButton" type="TextureButton" parent="."]
 offset_left = 1615.0
@@ -218,6 +210,20 @@ offset_right = 1102.0
 offset_bottom = 122.0
 text = "Drag here to sell"
 label_settings = SubResource("LabelSettings_rt3kt")
+
+[node name="PauseMenu" parent="." instance=ExtResource("20_vq54c")]
+visible = false
+offset_left = 926.0
+offset_top = 507.0
+offset_right = 926.0
+offset_bottom = 507.0
+
+[node name="TutorialPopup" parent="." instance=ExtResource("21_jngt6")]
+visible = false
+offset_left = 973.0
+offset_top = 518.0
+offset_right = 973.0
+offset_bottom = 518.0
 
 [connection signal="mouse_entered" from="FightButton" to="FightButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="FightButton" to="FightButton" method="_on_mouse_exited"]
