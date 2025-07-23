@@ -3,38 +3,13 @@
 [ext_resource type="Texture2D" uid="uid://0g3qn006ohak" path="res://assets/tutorial_gui.png" id="1_8722f"]
 [ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="2_idhui"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jo4xh"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.1, 0.1, 0.1, 0.3)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rp3em"]
+texture = ExtResource("1_8722f")
+region_rect = Rect2(112, 16, 32, 32)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x2csu"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(1, 1, 1, 0.75)
-draw_center = false
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-expand_margin_left = 2.0
-expand_margin_top = 2.0
-expand_margin_right = 2.0
-expand_margin_bottom = 2.0
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m5ied"]
+texture = ExtResource("1_8722f")
+region_rect = Rect2(64, 16, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_idhui"]
 texture = ExtResource("1_8722f")
@@ -69,8 +44,8 @@ Button/constants/icon_max_width = 0
 Button/constants/outline_size = 0
 Button/font_sizes/font_size = 15
 Button/fonts/font = ExtResource("2_idhui")
-Button/styles/disabled = SubResource("StyleBoxFlat_jo4xh")
-Button/styles/focus = SubResource("StyleBoxFlat_x2csu")
+Button/styles/disabled = SubResource("StyleBoxTexture_rp3em")
+Button/styles/focus = SubResource("StyleBoxTexture_m5ied")
 Button/styles/hover = SubResource("StyleBoxTexture_idhui")
 Button/styles/normal = SubResource("StyleBoxTexture_w1frq")
 Button/styles/pressed = SubResource("StyleBoxTexture_8722f")
