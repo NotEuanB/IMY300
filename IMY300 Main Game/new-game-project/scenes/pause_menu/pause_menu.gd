@@ -1,6 +1,6 @@
 extends Control
 
-@onready var main = $"../../"
+@onready var main = $"../"
 var player_stats = load("res://data/player/player_stats.tres")
 
 func _on_resume_pressed() -> void:

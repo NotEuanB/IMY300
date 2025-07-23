@@ -220,10 +220,10 @@ offset_bottom = 507.0
 
 [node name="TutorialPopup" parent="." instance=ExtResource("21_jngt6")]
 visible = false
-offset_left = 973.0
-offset_top = 518.0
-offset_right = 973.0
-offset_bottom = 518.0
+offset_left = 963.0
+offset_top = 484.0
+offset_right = 963.0
+offset_bottom = 484.0
 
 [connection signal="mouse_entered" from="FightButton" to="FightButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="FightButton" to="FightButton" method="_on_mouse_exited"]

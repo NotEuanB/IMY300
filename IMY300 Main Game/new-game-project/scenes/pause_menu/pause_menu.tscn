@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dquecal5snr3a"]
+[gd_scene load_steps=6 format=3 uid="uid://dquecal5snr3a"]
 
 [ext_resource type="Script" uid="uid://d4by11su4pxvj" path="res://scenes/pause_menu/pause_menu.gd" id="1_5bgjm"]
 [ext_resource type="Shader" uid="uid://oqxqy6rpcjj7" path="res://scenes/pause_menu/pause_menu.gdshader" id="2_qcmsd"]
+[ext_resource type="Theme" uid="uid://ci51k626vqn64" path="res://assets/themes/popup_panel.tres" id="3_0a7io"]
+[ext_resource type="Theme" uid="uid://i51js88lpwix" path="res://assets/themes/button.tres" id="3_10tpt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_10tpt"]
 shader = ExtResource("2_qcmsd")
@@ -37,22 +39,54 @@ offset_bottom = 540.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -17.5469
+offset_top = -31.1563
+offset_right = 52.4531
+offset_bottom = 34.8438
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.5, 2)
+theme = ExtResource("3_0a7io")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
-layout_mode = 2
+[node name="Resume" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -30.0
+offset_top = 15.0
+offset_right = 30.0
+offset_bottom = 35.0
+grow_horizontal = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(30, 10)
+theme = ExtResource("3_10tpt")
+text = "Resume"
 
-[node name="Resume" type="Button" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Resume
-"
-
-[node name="Quit" type="Button" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
+[node name="Quit" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -30.0
+offset_top = -35.0
+offset_right = 30.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(30, 10)
+theme = ExtResource("3_10tpt")
 text = "Quit"
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Panel/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Panel/Quit" to="." method="_on_quit_pressed"]
