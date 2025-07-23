@@ -7,10 +7,10 @@ const CELL_SIZE := Vector2(180, 305)
 @onready var unit_spawner: UnitSpawner = $UnitSpawner
 @onready var sell_portal: SellPortal = $SellPortal
 @onready var tooltip: TooltipClass = $Tooltip  # Ensure TooltipClass node exists
-@onready var shop_container: ShopContainer = $ShopContainer
+@onready var shop_container: ShopContainer = $ShopUI/ShopContainer
 @onready var board_area: PlayArea = $PlayArea
 @onready var hand_area: PlayArea = $HandArea
-@onready var pause_menu = $PauseMenu
+@onready var pause_menu = $ShopUI/PauseMenu
 var paused = false
 
 var hovered_unit: Node = null  # To store the currently hovered unit
