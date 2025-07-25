@@ -2,7 +2,9 @@ class_name UnitCombine1
 extends Node
 
 var combination_db := {
-	"Golem+Rat": preload("res://data/units/rolet.tres"), 
+	"Golem+Rat": preload("res://data/units/rolet.tres"),
+	"Flame Imp+Rat": preload("res://data/units/ashfang_scoundrel.tres"),
+	"Flame Imp+Golem": preload("res://data/units/magma_sentinel.tres"),
 }
 
 @onready var unit_mover: UnitMover

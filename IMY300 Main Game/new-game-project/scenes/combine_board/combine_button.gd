@@ -49,6 +49,8 @@ func _on_mouse_exited() -> void:
 
 var combination_db := {
 	"Golem+Rat": preload("res://data/units/rolet.tres"), 
+	"Flame Imp+Rat": preload("res://data/units/ashfang_scoundrel.tres"),
+	"Flame Imp+Golem": preload("res://data/units/magma_sentinel.tres"),
 }
 
 @export var slot_one_area: PlayArea
