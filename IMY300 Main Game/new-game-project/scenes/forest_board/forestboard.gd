@@ -6,8 +6,25 @@ extends Node2D
 @onready var hand_area: PlayArea = $HandArea
 @onready var enemy_area: PlayArea = $EnemyArea
 @export var player_stats: Resource
-
 @export var enemy_stats: EnemyStats
+@onready var pause_menu = $PauseLayer/PauseMenu
+var paused = false
+
+
+func pauseMenu():
+	if paused:
+		pause_menu.hide()
+		Engine.time_scale = 1
+	else:
+		pause_menu.show()
+		Engine.time_scale = 0
+	
+	paused = !paused
+
+# Check the hover time each frame
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("pause"):
+		pauseMenu()
 
 func _ready() -> void:
 	randomize()
