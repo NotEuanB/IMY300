@@ -1,0 +1,51 @@
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://i51js88lpwix"]
+
+[ext_resource type="Texture2D" uid="uid://0g3qn006ohak" path="res://assets/tutorial_gui.png" id="1_8722f"]
+[ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="2_idhui"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rp3em"]
+texture = ExtResource("1_8722f")
+region_rect = Rect2(112, 16, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m5ied"]
+texture = ExtResource("1_8722f")
+region_rect = Rect2(64, 16, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_idhui"]
+texture = ExtResource("1_8722f")
+region_rect = Rect2(64, 16, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w1frq"]
+texture = ExtResource("1_8722f")
+region_rect = Rect2(16, 16, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8722f"]
+texture = ExtResource("1_8722f")
+region_rect = Rect2(64, 16, 32, 32)
+
+[resource]
+default_font = ExtResource("2_idhui")
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_disabled_color = Color(1, 1, 1, 0.4)
+Button/colors/icon_focus_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_normal_color = Color(1, 1, 1, 1)
+Button/colors/icon_pressed_color = Color(1, 1, 1, 1)
+Button/constants/align_to_largest_stylebox = 0
+Button/constants/h_separation = 4
+Button/constants/icon_max_width = 0
+Button/constants/outline_size = 0
+Button/font_sizes/font_size = 15
+Button/fonts/font = ExtResource("2_idhui")
+Button/styles/disabled = SubResource("StyleBoxTexture_rp3em")
+Button/styles/focus = SubResource("StyleBoxTexture_m5ied")
+Button/styles/hover = SubResource("StyleBoxTexture_idhui")
+Button/styles/normal = SubResource("StyleBoxTexture_w1frq")
+Button/styles/pressed = SubResource("StyleBoxTexture_8722f")

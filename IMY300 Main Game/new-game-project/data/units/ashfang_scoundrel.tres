@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://clsabsgvaplfd"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_jmq5j"]
+[ext_resource type="Texture2D" uid="uid://cucmhv5r7tfo3" path="res://assets/units/Ashfang_Scoundrel.png" id="2_jmq5j"]
+[ext_resource type="PackedScene" uid="uid://cmffoo2c4m6xx" path="res://scenes/unit/AshfangScoundrelUnit.tscn" id="3_jmq5j"]
+
+[resource]
+script = ExtResource("1_jmq5j")
+name = "Ashfang Scoundrel"
+unit_scene = ExtResource("3_jmq5j")
+gold_cost = 2
+attack = 5
+health = 10
+pool_count = 0
+skin = ExtResource("2_jmq5j")
+description = "Ashy mfer"
+buff_used = false
+metadata/_custom_type_script = "uid://d2inypj55y68q"

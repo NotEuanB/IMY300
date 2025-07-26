@@ -2,6 +2,22 @@ class_name CombinationBoard
 extends Node2D
 
 @onready var unit_mover: UnitMover = $UnitMover
+@onready var pause_menu = $PauseLayer/PauseMenu
+var paused = false
+
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("pause"):
+		pauseMenu()
+
+func pauseMenu():
+	if paused:
+		pause_menu.hide()
+		Engine.time_scale = 1
+	else:
+		pause_menu.show()
+		Engine.time_scale = 0
+	
+	paused = !paused
 
 func _ready() -> void:
 	var states = GameState.load_state()
@@ -9,7 +25,6 @@ func _ready() -> void:
 	var hand_units = states[1]
 	_spawn_units(board_units, $PlayArea)
 	_spawn_units(hand_units, $HandArea)
-
 
 func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 	for unit_data in units_data:

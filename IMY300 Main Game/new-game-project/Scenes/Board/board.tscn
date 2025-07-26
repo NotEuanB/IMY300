@@ -219,6 +219,24 @@ offset_bottom = 122.0
 text = "Drag here to sell"
 label_settings = SubResource("LabelSettings_rt3kt")
 
+[node name="TutorialPopup" parent="." instance=ExtResource("21_jngt6")]
+visible = false
+offset_left = 963.0
+offset_top = 484.0
+offset_right = 963.0
+offset_bottom = 484.0
+
+[node name="PauseLayer" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" parent="PauseLayer" instance=ExtResource("20_vq54c")]
+visible = false
+offset_left = -34.0
+offset_top = -33.0
+offset_right = -34.0
+offset_bottom = -33.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
 [connection signal="mouse_entered" from="FightButton" to="FightButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="FightButton" to="FightButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="FightButton" to="FightButton" method="_on_pressed"]

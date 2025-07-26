@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cc03g1urqt55u"]
+[gd_scene load_steps=24 format=3 uid="uid://cc03g1urqt55u"]
 
 [ext_resource type="Texture2D" uid="uid://yreyrph44857" path="res://assets/combine_button_spritesheet.png" id="1_ast70"]
 [ext_resource type="Texture2D" uid="uid://cefn0xha7tq81" path="res://assets/combine_board.png" id="1_fmpw1"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="7_lw3kx"]
 [ext_resource type="AudioStream" uid="uid://c8msd2v5ehaox" path="res://assets/sfx/place_on_board.mp3" id="8_ixr8y"]
 [ext_resource type="AudioStream" uid="uid://pbhtcdb518nr" path="res://assets/sfx/necromancer_combine_ambience.mp3" id="9_gbvu2"]
+[ext_resource type="PackedScene" uid="uid://dquecal5snr3a" path="res://scenes/pause_menu/pause_menu.tscn" id="13_rmxbx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ar1ei"]
 atlas = ExtResource("1_fmpw1")
@@ -237,6 +238,15 @@ stream = ExtResource("9_gbvu2")
 volume_db = -20.0
 autoplay = true
 parameters/looping = true
+
+[node name="PauseLayer" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" parent="PauseLayer" instance=ExtResource("13_rmxbx")]
+visible = false
+offset_left = -34.0
+offset_top = -33.0
+offset_right = -34.0
+offset_bottom = -33.0
 
 [connection signal="mouse_entered" from="CombineButton" to="CombineButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="CombineButton" to="CombineButton" method="_on_mouse_exited"]
