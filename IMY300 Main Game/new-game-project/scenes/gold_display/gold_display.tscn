@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bf2bg5llb6imy" path="res://scenes/gold_display/gold_display.gd" id="1_ds663"]
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="2_5xxp2"]
 [ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="3_5xxp2"]
-[ext_resource type="Texture2D" uid="uid://b5l5skypukjgg" path="res://assets/currency.png" id="4_4sr4f"]
+[ext_resource type="Texture2D" uid="uid://c51oxtne8cegh" path="res://assets/coin.png" id="4_juluk"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ds663"]
 font = ExtResource("3_5xxp2")
@@ -23,5 +23,5 @@ label_settings = SubResource("LabelSettings_ds663")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(78, 19)
-scale = Vector2(0.8, 0.8)
-texture = ExtResource("4_4sr4f")
+scale = Vector2(2, 2)
+texture = ExtResource("4_juluk")
