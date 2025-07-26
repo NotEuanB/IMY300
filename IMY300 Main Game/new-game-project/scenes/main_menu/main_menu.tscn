@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://6c48rcspqsb8"]
+[gd_scene load_steps=46 format=3 uid="uid://6c48rcspqsb8"]
 
 [ext_resource type="Script" uid="uid://dxrxf0otj240b" path="res://scenes/main_menu/main_menu.gd" id="1_0ebjn"]
 [ext_resource type="Texture2D" uid="uid://mm68xnccfyl1" path="res://assets/main_menu.png" id="1_fsom3"]
@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://ju6kya03qjrf" path="res://assets/sfx/button.mp3" id="5_x2yjq"]
 [ext_resource type="Script" uid="uid://d2odvqgrhq4in" path="res://scenes/main_menu/options_button.gd" id="6_3ovsr"]
 [ext_resource type="Script" uid="uid://cgmawjlfk68t6" path="res://scenes/main_menu/credits_button.gd" id="7_4xg86"]
+[ext_resource type="Script" uid="uid://y5ybj88vlohq" path="res://scenes/main_menu/tutorial_button.gd" id="7_lqpn7"]
 [ext_resource type="Script" uid="uid://bsnnvdbql34k" path="res://scenes/main_menu/exit_button.gd" id="8_thkx5"]
 [ext_resource type="AudioStream" uid="uid://eiq3ljtlh03t" path="res://assets/sfx/main_menu.wav" id="9_thkx5"]
 
@@ -164,6 +165,63 @@ _data = {
 &"Continue_hover": SubResource("Animation_x2yjq"),
 &"Continue_idle": SubResource("Animation_4xg86"),
 &"RESET": SubResource("Animation_thkx5")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lqpn7"]
+atlas = ExtResource("3_ob46e")
+region = Rect2(0, 50, 375, 526)
+
+[sub_resource type="Animation" id="Animation_0m3cs"]
+resource_name = "Tutorial_hover"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [10, 11]
+}
+
+[sub_resource type="Animation" id="Animation_i7nm7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [10]
+}
+
+[sub_resource type="Animation" id="Animation_tfctf"]
+resource_name = "Tutorial_idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [10]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_n7xlh"]
+_data = {
+&"RESET": SubResource("Animation_i7nm7"),
+&"Tutorial_hover": SubResource("Animation_0m3cs"),
+&"Tutorial_idle": SubResource("Animation_tfctf")
 }
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3ovsr"]
@@ -388,6 +446,11 @@ libraries = {
 stream = ExtResource("5_x2yjq")
 volume_db = -20.0
 
+[node name="ColorRect" type="ColorRect" parent="NewRunButton"]
+offset_right = 190.0
+offset_bottom = 48.0
+color = Color(0, 0, 0, 0.75)
+
 [node name="ContinueButton" type="TextureButton" parent="."]
 layout_mode = 1
 offset_left = 763.0
@@ -419,12 +482,37 @@ offset_right = 190.0
 offset_bottom = 48.0
 color = Color(0, 0, 0, 0.75)
 
+[node name="TutorialButton" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 765.0
+offset_top = 469.0
+offset_right = 952.55
+offset_bottom = 517.89
+scale = Vector2(2, 2)
+script = ExtResource("7_lqpn7")
+
+[node name="TutorialSprite" type="Sprite2D" parent="TutorialButton"]
+position = Vector2(93.23, 3.765)
+texture = SubResource("AtlasTexture_lqpn7")
+hframes = 2
+vframes = 6
+frame = 10
+
+[node name="TutorialAnimation" type="AnimationPlayer" parent="TutorialButton/TutorialSprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_n7xlh")
+}
+
+[node name="Button" type="AudioStreamPlayer2D" parent="TutorialButton"]
+stream = ExtResource("5_x2yjq")
+volume_db = -20.0
+
 [node name="OptionsButton" type="TextureButton" parent="."]
 layout_mode = 1
 offset_left = 763.0
-offset_top = 479.0
+offset_top = 593.0
 offset_right = 1139.22
-offset_bottom = 573.41
+offset_bottom = 687.41
 script = ExtResource("6_3ovsr")
 
 [node name="OptionsSprite" type="Sprite2D" parent="OptionsButton"]
@@ -453,9 +541,9 @@ color = Color(0, 0, 0, 0.75)
 [node name="CreditsButton" type="TextureButton" parent="."]
 layout_mode = 1
 offset_left = 763.0
-offset_top = 612.0
+offset_top = 726.0
 offset_right = 1138.37
-offset_bottom = 706.395
+offset_bottom = 820.395
 script = ExtResource("7_4xg86")
 
 [node name="CreditsSprite" type="Sprite2D" parent="CreditsButton"]
@@ -484,9 +572,9 @@ color = Color(0, 0, 0, 0.735)
 [node name="ExitButton" type="TextureButton" parent="."]
 layout_mode = 1
 offset_left = 763.0
-offset_top = 747.0
+offset_top = 861.0
 offset_right = 951.195
-offset_bottom = 794.08
+offset_bottom = 908.08
 scale = Vector2(2, 2)
 script = ExtResource("8_thkx5")
 
@@ -516,6 +604,9 @@ autoplay = true
 [connection signal="pressed" from="NewRunButton" to="NewRunButton" method="_on_pressed"]
 [connection signal="mouse_entered" from="ContinueButton" to="ContinueButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="ContinueButton" to="ContinueButton" method="_on_mouse_exited"]
+[connection signal="mouse_entered" from="TutorialButton" to="TutorialButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="TutorialButton" to="TutorialButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="TutorialButton" to="TutorialButton" method="_on_pressed"]
 [connection signal="mouse_entered" from="OptionsButton" to="OptionsButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="OptionsButton" to="OptionsButton" method="_on_mouse_exited"]
 [connection signal="mouse_entered" from="CreditsButton" to="CreditsButton" method="_on_mouse_entered"]
