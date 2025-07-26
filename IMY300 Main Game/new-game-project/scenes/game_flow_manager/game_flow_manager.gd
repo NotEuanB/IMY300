@@ -1,6 +1,20 @@
-extends Control
+extends Node2D
 
 @onready var unit_mover: UnitMover = $UnitMover
+@onready var board_area: PlayArea = $PlayArea
+@onready var hand_area: PlayArea = $HandArea
+@onready var pause_menu = $PauseLayer/PauseMenu
+var paused = false
+
+func pauseMenu():
+	if paused:
+		pause_menu.hide()
+		Engine.time_scale = 1
+	else:
+		pause_menu.show()
+		Engine.time_scale = 0
+	
+	paused = !paused
 
 func _ready() -> void:
 	$FlowMenuAnimation/FlowMenuAnimation.play("Flowmenu_idle")
@@ -8,8 +22,12 @@ func _ready() -> void:
 	var states = GameState.load_state()
 	var board_units = states["board_units"]
 	var hand_units = states["hand_units"]
-	_spawn_units(board_units, $PlayArea)
-	_spawn_units(hand_units, $HandArea)
+	_spawn_units(board_units, board_area)
+	_spawn_units(hand_units, hand_area)
+	
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("pause"):
+		pauseMenu()
 
 func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 	for unit_data in units_data:
