@@ -7,6 +7,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_n4jq7")
@@ -27,6 +29,23 @@ text = "Combine"
 [node name="FightButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Fight"
+
+[node name="TutorialPopup" type="Panel" parent="."]
+clip_contents = true
+custom_minimum_size = Vector2(500, 300)
+layout_mode = 0
+offset_left = 238.0
+offset_top = 111.0
+offset_right = 438.0
+offset_bottom = 411.0
+
+[node name="TutorialText" type="Label" parent="TutorialPopup"]
+offset_left = 4.0
+offset_top = 5.0
+offset_right = 171.0
+offset_bottom = 97.0
+text = "This is a pop 
+up panel"
 
 [connection signal="pressed" from="VBoxContainer/ShopButton" to="." method="_on_ShopButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/CombineButton" to="." method="_on_CombineButton_pressed"]

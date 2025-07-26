@@ -33,3 +33,7 @@ func update_step() -> void:
 			print("Game step updated to FIGHT")
 		GameStep.FIGHT:
 			print("Already in the fight step. No further steps.")
+
+func reset_state() -> void:
+	board_units = []
+	hand_units = []

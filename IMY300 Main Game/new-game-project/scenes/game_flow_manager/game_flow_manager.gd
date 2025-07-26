@@ -1,7 +1,15 @@
 extends Control
 
+@onready var tutorial_popup = $TutorialPopup
+@onready var tutorial_text = $TutorialPopup/TutorialText
+
 func _ready() -> void:
 	_update_ui()
+	_show_tutorial_popup()
+
+func _show_tutorial_popup() -> void:
+	tutorial_text.text = "Welcome to the game! Here are your options:\n\n- Shop: Buy units.\n- Combine: Combine units.\n- Fight: Start a battle.\n\nPress the Shop button to begin."
+	$TutorialPopup.visible = true  # Show the tutorial panel
 
 func _update_ui() -> void:
 	# Hide all buttons initially
@@ -11,7 +19,11 @@ func _update_ui() -> void:
 
 	# Show buttons based on the current step
 	match GameState.current_step:
-		GameState.GameStep.STEP_1, GameState.GameStep.STEP_2:
+		GameState.GameStep.STEP_1:
+			$VBoxContainer/ShopButton.visible = true
+			$VBoxContainer/CombineButton.visible = true
+			$VBoxContainer/CombineButton.disabled = true
+		GameState.GameStep.STEP_2:
 			$VBoxContainer/ShopButton.visible = true
 			$VBoxContainer/CombineButton.visible = true
 		GameState.GameStep.FIGHT:
@@ -21,6 +33,7 @@ func _update_ui() -> void:
 
 func _on_ShopButton_pressed() -> void:
 	# Load the Shop scene
+	tutorial_popup.hide()
 	_load_scene("res://Scenes/Board/board.tscn")
 
 func _on_CombineButton_pressed() -> void:
