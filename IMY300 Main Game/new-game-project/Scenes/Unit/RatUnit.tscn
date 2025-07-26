@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://ctjoppicivqw7"]
+[gd_scene load_steps=11 format=3 uid="uid://ctjoppicivqw7"]
 
 [ext_resource type="Script" uid="uid://cugvslmtacy30" path="res://scenes/unit/rat_unit.gd" id="1_6vtfb"]
-[ext_resource type="Texture2D" uid="uid://br881ewjuyyb4" path="res://assets/units/frame.png" id="3_hr40g"]
+[ext_resource type="Texture2D" uid="uid://k0xe3d80qixm" path="res://assets/units/frame_uncracked.png" id="2_sngko"]
 [ext_resource type="Texture2D" uid="uid://dh1hx2aib8w8y" path="res://assets/units/Rat.png" id="4_urabe"]
+[ext_resource type="Texture2D" uid="uid://kx62at88usu4" path="res://assets/units/gem_uncracked.png" id="5_20pdc"]
 [ext_resource type="LabelSettings" uid="uid://hmjcs0b768nu" path="res://assets/font/font_stat.tres" id="5_gobla"]
 [ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="5_yg6pq"]
 [ext_resource type="LabelSettings" uid="uid://w0i76r03armr" path="res://assets/font/font_name.tres" id="6_oiu38"]
@@ -19,7 +20,7 @@ metadata/_edit_group_ = true
 [node name="CardBack" type="TextureRect" parent="."]
 offset_right = 200.0
 offset_bottom = 305.0
-texture = ExtResource("3_hr40g")
+texture = ExtResource("2_sngko")
 
 [node name="Skin" type="Sprite2D" parent="."]
 position = Vector2(100, 153)
@@ -32,6 +33,13 @@ shape = SubResource("RectangleShape2D_ulevp")
 [node name="DragAndDrop" type="Node" parent="." node_paths=PackedStringArray("target")]
 script = ExtResource("5_yg6pq")
 target = NodePath("..")
+
+[node name="Gem" type="TextureRect" parent="."]
+offset_left = 90.0
+offset_top = 195.0
+offset_right = 110.0
+offset_bottom = 215.0
+texture = ExtResource("5_20pdc")
 
 [node name="Stats" type="Node2D" parent="."]
 position = Vector2(-10, 0)
@@ -56,9 +64,9 @@ horizontal_alignment = 1
 
 [node name="Name" type="Label" parent="Stats"]
 offset_left = 23.0
-offset_top = 206.0
+offset_top = 212.0
 offset_right = 197.0
-offset_bottom = 234.0
+offset_bottom = 240.0
 text = "Rat"
 label_settings = ExtResource("6_oiu38")
 horizontal_alignment = 1
