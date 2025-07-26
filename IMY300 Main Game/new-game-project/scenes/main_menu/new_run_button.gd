@@ -9,4 +9,4 @@ func _on_mouse_exited() -> void:
 func _on_pressed() -> void:
 	$"../CreditsButton/Button".play()
 	await get_tree().create_timer(1.5).timeout
-	get_tree().change_scene_to_file("res://Scenes/game_flow_manager/GameFlowManager.tscn")
+	get_tree().change_scene_to_file("res://scenes/board/board.tscn")
