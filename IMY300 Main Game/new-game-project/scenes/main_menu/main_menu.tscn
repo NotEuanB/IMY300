@@ -171,6 +171,21 @@ _data = {
 atlas = ExtResource("3_ob46e")
 region = Rect2(0, 50, 375, 526)
 
+[sub_resource type="Animation" id="Animation_i7nm7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [10]
+}
+
 [sub_resource type="Animation" id="Animation_0m3cs"]
 resource_name = "Tutorial_hover"
 loop_mode = 1
@@ -185,21 +200,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [10, 11]
-}
-
-[sub_resource type="Animation" id="Animation_i7nm7"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [10]
 }
 
 [sub_resource type="Animation" id="Animation_tfctf"]
@@ -447,6 +447,7 @@ stream = ExtResource("5_x2yjq")
 volume_db = -20.0
 
 [node name="ColorRect" type="ColorRect" parent="NewRunButton"]
+layout_mode = 0
 offset_right = 190.0
 offset_bottom = 48.0
 color = Color(0, 0, 0, 0.75)
