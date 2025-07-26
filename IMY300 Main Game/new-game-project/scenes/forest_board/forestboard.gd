@@ -29,8 +29,8 @@ func _process(_delta: float) -> void:
 func _ready() -> void:
 	randomize()
 	var states = GameState.load_state()
-	var board_units = states[0]
-	var hand_units = states[1]
+	var board_units = states["board_units"]
+	var hand_units = states["hand_units"]
 	_spawn_units(board_units, player_area)
 	_spawn_units(hand_units, hand_area)
 	_spawn_enemy_units()
