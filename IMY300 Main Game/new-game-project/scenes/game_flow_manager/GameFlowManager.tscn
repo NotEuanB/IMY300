@@ -1,52 +1,330 @@
-[gd_scene load_steps=2 format=3 uid="uid://ddfh5sjavcqlt"]
+[gd_scene load_steps=29 format=3 uid="uid://ddfh5sjavcqlt"]
 
-[ext_resource type="Script" uid="uid://2uog3jvf77s" path="res://Scenes/game_flow_manager/game_flow_manager.gd" id="1_n4jq7"]
+[ext_resource type="Script" uid="uid://efm64ucm2nxo" path="res://scenes/game_flow_manager/game_flow_manager.gd" id="1_wiyfw"]
+[ext_resource type="Texture2D" uid="uid://c5xrec5k25gbs" path="res://assets/flow_menu.png" id="2_fmoox"]
+[ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="2_wiyfw"]
+[ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="3_ftcp3"]
+[ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="4_fmoox"]
+[ext_resource type="AudioStream" uid="uid://c8msd2v5ehaox" path="res://assets/sfx/place_on_board.mp3" id="5_1hjlv"]
+[ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="6_c4sdh"]
+[ext_resource type="AudioStream" uid="uid://ju6kya03qjrf" path="res://assets/sfx/button.mp3" id="8_1hjlv"]
+[ext_resource type="Texture2D" uid="uid://olxlpg20w7ce" path="res://assets/menu_spritesheet.png" id="8_c4sdh"]
+[ext_resource type="Script" uid="uid://bma27uxgvks5h" path="res://scenes/game_flow_manager/fight_button.gd" id="8_ml3ms"]
+[ext_resource type="Script" uid="uid://c1wy5c5uiq8yq" path="res://scenes/game_flow_manager/combine_button.gd" id="11_8042t"]
+[ext_resource type="Script" uid="uid://2xk01l6ydokn" path="res://scenes/game_flow_manager/shop_button.gd" id="12_apqci"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c4sdh"]
+atlas = ExtResource("2_fmoox")
+region = Rect2(0, 0, 5760, 1080)
+
+[sub_resource type="Animation" id="Animation_16ghk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_ml3ms"]
+resource_name = "flowmenu_idle"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8042t"]
+_data = {
+&"Flowmenu_idle": SubResource("Animation_ml3ms"),
+&"RESET": SubResource("Animation_16ghk")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ml3ms"]
+atlas = ExtResource("8_c4sdh")
+region = Rect2(0, 0, 768, 576)
+
+[sub_resource type="Animation" id="Animation_8042t"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_apqci"]
+resource_name = "Fight_hover"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [14, 15]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hk54s"]
+_data = {
+&"Fight_idle": SubResource("Animation_apqci"),
+&"RESET": SubResource("Animation_8042t")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3whi2"]
+atlas = ExtResource("8_c4sdh")
+region = Rect2(0, 0, 768, 576)
+
+[sub_resource type="Animation" id="Animation_8b3oi"]
+resource_name = "Combine_idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_spse8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_16ghk"]
+_data = {
+&"Combine_idle": SubResource("Animation_8b3oi"),
+&"RESET": SubResource("Animation_spse8")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v6pfo"]
+atlas = ExtResource("8_c4sdh")
+region = Rect2(386.34, 226, 171, 62)
+
+[sub_resource type="Animation" id="Animation_hk54s"]
+resource_name = "Shop_idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_3whi2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8b3oi"]
+_data = {
+&"RESET": SubResource("Animation_3whi2"),
+&"Shop_idle": SubResource("Animation_hk54s")
+}
 
 [node name="GameFlowManager" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -1.0
-offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_n4jq7")
+script = ExtResource("1_wiyfw")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="FlowMenuAnimation" type="Sprite2D" parent="."]
+position = Vector2(960, 540)
+texture = SubResource("AtlasTexture_c4sdh")
+hframes = 3
 
-[node name="ShopButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-text = "Shop"
+[node name="FlowMenuAnimation" type="AnimationPlayer" parent="FlowMenuAnimation"]
+libraries = {
+&"": SubResource("AnimationLibrary_8042t")
+}
 
-[node name="CombineButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-text = "Combine"
+[node name="HandArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
+z_index = 100
+position = Vector2(336, 982)
+script = ExtResource("2_wiyfw")
+unit_grid = NodePath("HandUnitGrid")
+cell_size = Vector2(209, 305)
+area_type = "hand"
+metadata/_edit_lock_ = true
 
-[node name="FightButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-text = "Fight"
+[node name="HandUnitGrid" type="Node2D" parent="HandArea"]
+script = ExtResource("3_ftcp3")
+size = Vector2i(6, 1)
 
-[node name="TutorialPopup" type="Panel" parent="."]
-clip_contents = true
-custom_minimum_size = Vector2(500, 300)
-layout_mode = 0
-offset_left = 238.0
-offset_top = 111.0
-offset_right = 438.0
-offset_bottom = 411.0
+[node name="PlayArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
+position = Vector2(336, 837)
+script = ExtResource("2_wiyfw")
+unit_grid = NodePath("PlayerUnitGrid")
+cell_size = Vector2(209, 305)
+area_type = "board"
+metadata/_edit_lock_ = true
 
-[node name="TutorialText" type="Label" parent="TutorialPopup"]
-offset_left = 4.0
-offset_top = 5.0
-offset_right = 171.0
-offset_bottom = 97.0
-text = "This is a pop 
-up panel"
+[node name="PlayerUnitGrid" type="Node2D" parent="PlayArea"]
+script = ExtResource("3_ftcp3")
+size = Vector2i(6, 1)
 
-[connection signal="pressed" from="VBoxContainer/ShopButton" to="." method="_on_ShopButton_pressed"]
-[connection signal="pressed" from="VBoxContainer/CombineButton" to="." method="_on_CombineButton_pressed"]
-[connection signal="pressed" from="VBoxContainer/FightButton" to="." method="_on_FightButton_pressed"]
+[node name="UnitMover" type="Node" parent="."]
+script = ExtResource("4_fmoox")
+
+[node name="Place" type="AudioStreamPlayer2D" parent="UnitMover"]
+stream = ExtResource("5_1hjlv")
+
+[node name="UnitSpawner" type="Node" parent="." node_paths=PackedStringArray("hand_area")]
+script = ExtResource("6_c4sdh")
+hand_area = NodePath("../HandArea")
+
+[node name="FightButton" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -118.0
+offset_top = -385.495
+offset_right = -15.085
+offset_bottom = -309.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+script = ExtResource("8_ml3ms")
+
+[node name="FightSprite" type="Sprite2D" parent="FightButton"]
+position = Vector2(49.94, 41.26)
+texture = SubResource("AtlasTexture_ml3ms")
+hframes = 4
+vframes = 6
+
+[node name="FightAnimation" type="AnimationPlayer" parent="FightButton/FightSprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_hk54s")
+}
+
+[node name="Button" type="AudioStreamPlayer2D" parent="FightButton"]
+stream = ExtResource("8_1hjlv")
+volume_db = -20.0
+
+[node name="CombineButton" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -412.0
+offset_top = -400.0
+offset_right = -230.675
+offset_bottom = -294.62
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+script = ExtResource("11_8042t")
+
+[node name="CombineSprite" type="Sprite2D" parent="CombineButton"]
+position = Vector2(87.065, 57.28)
+texture = SubResource("AtlasTexture_3whi2")
+hframes = 4
+vframes = 5
+frame = 2
+
+[node name="CombineAnimation" type="AnimationPlayer" parent="CombineButton/CombineSprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_16ghk")
+}
+
+[node name="Button" type="AudioStreamPlayer2D" parent="CombineButton"]
+stream = ExtResource("8_1hjlv")
+volume_db = -20.0
+
+[node name="ShopButton" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 102.0
+offset_top = -376.965
+offset_right = 189.675
+offset_bottom = -317.655
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+script = ExtResource("12_apqci")
+
+[node name="ShopSprite" type="Sprite2D" parent="ShopButton"]
+position = Vector2(41.94, 30.41)
+texture = SubResource("AtlasTexture_v6pfo")
+hframes = 2
+
+[node name="ShopAnimation" type="AnimationPlayer" parent="ShopButton/ShopSprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_8b3oi")
+}
+
+[node name="Button" type="AudioStreamPlayer2D" parent="ShopButton"]
+stream = ExtResource("8_1hjlv")
+volume_db = -20.0
+
+[connection signal="pressed" from="FightButton" to="." method="_on_fight_button_pressed"]
+[connection signal="pressed" from="CombineButton" to="." method="_on_combine_button_pressed"]
+[connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]
