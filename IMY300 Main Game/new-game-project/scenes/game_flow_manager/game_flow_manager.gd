@@ -1,6 +1,7 @@
 extends Node2D
 
 @onready var unit_mover: UnitMover = $UnitMover
+@onready var unit_spawner: UnitSpawner = $UnitSpawner
 @onready var board_area: PlayArea = $PlayArea
 @onready var hand_area: PlayArea = $HandArea
 @onready var pause_menu = $PauseLayer/PauseMenu
@@ -63,17 +64,49 @@ func _load_scene(scene_path: String) -> void:
 	get_tree().change_scene_to_file(scene_path)
 	_update_ui()
 
+func get_hand_state() -> Array:
+	var hand = []
+	for tile in unit_spawner.hand_area.unit_grid.units:
+		var unit = unit_spawner.hand_area.unit_grid.units[tile]
+		if unit:
+			hand.append({
+				"stats": unit.stats,
+				"tile": tile
+			})
+	return hand
+
+func get_board_state() -> Array:
+	# If you have a board area, replace 'board_area' with the correct variable
+	var board = []
+	for tile in board_area.unit_grid.units:
+		var unit = board_area.unit_grid.units[tile]
+		if unit:
+			board.append({
+				"stats": unit.stats,
+				"tile": tile
+			})
+	return board
+
 
 func _on_fight_button_pressed() -> void:
+	var board_state = get_board_state()
+	var hand_state = get_hand_state()
+	GameState.save_state(board_state, hand_state)
 	# Load the Fight scene
 	_load_scene("res://Scenes/forest_board/forestboard.tscn")
 
 
 func _on_combine_button_pressed() -> void:
+	var board_state = get_board_state()
+	var hand_state = get_hand_state()
+	GameState.save_state(board_state, hand_state)
 	# Load the Combine scene
 	_load_scene("res://Scenes/combine_board/combineboard.tscn")
 
 
 func _on_shop_button_pressed() -> void:
+	var board_state = get_board_state()
+	var hand_state = get_hand_state()
+	GameState.save_state(board_state, hand_state)
 	# Load the Shop scene
 	_load_scene("res://Scenes/Board/board.tscn")
