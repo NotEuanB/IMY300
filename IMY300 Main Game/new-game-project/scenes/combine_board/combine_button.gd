@@ -35,9 +35,10 @@ func _on_pressed() -> void:
 func go_to_fight_scene():
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
+	await get_tree().create_timer(0.5).timeout
 	GameState.save_state(board_state, hand_state)
-	get_tree().change_scene_to_file("res://scenes/forest_board/forestboard.tscn")
-	
+	get_tree().change_scene_to_file("res://Scenes/game_flow_manager/GameFlowManager.tscn")
+
 
 func _on_mouse_entered() -> void:
 	$CombineSprite/CombineAnimation.play("Combine_hover")
