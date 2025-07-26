@@ -1,9 +1,11 @@
 [gd_scene load_steps=6 format=3 uid="uid://dquecal5snr3a"]
 
+
 [ext_resource type="Script" uid="uid://d4by11su4pxvj" path="res://scenes/pause_menu/pause_menu.gd" id="1_5bgjm"]
 [ext_resource type="Shader" uid="uid://oqxqy6rpcjj7" path="res://scenes/pause_menu/pause_menu.gdshader" id="2_qcmsd"]
 [ext_resource type="Theme" uid="uid://ci51k626vqn64" path="res://assets/themes/popup_panel.tres" id="3_0a7io"]
 [ext_resource type="Theme" uid="uid://i51js88lpwix" path="res://assets/themes/button.tres" id="3_10tpt"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_10tpt"]
 shader = ExtResource("2_qcmsd")
