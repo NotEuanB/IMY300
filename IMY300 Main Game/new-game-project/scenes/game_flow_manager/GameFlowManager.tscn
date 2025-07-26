@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://ddfh5sjavcqlt"]
+[gd_scene load_steps=7 format=3 uid="uid://ddfh5sjavcqlt"]
 
-[ext_resource type="Script" uid="uid://2uog3jvf77s" path="res://Scenes/game_flow_manager/game_flow_manager.gd" id="1_n4jq7"]
+[ext_resource type="Script" uid="uid://efm64ucm2nxo" path="res://Scenes/game_flow_manager/game_flow_manager.gd" id="1_n4jq7"]
+[ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="2_wiyfw"]
+[ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="3_ftcp3"]
+[ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="4_fmoox"]
+[ext_resource type="AudioStream" uid="uid://c8msd2v5ehaox" path="res://assets/sfx/place_on_board.mp3" id="5_1hjlv"]
+[ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="6_c4sdh"]
 
 [node name="GameFlowManager" type="Control"]
 layout_mode = 3
@@ -27,6 +32,41 @@ text = "Combine"
 [node name="FightButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Fight"
+
+[node name="HandArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
+z_index = 100
+position = Vector2(336, 982)
+script = ExtResource("2_wiyfw")
+unit_grid = NodePath("HandUnitGrid")
+cell_size = Vector2(209, 305)
+area_type = "hand"
+metadata/_edit_lock_ = true
+
+[node name="HandUnitGrid" type="Node2D" parent="HandArea"]
+script = ExtResource("3_ftcp3")
+size = Vector2i(6, 1)
+
+[node name="PlayArea" type="Node2D" parent="." node_paths=PackedStringArray("unit_grid")]
+position = Vector2(336, 837)
+script = ExtResource("2_wiyfw")
+unit_grid = NodePath("PlayerUnitGrid")
+cell_size = Vector2(209, 305)
+area_type = "board"
+metadata/_edit_lock_ = true
+
+[node name="PlayerUnitGrid" type="Node2D" parent="PlayArea"]
+script = ExtResource("3_ftcp3")
+size = Vector2i(6, 1)
+
+[node name="UnitMover" type="Node" parent="."]
+script = ExtResource("4_fmoox")
+
+[node name="Place" type="AudioStreamPlayer2D" parent="UnitMover"]
+stream = ExtResource("5_1hjlv")
+
+[node name="UnitSpawner" type="Node" parent="." node_paths=PackedStringArray("hand_area")]
+script = ExtResource("6_c4sdh")
+hand_area = NodePath("../HandArea")
 
 [connection signal="pressed" from="VBoxContainer/ShopButton" to="." method="_on_ShopButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/CombineButton" to="." method="_on_CombineButton_pressed"]
