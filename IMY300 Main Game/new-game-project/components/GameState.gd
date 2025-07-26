@@ -37,3 +37,6 @@ func update_step() -> void:
 func reset_state() -> void:
 	board_units = []
 	hand_units = []
+
+func reset_step() -> void:
+	current_step = GameStep.STEP_1
