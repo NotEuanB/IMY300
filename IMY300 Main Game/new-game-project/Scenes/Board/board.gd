@@ -23,6 +23,13 @@ func _ready() -> void:
 	shop_container.unit_bought.connect(_on_unit_bought)
 	$FightButton.fight_pressed.connect(_on_fight_button_pressed)
 
+	# Restore the saved state
+	var states = GameState.load_state()
+	var board_units = states["board_units"]
+	var hand_units = states["hand_units"]
+	_spawn_units(board_units, board_area)
+	_spawn_units(hand_units, hand_area)
+
 func _on_unit_bought(unit_stats: UnitStats) -> void:
 	unit_spawner.spawn_unit(unit_stats)
 
@@ -108,4 +115,16 @@ func _on_fight_button_pressed() -> void:
 	var hand_state = get_hand_state()
 	await get_tree().create_timer(0.5).timeout
 	GameState.save_state(board_state, hand_state)
-	get_tree().change_scene_to_file("res://scenes/combine_board/combineboard.tscn")
+	get_tree().change_scene_to_file("res://Scenes/game_flow_manager/GameFlowManager.tscn")
+
+func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
+	for unit_data in units_data:
+		var stats = unit_data["stats"]
+		var tile = unit_data["tile"]
+		var unit_scene = stats.unit_scene if stats.unit_scene else preload("res://scenes/unit/unit.tscn")
+		var unit = unit_scene.instantiate()
+		play_area.unit_grid.add_child(unit)
+		play_area.unit_grid.add_unit(tile, unit)
+		unit.global_position = play_area.get_global_from_tile(tile)
+		unit.stats = stats.duplicate()
+		unit_mover.setup_unit(unit)

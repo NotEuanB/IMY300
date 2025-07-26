@@ -21,8 +21,8 @@ func pauseMenu():
 
 func _ready() -> void:
 	var states = GameState.load_state()
-	var board_units = states[0]
-	var hand_units = states[1]
+	var board_units = states["board_units"]
+	var hand_units = states["hand_units"]
 	_spawn_units(board_units, $PlayArea)
 	_spawn_units(hand_units, $HandArea)
 
