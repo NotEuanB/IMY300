@@ -8,8 +8,13 @@ func _ready() -> void:
 	_show_tutorial_popup()
 
 func _show_tutorial_popup() -> void:
-	tutorial_text.text = "Welcome to the game! Here are your options:\n\n- Shop: Buy units.\n- Combine: Combine units.\n- Fight: Start a battle.\n\nPress the Shop button to begin."
-	$TutorialPopup.visible = true  # Show the tutorial panel
+	match GameState.current_step:
+		GameState.GameStep.STEP_1:
+			tutorial_text.text = "Welcome to the game! Here are your options:\n\n- Shop: Buy units.\n- Combine: Combine units.\n- Fight: Start a battle.\n\nPress the Shop button to begin."
+			$TutorialPopup.visible = true  # Show the tutorial panel
+		GameState.GameStep.STEP_2:
+			tutorial_text.text = "Now that you know the shop, let's move on to the combination.\n\n Press on the Combine button to continue."
+			$TutorialPopup.visible = true  # Show the tutorial panel
 
 func _update_ui() -> void:
 	# Hide all buttons initially
@@ -24,6 +29,7 @@ func _update_ui() -> void:
 			$VBoxContainer/CombineButton.visible = true
 			$VBoxContainer/CombineButton.disabled = true
 		GameState.GameStep.STEP_2:
+			$VBoxContainer/ShopButton.disabled = true
 			$VBoxContainer/ShopButton.visible = true
 			$VBoxContainer/CombineButton.visible = true
 		GameState.GameStep.FIGHT:
