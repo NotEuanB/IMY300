@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://ddfh5sjavcqlt"]
 
-[ext_resource type="Script" uid="uid://efm64ucm2nxo" path="res://Scenes/game_flow_manager/game_flow_manager.gd" id="1_n4jq7"]
+[ext_resource type="Script" uid="uid://efm64ucm2nxo" path="res://scenes/game_flow_manager/game_flow_manager.gd" id="1_wiyfw"]
 [ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="2_wiyfw"]
 [ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="3_ftcp3"]
 [ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="4_fmoox"]
@@ -14,7 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_n4jq7")
+script = ExtResource("1_wiyfw")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
