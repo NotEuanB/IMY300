@@ -58,7 +58,7 @@ _data = {
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hk54s"]
 atlas = ExtResource("8_c4sdh")
-region = Rect2(0, 0, 768, 576)
+region = Rect2(384, 40.865, 384, 352)
 
 [sub_resource type="Animation" id="Animation_apqci"]
 resource_name = "Fight_hover"
@@ -73,7 +73,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [14, 15]
+"values": [4, 5]
 }
 
 [sub_resource type="Animation" id="Animation_8042t"]
@@ -99,7 +99,7 @@ _data = {
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3whi2"]
 atlas = ExtResource("8_c4sdh")
-region = Rect2(0, 0, 768, 576)
+region = Rect2(384.46, 38.65, 381.96, 352)
 
 [sub_resource type="Animation" id="Animation_8b3oi"]
 resource_name = "Combine_idle"
@@ -114,7 +114,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [2, 3]
+"values": [0, 1]
 }
 
 [sub_resource type="Animation" id="Animation_spse8"]
@@ -140,7 +140,7 @@ _data = {
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8b3oi"]
 atlas = ExtResource("8_c4sdh")
-region = Rect2(386.34, 226, 171, 62)
+region = Rect2(382.785, 32, 385.215, 352)
 
 [sub_resource type="Animation" id="Animation_3whi2"]
 length = 0.001
@@ -170,7 +170,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [0, 1]
+"values": [2, 3]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8b3oi"]
@@ -210,8 +210,8 @@ script = ExtResource("8_ml3ms")
 [node name="FightSprite" type="Sprite2D" parent="FightButton"]
 position = Vector2(49.94, 41.26)
 texture = SubResource("AtlasTexture_hk54s")
-hframes = 4
-vframes = 6
+hframes = 2
+vframes = 3
 
 [node name="FightAnimation" type="AnimationPlayer" parent="FightButton/FightSprite"]
 libraries = {
@@ -240,8 +240,8 @@ script = ExtResource("11_8042t")
 [node name="CombineSprite" type="Sprite2D" parent="CombineButton"]
 position = Vector2(87.065, 57.28)
 texture = SubResource("AtlasTexture_3whi2")
-hframes = 4
-vframes = 5
+hframes = 2
+vframes = 3
 frame = 2
 
 [node name="CombineAnimation" type="AnimationPlayer" parent="CombineButton/CombineSprite"]
@@ -269,9 +269,10 @@ scale = Vector2(2, 2)
 script = ExtResource("12_apqci")
 
 [node name="ShopSprite" type="Sprite2D" parent="ShopButton"]
-position = Vector2(41.94, 30.41)
+position = Vector2(41.94, 0)
 texture = SubResource("AtlasTexture_8b3oi")
 hframes = 2
+vframes = 3
 
 [node name="ShopAnimation" type="AnimationPlayer" parent="ShopButton/ShopSprite"]
 libraries = {
