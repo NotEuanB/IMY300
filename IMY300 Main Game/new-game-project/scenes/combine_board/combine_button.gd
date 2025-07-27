@@ -31,7 +31,8 @@ func _on_pressed() -> void:
 		await get_tree().create_timer(3).timeout
 		GameState.update_step()
 		go_to_fight_scene()
-	# else: invalid combo, do nothing
+	else: 
+		$Error.play()
 
 func go_to_fight_scene():
 	var board_state = get_board_state()

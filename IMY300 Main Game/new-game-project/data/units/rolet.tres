@@ -13,6 +13,6 @@ attack = 10
 health = 10
 pool_count = 0
 skin = ExtResource("2_4yqm3")
-description = "This is a mf rolet"
+description = "This is a rot golem"
 buff_used = false
 metadata/_custom_type_script = "uid://d2inypj55y68q"

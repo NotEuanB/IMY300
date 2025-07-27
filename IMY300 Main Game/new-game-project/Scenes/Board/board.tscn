@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=48 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://scenes/board/board.gd" id="1_ef5ss"]
 [ext_resource type="Texture2D" uid="uid://c6xr4umn1qegw" path="res://assets/board.png" id="2_brcfe"]
@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://dquecal5snr3a" path="res://scenes/pause_menu/pause_menu.tscn" id="20_vq54c"]
 [ext_resource type="PackedScene" uid="uid://dh2dbq6xklqss" path="res://scenes/tutorial/tutorial_popup.tscn" id="21_jngt6"]
 [ext_resource type="LabelSettings" uid="uid://d3kcq1iyjj6cf" path="res://assets/font/font_desc.tres" id="21_xlcy2"]
+[ext_resource type="Theme" uid="uid://i51js88lpwix" path="res://assets/themes/button.tres" id="23_fu73k"]
 [ext_resource type="Texture2D" uid="uid://bteelm3a72r7m" path="res://assets/scene2_spritesheet.png" id="23_mvp8v"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqnt6"]
@@ -365,7 +366,7 @@ volume_db = -20.0
 
 [node name="Ambience" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("16_dqnt6")
-volume_db = -20.0
+volume_db = -10.0
 autoplay = true
 parameters/looping = true
 
@@ -449,6 +450,7 @@ offset_right = 209.0
 offset_bottom = -15.0
 grow_horizontal = 0
 grow_vertical = 0
+theme = ExtResource("23_fu73k")
 text = "Next"
 
 [node name="PauseLayer" type="CanvasLayer" parent="."]
