@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://b8efhd0prtmna"]
+[gd_scene load_steps=7 format=3 uid="uid://b8efhd0prtmna"]
 
-[ext_resource type="Script" uid="uid://bwd2183f13hw6" path="res://Scenes/rewards/reward_ui.gd" id="1_i8rq4"]
+[ext_resource type="Script" path="res://Scenes/rewards/reward_ui.gd" id="1_i8rq4"]
 [ext_resource type="Texture2D" uid="uid://d1cd64t4tllfc" path="res://assets/Rewards.png" id="1_mvdtc"]
 [ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="2_0ni76"]
+[ext_resource type="Theme" uid="uid://i51js88lpwix" path="res://assets/themes/button.tres" id="4_vpbnp"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_v2206"]
 font = ExtResource("2_0ni76")
@@ -46,6 +47,7 @@ offset_left = 706.0
 offset_top = 916.0
 offset_right = 1206.0
 offset_bottom = 1016.0
+theme = ExtResource("4_vpbnp")
 text = "Close"
 
 [connection signal="pressed" from="NextButton" to="." method="_on_close_button_pressed"]

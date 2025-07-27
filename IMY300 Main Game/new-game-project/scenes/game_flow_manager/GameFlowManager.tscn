@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://bgok4ypq3xs5u"]
+[gd_scene load_steps=33 format=3 uid="uid://bgok4ypq3xs5u"]
 
 [ext_resource type="Script" uid="uid://efm64ucm2nxo" path="res://scenes/game_flow_manager/game_flow_manager.gd" id="1_wiyfw"]
 [ext_resource type="Texture2D" uid="uid://c5xrec5k25gbs" path="res://assets/flow_menu.png" id="2_fmoox"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://dquecal5snr3a" path="res://scenes/pause_menu/pause_menu.tscn" id="13_apqci"]
 [ext_resource type="PackedScene" uid="uid://dh2dbq6xklqss" path="res://scenes/tutorial/tutorial_popup.tscn" id="14_c5ac8"]
 [ext_resource type="LabelSettings" uid="uid://d3kcq1iyjj6cf" path="res://assets/font/font_desc.tres" id="15_1u711"]
+[ext_resource type="AudioStream" uid="uid://8vcleiightei" path="res://assets/sfx/flow_ambient.wav" id="16_8b3oi"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_apqci"]
 atlas = ExtResource("2_fmoox")
@@ -341,6 +342,10 @@ offset_right = 220.0
 offset_bottom = -172.0
 label_settings = ExtResource("15_1u711")
 autowrap_mode = 2
+
+[node name="Ambience" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("16_8b3oi")
+autoplay = true
 
 [connection signal="pressed" from="FightButton" to="." method="_on_fight_button_pressed"]
 [connection signal="pressed" from="CombineButton" to="." method="_on_combine_button_pressed"]

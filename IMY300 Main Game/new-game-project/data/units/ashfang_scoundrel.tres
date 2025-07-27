@@ -13,6 +13,6 @@ attack = 5
 health = 10
 pool_count = 0
 skin = ExtResource("2_jmq5j")
-description = "Ashy mfer"
+description = "Ashy imp"
 buff_used = false
 metadata/_custom_type_script = "uid://d2inypj55y68q"

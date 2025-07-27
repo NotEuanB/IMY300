@@ -9,7 +9,7 @@ region_rect = Rect2(112, 16, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m5ied"]
 texture = ExtResource("1_8722f")
-region_rect = Rect2(64, 16, 32, 32)
+region_rect = Rect2(16, 16, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_idhui"]
 texture = ExtResource("1_8722f")

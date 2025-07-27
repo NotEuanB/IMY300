@@ -595,7 +595,6 @@ volume_db = -20.0
 
 [node name="Ambience" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("9_thkx5")
-volume_db = -15.0
 autoplay = true
 
 [connection signal="mouse_entered" from="NewRunButton" to="NewRunButton" method="_on_mouse_entered"]
