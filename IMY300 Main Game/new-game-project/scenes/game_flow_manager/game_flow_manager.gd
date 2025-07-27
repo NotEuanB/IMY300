@@ -5,8 +5,8 @@ extends Node2D
 @onready var board_area: PlayArea = $PlayArea
 @onready var hand_area: PlayArea = $HandArea
 @onready var pause_menu = $PauseLayer/PauseMenu
-@onready var tutorial_popup = $TutorialPanel
-@onready var tutorial_text = $TutorialPanel/TutorialText
+@onready var tutorial_popup = $TutorialPopup
+@onready var tutorial_text = $TutorialPopup/TutorialLabel
 
 var paused = false
 
