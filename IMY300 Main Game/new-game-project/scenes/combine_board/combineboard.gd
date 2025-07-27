@@ -27,8 +27,8 @@ func _show_tutorial_popup() -> void:
 	match GameState.current_step:
 		GameState.GameStep.STEP_2_1: 
 			tutorial_text.text = "This is the combine screen, where you can combine units to make a new one.\nBy looking at your units, you can see a yellow uncracked gem in the middle, which means it can be combined with another unit. Units cannot be combined with themself.\nDrag 2 different units into the slots and press the combine button to see the magic happen!"
-			tutorial_popup.position.x = 800
-			tutorial_popup.position.y = 500
+			tutorial_popup.position.x = 300
+			tutorial_popup.position.y = 400
 
 func _ready() -> void:
 	var states = GameState.load_state()

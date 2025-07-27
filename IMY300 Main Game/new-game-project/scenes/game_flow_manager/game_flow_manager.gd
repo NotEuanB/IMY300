@@ -35,8 +35,8 @@ func _show_tutorial_popup() -> void:
 	match GameState.current_step:
 		GameState.GameStep.STEP_1: 
 			tutorial_text.text = "Welcome to the game! Here are your options:\n\n- Shop: Buy units.\n- Combine: Combine units.\n\nPress the Shop button to begin."
-			tutorial_popup.position.x = 800
-			tutorial_popup.position.y = 500
+			tutorial_popup.position.x = 960
+			tutorial_popup.position.y = 600
 			$ShopButton.disabled = false
 			$CombineButton.disabled = true
 			$FightButton.disabled = true
@@ -45,15 +45,15 @@ func _show_tutorial_popup() -> void:
 			$CombineButton.disabled = false
 			$FightButton.disabled = true
 			tutorial_text.text = "Now that you have seen and understand the shop, let us go to the combination of units. \n\n Click on the combine button to proceed."
-			tutorial_popup.position.x = 650
-			tutorial_popup.position.y = 500
+			tutorial_popup.position.x = 960
+			tutorial_popup.position.y = 600
 		GameState.GameStep.FIGHT:
 			$ShopButton.visible = false
 			$CombineButton.visible = false
 			$FightButton.visible = true
 			tutorial_text.text = "In this screen, you can still change around the units you have on the board. Drag the new combined unit from your hand to the battlefield.\n\nWhen seeing this screen for the 3rd time after starting the game, or after a fight, your only option will be to take the fight.\n\n Click on the button to proceed."
-			tutorial_popup.position.x = 650
-			tutorial_popup.position.y = 500
+			tutorial_popup.position.x = 900
+			tutorial_popup.position.y = 600
 	
 
 

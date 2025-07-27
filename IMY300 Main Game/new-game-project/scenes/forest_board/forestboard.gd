@@ -46,7 +46,7 @@ func _show_tutorial_popup() -> void:
 	match GameState.current_step:
 		GameState.GameStep.FIGHT: 
 			tutorial_text.text = "As you saw, the combat happens automatically.\nThe rewards are worked out based on the number of enemies killed, as well as certain team compositions in the future.\n\nExperiment around to see what builds you like and get stronger!"
-			tutorial_popup.position.x = 800
+			tutorial_popup.position.x = 960
 			tutorial_popup.position.y = 500
 			tutorial_popup.z_index = 100
 			tutorial_popup.visible = true
