@@ -227,8 +227,6 @@ offset_top = -33.0
 offset_right = -34.0
 offset_bottom = -33.0
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-
 [connection signal="mouse_entered" from="FightButton" to="FightButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="FightButton" to="FightButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="FightButton" to="FightButton" method="_on_pressed"]
