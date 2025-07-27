@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://yreyrph44857" path="res://assets/combine_button_spritesheet.png" id="1_ast70"]
 [ext_resource type="Texture2D" uid="uid://cefn0xha7tq81" path="res://assets/combine_board.png" id="1_fmpw1"]
-[ext_resource type="Script" uid="uid://bxly6af3ih845" path="res://Scenes/combine_board/combineboard.gd" id="1_gbvu2"]
-[ext_resource type="Script" uid="uid://dsli3x81jfhxp" path="res://Scenes/combine_board/combine_button.gd" id="2_ar1ei"]
+[ext_resource type="Script" uid="uid://bxly6af3ih845" path="res://scenes/combine_board/combineboard.gd" id="1_gbvu2"]
+[ext_resource type="Script" uid="uid://dsli3x81jfhxp" path="res://scenes/combine_board/combine_button.gd" id="2_ar1ei"]
 [ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="4_7n45d"]
 [ext_resource type="AudioStream" uid="uid://d0h147ys8yxv1" path="res://assets/sfx/combine_success.mp3" id="5_7ypw6"]
 [ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="5_a4yca"]
@@ -12,8 +12,8 @@
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="7_lw3kx"]
 [ext_resource type="AudioStream" uid="uid://c8msd2v5ehaox" path="res://assets/sfx/place_on_board.mp3" id="8_ixr8y"]
 [ext_resource type="AudioStream" uid="uid://pbhtcdb518nr" path="res://assets/sfx/necromancer_combine_ambience.mp3" id="9_gbvu2"]
-[ext_resource type="PackedScene" uid="uid://dquecal5snr3a" path="res://Scenes/pause_menu/pause_menu.tscn" id="13_rmxbx"]
-[ext_resource type="PackedScene" uid="uid://dh2dbq6xklqss" path="res://Scenes/tutorial/tutorial_popup.tscn" id="14_2bdk0"]
+[ext_resource type="PackedScene" uid="uid://dquecal5snr3a" path="res://scenes/pause_menu/pause_menu.tscn" id="13_rmxbx"]
+[ext_resource type="PackedScene" uid="uid://dh2dbq6xklqss" path="res://scenes/tutorial/tutorial_popup.tscn" id="14_2bdk0"]
 [ext_resource type="LabelSettings" uid="uid://d3kcq1iyjj6cf" path="res://assets/font/font_desc.tres" id="15_ca3qq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ar1ei"]

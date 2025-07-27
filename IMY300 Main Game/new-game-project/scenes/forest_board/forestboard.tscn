@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=3 uid="uid://3so8lnmdjcjo"]
 
-[ext_resource type="Script" uid="uid://bbhwy2e8n6afe" path="res://Scenes/forest_board/forestboard.gd" id="1_6whip"]
+[ext_resource type="Script" uid="uid://bbhwy2e8n6afe" path="res://scenes/forest_board/forestboard.gd" id="1_6whip"]
 [ext_resource type="Texture2D" uid="uid://bmg1gbvddjd4a" path="res://assets/Forest_board.png" id="1_7wfkq"]
 [ext_resource type="Texture2D" uid="uid://bxvnsqfsenlnl" path="res://assets/Player_avatar.png" id="2_kk7ri"]
 [ext_resource type="Script" uid="uid://ckiog3kedx0ga" path="res://components/play_area.gd" id="2_t7ggh"]
@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="2_wha1q"]
 [ext_resource type="Texture2D" uid="uid://u3n13mxow2g6" path="res://assets/enemy_avatar.png" id="3_6whip"]
 [ext_resource type="Script" uid="uid://8s6aqpp1oiic" path="res://components/unit_grid.gd" id="3_l4id5"]
-[ext_resource type="PackedScene" uid="uid://tm1a5rntugg8" path="res://Scenes/health_display/health_display.tscn" id="5_l4id5"]
+[ext_resource type="PackedScene" uid="uid://tm1a5rntugg8" path="res://scenes/health_display/health_display.tscn" id="5_l4id5"]
 [ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="7_w21hk"]
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="8_ltt0n"]
 [ext_resource type="AudioStream" uid="uid://c8msd2v5ehaox" path="res://assets/sfx/place_on_board.mp3" id="10_2h058"]
@@ -16,8 +16,8 @@
 [ext_resource type="AudioStream" uid="uid://5uchen6u0i0k" path="res://assets/sfx/forest_ambience.mp3" id="13_wha1q"]
 [ext_resource type="AudioStream" uid="uid://cck8y8ttv2i3r" path="res://assets/sfx/damage.mp3" id="14_wha1q"]
 [ext_resource type="AudioStream" uid="uid://b2jyrgw6375gj" path="res://assets/sfx/win.wav" id="16_p7wka"]
-[ext_resource type="PackedScene" uid="uid://dquecal5snr3a" path="res://Scenes/pause_menu/pause_menu.tscn" id="17_lwoeu"]
-[ext_resource type="PackedScene" uid="uid://dh2dbq6xklqss" path="res://Scenes/tutorial/tutorial_popup.tscn" id="18_keofs"]
+[ext_resource type="PackedScene" uid="uid://dquecal5snr3a" path="res://scenes/pause_menu/pause_menu.tscn" id="17_lwoeu"]
+[ext_resource type="PackedScene" uid="uid://dh2dbq6xklqss" path="res://scenes/tutorial/tutorial_popup.tscn" id="18_keofs"]
 [ext_resource type="LabelSettings" uid="uid://d3kcq1iyjj6cf" path="res://assets/font/font_desc.tres" id="19_mfj7e"]
 
 [node name="Forestboard" type="Node2D"]

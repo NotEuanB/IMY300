@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=47 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://scenes/board/board.gd" id="1_ef5ss"]
 [ext_resource type="Texture2D" uid="uid://c6xr4umn1qegw" path="res://assets/board.png" id="2_brcfe"]
@@ -101,6 +101,47 @@ _data = {
 [sub_resource type="LabelSettings" id="LabelSettings_rt3kt"]
 font = ExtResource("19_a1ark")
 font_size = 42
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s0ety"]
+atlas = ExtResource("23_mvp8v")
+region = Rect2(101, 85, 264, 79)
+
+[sub_resource type="Animation" id="Animation_mvp8v"]
+resource_name = "Gold"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_x4jil"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_x2ryx"]
+_data = {
+&"Gold": SubResource("Animation_mvp8v"),
+&"RESET": SubResource("Animation_x4jil")
+}
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0t3ev"]
 atlas = ExtResource("23_mvp8v")
@@ -337,9 +378,15 @@ text = "Drag here to sell"
 label_settings = SubResource("LabelSettings_rt3kt")
 
 [node name="HighlightGold" type="Sprite2D" parent="."]
-position = Vector2(828, 76)
+visible = false
+position = Vector2(1486, 166)
+texture = SubResource("AtlasTexture_s0ety")
+hframes = 2
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="HighlightGold"]
+[node name="HighlightAnimation" type="AnimationPlayer" parent="HighlightGold"]
+libraries = {
+&"": SubResource("AnimationLibrary_x2ryx")
+}
 
 [node name="HighlightUnit" type="Sprite2D" parent="."]
 visible = false
@@ -390,11 +437,18 @@ autowrap_mode = 2
 
 [node name="TutorialNext" type="Button" parent="TutorialPopup"]
 custom_minimum_size = Vector2(120, 60)
-layout_mode = 0
-offset_left = 74.0
-offset_top = 141.0
-offset_right = 194.0
-offset_bottom = 201.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 89.0
+offset_top = -75.0
+offset_right = 209.0
+offset_bottom = -15.0
+grow_horizontal = 0
+grow_vertical = 0
 text = "Next"
 
 [node name="PauseLayer" type="CanvasLayer" parent="."]
