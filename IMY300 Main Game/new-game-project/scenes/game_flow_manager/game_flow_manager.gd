@@ -5,6 +5,9 @@ extends Node2D
 @onready var board_area: PlayArea = $PlayArea
 @onready var hand_area: PlayArea = $HandArea
 @onready var pause_menu = $PauseLayer/PauseMenu
+@onready var tutorial_popup = $TutorialPanel
+@onready var tutorial_text = $TutorialPanel/TutorialText
+
 var paused = false
 
 func pauseMenu():
@@ -25,7 +28,35 @@ func _ready() -> void:
 	var hand_units = states["hand_units"]
 	_spawn_units(board_units, board_area)
 	_spawn_units(hand_units, hand_area)
+	_show_tutorial_popup()
+
+
+func _show_tutorial_popup() -> void:
+	match GameState.current_step:
+		GameState.GameStep.STEP_1: 
+			tutorial_text.text = "Welcome to the game! Here are your options:\n\n- Shop: Buy units.\n- Combine: Combine units.\n\nPress the Shop button to begin."
+			tutorial_popup.position.x = 800
+			tutorial_popup.position.y = 500
+			$ShopButton.disabled = false
+			$CombineButton.disabled = true
+			$FightButton.disabled = true
+		GameState.GameStep.STEP_2:
+			$ShopButton.disabled = true
+			$CombineButton.disabled = false
+			$FightButton.disabled = true
+			tutorial_text.text = "Now that you have seen and understand the shop, let us go to the combination of units. \n\n Click on the combine button to proceed."
+			tutorial_popup.position.x = 650
+			tutorial_popup.position.y = 500
+		GameState.GameStep.FIGHT:
+			$ShopButton.visible = false
+			$CombineButton.visible = false
+			$FightButton.visible = true
+			tutorial_text.text = "In this screen, you can still change around the units you have on the board. Drag the new combined unit from your hand to the battlefield.\n\nWhen seeing this screen for the 3rd time after starting the game, or after a fight, your only option will be to take the fight.\n\n Click on the button to proceed."
+			tutorial_popup.position.x = 650
+			tutorial_popup.position.y = 500
 	
+
+
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
 		pauseMenu()
