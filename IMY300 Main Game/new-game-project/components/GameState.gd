@@ -1,7 +1,7 @@
 extends Node
 
 # Define the game steps
-enum GameStep { STEP_1, STEP_2, FIGHT , STEP_1_1, STEP_1_2, STEP_1_3, STEP_1_4, STEP_1_5, STEP_1_6, STEP_1_7, STEP_1_8, STEP_1_9}
+enum GameStep { STEP_1, STEP_2, FIGHT , STEP_1_1, STEP_1_2, STEP_1_3, STEP_1_4, STEP_1_5, STEP_1_6, STEP_1_7, STEP_1_8, STEP_1_9, STEP_2_1}
 
 # Track the current step
 var current_step: GameStep = GameStep.STEP_1
@@ -56,6 +56,9 @@ func update_step() -> void:
 			current_step = GameStep.STEP_2
 			print("Game step updated to STEP_2")
 		GameStep.STEP_2:
+			current_step = GameStep.STEP_2_1
+			print("Game step updated to STEP_2_1")
+		GameStep.STEP_2_1:
 			current_step = GameStep.FIGHT
 			print("Game step updated to FIGHT")
 		GameStep.FIGHT:
