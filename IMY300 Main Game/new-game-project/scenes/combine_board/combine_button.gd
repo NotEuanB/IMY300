@@ -29,6 +29,7 @@ func _on_pressed() -> void:
 	if valid:
 		$Button.play()
 		await get_tree().create_timer(3).timeout
+		GameState.update_step()
 		go_to_fight_scene()
 	# else: invalid combo, do nothing
 

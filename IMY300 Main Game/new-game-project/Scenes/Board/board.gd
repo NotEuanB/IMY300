@@ -11,6 +11,10 @@ const CELL_SIZE := Vector2(180, 305)
 @onready var board_area: PlayArea = $PlayArea
 @onready var hand_area: PlayArea = $HandArea
 @onready var pause_menu = $PauseLayer/PauseMenu
+@onready var tutorial_popup = $TutorialPopup
+@onready var tutorial_text = $TutorialPopup/TutorialLabel
+@onready var tutorial_next = $TutorialPopup/TutorialNext
+
 var paused = false
 
 var hovered_unit: Node = null  # To store the currently hovered unit
@@ -29,6 +33,8 @@ func _ready() -> void:
 	var hand_units = states["hand_units"]
 	_spawn_units(board_units, board_area)
 	_spawn_units(hand_units, hand_area)
+
+	_show_step_popup()
 
 func _on_unit_bought(unit_stats: UnitStats) -> void:
 	unit_spawner.spawn_unit(unit_stats)
@@ -128,3 +134,80 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 		unit.global_position = play_area.get_global_from_tile(tile)
 		unit.stats = stats.duplicate()
 		unit_mover.setup_unit(unit)
+
+func _show_step_popup() -> void:
+	match GameState.current_step:
+		GameState.GameStep.STEP_1_1:
+			tutorial_text.text = "This is the shop screen, where you can buy units and manipulate your board area to create effective battle teams!"
+			tutorial_popup.position.x = 960
+			tutorial_popup.position.y = 500
+			tutorial_popup.visible = true
+		GameState.GameStep.STEP_1_2:
+			tutorial_text.text = "This is the units that are currently active in the shop.\nThe shop will always have 6 choices available to purchase."
+			tutorial_popup.position.x = 960
+			tutorial_popup.position.y = 800
+			$HighlightBoard.visible = true
+			$HighlightBoard/HighlightAnimation.play("Board")
+			tutorial_popup.visible = true
+		GameState.GameStep.STEP_1_3:
+			$HighlightBoard.visible = false
+			tutorial_text.text = "This is the unit card itself.\nYou can see the cost of the card, as well as the attack value in green and the health value in red.\nThe middle part of the card explains what effect it has."
+			tutorial_popup.position.x = 800
+			tutorial_popup.position.y = 400
+			$HighlightUnit.visible = true
+			$HighlightUnit/HighlightAnimation.play("Unit")
+			tutorial_popup.visible = true
+		GameState.GameStep.STEP_1_4:
+			$HighlightUnit.visible = false
+			tutorial_text.text = "You can see your available gold here.\nYou can get more gold by winning fights and certain team compositions also give other bonuses.\nExperiment to see what works best for you!"
+			tutorial_popup.position.x = 1150
+			tutorial_popup.position.y = 300
+			$HighlightGold.visible = true
+			$HighlightGold/HighlightAnimation.play("Gold")
+			tutorial_popup.visible = true
+		GameState.GameStep.STEP_1_5:
+			$HighlightGold.visible = false
+			tutorial_text.text = "You can reroll the units you see in the shop here.\nThe reroll costs 2 gold, but it will allow you to see more units to create better team compositions."
+			tutorial_popup.position.x = 800
+			tutorial_popup.position.y = 300
+			$HighlightReroll.visible = true
+			$HighlightReroll/HighlightAnimation.play("Reroll")
+			tutorial_popup.visible = true
+		GameState.GameStep.STEP_1_6:
+			$HighlightReroll.visible = false
+			tutorial_text.text = "Go ahead and use the shop to buy a Rat, Golem, and a Flame Imp.\nRemember to use the shop reroll to find the units if they are not available!"
+			tutorial_popup.position.x = 960
+			tutorial_popup.position.y = 250
+			tutorial_popup.visible = true
+		GameState.GameStep.STEP_1_7:
+			tutorial_text.text = "After buying a card, it goes into your hand space here. You can fit 6 cards into your hand.\nBuying cards and combining units are the only ways to get cards into your hand. Once the units are on the board, they cannot be moved back to your hand.\nMove your units from the hand to the board space above."
+			tutorial_popup.position.x = 960
+			tutorial_popup.position.y = 600
+			$HighlightBoard.position.y = 1040
+			$HighlightBoard.visible = true
+			$HighlightBoard/HighlightAnimation.play("Board")
+			tutorial_popup.visible = true
+		GameState.GameStep.STEP_1_8:
+			tutorial_text.text = "This is your board space, which is your active team composition. This team will fight for you.\nLike the hand, there are only 6 available spots, which means you need to plan carefully.\nTo create a spot when the board is full, or to remove a unit you do not want, drag the unit from the board to the sell area above.\nTry selling your flame imp."
+			tutorial_popup.position.x = 960
+			tutorial_popup.position.y = 500
+			$HighlightBoard.position.y = 700
+			$HighlightBoard.visible = true
+			$HighlightBoard/HighlightAnimation.play("Board")
+			tutorial_popup.visible = true
+		GameState.GameStep.STEP_1_9:
+			$HighlightBoard.visible = false
+			tutorial_text.text = "Buy some more units and place them on the board like you want to place, then, once you are happy, proceed to the next stage by clicking next!"
+			tutorial_popup.position.x = 960
+			tutorial_popup.position.y = 500
+			tutorial_popup.visible = true
+		_:
+			tutorial_popup.visible = false  # Hide the popup if no matching step
+
+
+func _on_next_step_pressed() -> void:
+	# Update the game step
+	GameState.update_step()
+
+	# Show the tutorial popup for the next step
+	_show_step_popup()

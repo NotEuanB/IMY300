@@ -8,6 +8,8 @@ extends Node2D
 @export var player_stats: Resource
 @export var enemy_stats: EnemyStats
 @onready var pause_menu = $PauseLayer/PauseMenu
+@onready var tutorial_popup = $TutorialPopup
+@onready var tutorial_text = $TutorialPopup/TutorialText
 var paused = false
 
 
@@ -39,6 +41,15 @@ func _ready() -> void:
 	unit_mover.set_enabled(false)
 	await get_tree().create_timer(3.0).timeout  # Add delay between turns
 	start_combat()
+
+func _show_tutorial_popup() -> void:
+	match GameState.current_step:
+		GameState.GameStep.FIGHT: 
+			tutorial_text.text = "As you saw, the combat happens automatically.\nThe rewards are worked out based on the number of enemies killed, as well as certain team compositions in the future.\n\nExperiment around to see what builds you like and get stronger!"
+			tutorial_popup.position.x = 960
+			tutorial_popup.position.y = 500
+			tutorial_popup.z_index = 100
+			tutorial_popup.visible = true
 
 func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 	for unit_data in units_data:
@@ -77,12 +88,15 @@ func show_reward_ui(title_text: String, description_text: String) -> void:
 	var reward_ui = reward_ui_scene.instantiate()
 	$OverlayLayer.add_child(reward_ui)
 	reward_ui.get_node("Title").text = title_text
-	reward_ui.get_node("Description").text = description_text	
+	reward_ui.get_node("Description").text = description_text
+
 	# Optionally, hide the dimmer when the reward UI is closed
 	reward_ui.connect("tree_exited", Callable(self, "_on_reward_ui_closed"))
 
 func _on_reward_ui_closed():
 	$OverlayLayer/Dimmer.visible = false
+	_show_tutorial_popup()
+
 
 func start_combat() -> void:
 	while get_living_unit_count(player_area.unit_grid) > 0 and get_living_unit_count(enemy_area.unit_grid) > 0:		
