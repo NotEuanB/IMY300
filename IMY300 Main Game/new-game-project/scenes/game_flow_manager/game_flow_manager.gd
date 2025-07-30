@@ -124,7 +124,7 @@ func _on_fight_button_pressed() -> void:
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
 	# Load the Fight scene
-	_load_scene("res://Scenes/forest_board/forestboard.tscn")
+	_load_scene("res://scenes/forest_board/forestboard.tscn")
 
 
 func _on_combine_button_pressed() -> void:
@@ -132,7 +132,7 @@ func _on_combine_button_pressed() -> void:
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
 	# Load the Combine scene
-	_load_scene("res://Scenes/combine_board/combineboard.tscn")
+	_load_scene("res://scenes/combine_board/combineboard.tscn")
 
 
 func _on_shop_button_pressed() -> void:
@@ -140,4 +140,4 @@ func _on_shop_button_pressed() -> void:
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
 	# Load the Shop scene
-	_load_scene("res://Scenes/Board/board.tscn")
+	_load_scene("res://scenes/board/board.tscn")

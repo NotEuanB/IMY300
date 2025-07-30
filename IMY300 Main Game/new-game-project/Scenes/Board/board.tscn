@@ -148,6 +148,21 @@ _data = {
 atlas = ExtResource("23_mvp8v")
 region = Rect2(481, 18, 356, 300)
 
+[sub_resource type="Animation" id="Animation_m0x5n"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
 [sub_resource type="Animation" id="Animation_jhx4t"]
 resource_name = "Unit"
 length = 2.0
@@ -164,7 +179,17 @@ tracks/0/keys = {
 "values": [0, 1, 0, 1]
 }
 
-[sub_resource type="Animation" id="Animation_m0x5n"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_x4jil"]
+_data = {
+&"RESET": SubResource("Animation_m0x5n"),
+&"Unit": SubResource("Animation_jhx4t")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mvp8v"]
+atlas = ExtResource("23_mvp8v")
+region = Rect2(43, 16, 376, 47)
+
+[sub_resource type="Animation" id="Animation_0avwi"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -176,18 +201,8 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [0]
+"values": [1]
 }
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_x4jil"]
-_data = {
-&"RESET": SubResource("Animation_m0x5n"),
-&"Unit": SubResource("Animation_jhx4t")
-}
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mvp8v"]
-atlas = ExtResource("23_mvp8v")
-region = Rect2(43, 16, 376, 47)
 
 [sub_resource type="Animation" id="Animation_fu73k"]
 resource_name = "Reroll"
@@ -203,21 +218,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [1, 0, 1, 0]
-}
-
-[sub_resource type="Animation" id="Animation_0avwi"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [1]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jhx4t"]

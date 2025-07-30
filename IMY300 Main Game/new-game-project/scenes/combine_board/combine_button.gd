@@ -39,7 +39,7 @@ func go_to_fight_scene():
 	var hand_state = get_hand_state()
 	await get_tree().create_timer(0.5).timeout
 	GameState.save_state(board_state, hand_state)
-	get_tree().change_scene_to_file("res://Scenes/game_flow_manager/GameFlowManager.tscn")
+	get_tree().change_scene_to_file("res://scenes/game_flow_manager/GameFlowManager.tscn")
 
 
 func _on_mouse_entered() -> void:
