@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://vmwegvlscr32"]
+
+[ext_resource type="Script" uid="uid://d4c3g2nwtxg8g" path="res://scripts/Pet.gd" id="1_ukryg"]
+
+[node name="Pet" type="CharacterBody2D"]
+script = ExtResource("1_ukryg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="StateLabel" type="Label" parent="."]
+offset_left = -88.0
+offset_top = -127.0
+offset_right = 25.0
+offset_bottom = -104.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Label example"
+horizontal_alignment = 1
+vertical_alignment = 1

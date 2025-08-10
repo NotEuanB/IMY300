@@ -1,0 +1,36 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Virtual Pet Game"
+config/description="A fun and engaging virtual pet game where players care for a digital pet."
+config/version="1.0"
+run/main_scene="res://scenes/UI/MainUI.tscn"
+config/features=PackedStringArray("4.4")
+config/author="Your Name"
+config/uuid="your-unique-uuid"
+
+[autoload]
+
+GameManager="*scripts/GameManager.gd"
+
+[editor]
+
+load_external_resources=true
+
+[gd_project]
+
+version="3.5"
+config_version=4
+
+[rendering]
+
+default_clear_color=Color(1, 1, 1, 1)

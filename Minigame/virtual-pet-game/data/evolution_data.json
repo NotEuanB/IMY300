@@ -1,0 +1,49 @@
+{
+  "evolution_stages": [
+	{
+	  "stage": "Baby",
+	  "requirements": {
+		"food": 20,
+		"happiness": 15,
+		"health": 10,
+		"energy": 10
+	  },
+	  "description": "A small and playful pet, full of energy."
+	},
+	{
+	  "stage": "Teen",
+	  "requirements": {
+		"food": 40,
+		"happiness": 30,
+		"health": 25,
+		"energy": 20
+	  },
+	  "description": "A curious and adventurous pet, starting to explore the world."
+	},
+	{
+	  "stage": "Adult",
+	  "requirements": {
+		"food": 60,
+		"happiness": 50,
+		"health": 40,
+		"energy": 30
+	  },
+	  "description": "A strong and independent pet, ready for challenges."
+	},
+	{
+	  "stage": "Elder",
+	  "requirements": {
+		"food": 80,
+		"happiness": 70,
+		"health": 60,
+		"energy": 50
+	  },
+	  "description": "A wise and gentle pet, enjoying its golden years."
+	}
+  ],
+  "evolution_conditions": {
+	"max_happiness": 100,
+	"min_health": 20,
+	"max_energy": 100
+  }
+}
