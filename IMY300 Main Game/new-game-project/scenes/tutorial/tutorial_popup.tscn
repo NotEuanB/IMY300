@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dh2dbq6xklqss"]
+[gd_scene load_steps=3 format=3 uid="uid://dh2dbq6xklqss"]
 
 [ext_resource type="Theme" uid="uid://bcn3lajbbv2qt" path="res://assets/themes/popup_text.tres" id="1_3o8g1"]
+[ext_resource type="Theme" uid="uid://ci51k626vqn64" path="res://assets/themes/popup_panel.tres" id="1_6hdaq"]
 
 [node name="TutorialPopup" type="Control"]
 layout_mode = 3
@@ -24,7 +25,7 @@ offset_top = -240.0
 offset_right = 240.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_3o8g1")
+theme = ExtResource("1_6hdaq")
 
 [node name="Text" type="Label" parent="Panel"]
 layout_mode = 1
@@ -38,3 +39,4 @@ offset_top = -31.5
 offset_bottom = -8.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_3o8g1")

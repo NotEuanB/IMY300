@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://yreyrph44857"
-path="res://.godot/imported/combine_button_spritesheet.png-6198c46a1e1fbe972df74b3aa021f35c.ctex"
+uid="uid://bmg1gbvddjd4a"
+path="res://.godot/imported/Forest_board.png-ef03b1bd43318e5a0e0035fbe5371a5c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/combine_button_spritesheet.png"
-dest_files=["res://.godot/imported/combine_button_spritesheet.png-6198c46a1e1fbe972df74b3aa021f35c.ctex"]
+source_file="res://assets/backgrounds/Forest_board.png"
+dest_files=["res://.godot/imported/Forest_board.png-ef03b1bd43318e5a0e0035fbe5371a5c.ctex"]
 
 [params]
 

@@ -1,10 +1,10 @@
 [gd_resource type="Theme" load_steps=3 format=3 uid="uid://ci51k626vqn64"]
 
-[ext_resource type="Texture2D" uid="uid://0g3qn006ohak" path="res://assets/tutorial_gui.png" id="1_srsg8"]
+[ext_resource type="Texture2D" uid="uid://0g3qn006ohak" path="res://assets/tutorial/tutorial_gui.png" id="1_srsg8"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g6y5e"]
 texture = ExtResource("1_srsg8")
-region_rect = Rect2(224, 16, 48, 32)
+region_rect = Rect2(160, 16, 48, 32)
 
 [resource]
 Panel/styles/panel = SubResource("StyleBoxTexture_g6y5e")

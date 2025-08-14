@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://mm68xnccfyl1"
-path="res://.godot/imported/main_menu.png-0132c610c849c9ef08be85042da72793.ctex"
+uid="uid://40m2behucbht"
+path="res://.godot/imported/Reroll.png-436f669af62f19042bdba23ae66ea741.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/main_menu.png"
-dest_files=["res://.godot/imported/main_menu.png-0132c610c849c9ef08be85042da72793.ctex"]
+source_file="res://assets/buttons/Reroll.png"
+dest_files=["res://.godot/imported/Reroll.png-436f669af62f19042bdba23ae66ea741.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bnome0aeiakn7"
-path="res://.godot/imported/Health.png-3ce42053b509ad6dec0c10a8faaadb6f.ctex"
+uid="uid://u3n13mxow2g6"
+path="res://.godot/imported/enemy_avatar.png-f7c0b4b405a3661895365d1a8aaef875.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Health.png"
-dest_files=["res://.godot/imported/Health.png-3ce42053b509ad6dec0c10a8faaadb6f.ctex"]
+source_file="res://assets/avatars/enemy_avatar.png"
+dest_files=["res://.godot/imported/enemy_avatar.png-f7c0b4b405a3661895365d1a8aaef875.ctex"]
 
 [params]
 
