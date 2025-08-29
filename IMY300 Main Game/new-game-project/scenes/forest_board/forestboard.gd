@@ -94,9 +94,29 @@ func show_reward_ui(title_text: String, description_text: String) -> void:
 	reward_ui.connect("tree_exited", Callable(self, "_on_reward_ui_closed"))
 
 func _on_reward_ui_closed():
+	print("Reward UI closed. Game mode:", GameState.game_mode, ", Main step:", GameState.main_step, ", Round:", GameState.main_round)
+
+	# Ensure the node is still in the scene tree
+	if not is_inside_tree():
+		print("Node is no longer in the scene tree. Cannot change scene.")
+		return
+
 	$OverlayLayer/Dimmer.visible = false
 	_show_tutorial_popup()
 
+	# Handle scene transition based on game mode
+	if GameState.game_mode == GameState.GameMode.MAIN_GAME:
+		GameState.advance()
+		if GameState.is_main_complete():
+			call_deferred("change_scene", "res://Scenes/main_menu/main_menu.tscn")
+		else:
+			call_deferred("change_scene", "res://Scenes/game_flow_manager/GameFlowManager.tscn")
+
+func change_scene(scene_path: String) -> void:
+	if get_tree():
+		get_tree().change_scene_to_file(scene_path)
+	else:
+		print("Cannot change scene. get_tree() is null.")
 
 func start_combat() -> void:
 	while get_living_unit_count(player_area.unit_grid) > 0 and get_living_unit_count(enemy_area.unit_grid) > 0:		

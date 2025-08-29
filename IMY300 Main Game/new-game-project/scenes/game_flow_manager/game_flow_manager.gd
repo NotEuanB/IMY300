@@ -21,17 +21,32 @@ func pauseMenu():
 	paused = !paused
 
 func _ready() -> void:
+	# Log the current game mode and step
+	print("GameState: Mode = ", GameState.game_mode, ", Step = ", GameState.main_step, ", Round = ", GameState.main_round)
+
+	if GameState.game_mode == GameState.GameMode.MAIN_GAME:
+		# Main game flow
+		_update_ui_for_main_game()
+		var states = GameState.load_state()
+		var board_units = states["board_units"]
+		var hand_units = states["hand_units"]
+		_spawn_units(board_units, $PlayArea)
+		_spawn_units(hand_units, $HandArea)
+		return
+
+	# Tutorial flow
+	print("Tutorial: Starting tutorial flow.")
 	$FlowMenuAnimation/FlowMenuAnimation.play("Flowmenu_idle")
 	_update_ui()
 	var states = GameState.load_state()
 	var board_units = states["board_units"]
 	var hand_units = states["hand_units"]
-	_spawn_units(board_units, board_area)
-	_spawn_units(hand_units, hand_area)
+	_spawn_units(board_units, $PlayArea)
+	_spawn_units(hand_units, $HandArea)
 	_show_tutorial_popup()
 
-
 func _show_tutorial_popup() -> void:
+	print("Showing tutorial popup for step:", GameState.current_step)
 	match GameState.current_step:
 		GameState.GameStep.STEP_1: 
 			tutorial_text.text = "Welcome to the game! Here are your options:\n\n- Shop: Buy units.\n- Combine: Combine units.\n\nPress the Shop button to begin."
@@ -54,8 +69,6 @@ func _show_tutorial_popup() -> void:
 			tutorial_text.text = "In this screen, you can still change around the units you have on the board. Drag the new combined unit from your hand to the battlefield.\n\nWhen seeing this screen for the 3rd time after starting the game, or after a fight, your only option will be to take the fight.\n\n Click on the button to proceed."
 			tutorial_popup.position.x = 900
 			tutorial_popup.position.y = 600
-	
-
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
@@ -89,10 +102,19 @@ func _update_ui() -> void:
 			$CombineButton.visible = false
 			$FightButton.visible = true
 
+func _update_ui_for_main_game() -> void:
+	# Show buttons based on the current step in the main game
+	$ShopButton.visible = GameState.main_step == GameState.MainStep.SHOP
+	$CombineButton.visible = GameState.main_step == GameState.MainStep.COMBINE
+	$FightButton.visible = GameState.main_step == GameState.MainStep.FIGHT
+
 func _load_scene(scene_path: String) -> void:
-	print("Changing scene to:", scene_path)
-	GameState.update_step()  # Centralized game step update
-	get_tree().change_scene_to_file(scene_path)
+	print("Changing scene to:", scene_path, " | Current Mode:", GameState.game_mode, ", Step =", GameState.main_step, ", Round =", GameState.main_round)
+	var result = get_tree().change_scene_to_file(scene_path)
+	if result != OK:
+		print("Failed to load scene:", scene_path)
+	else:
+		print("Scene loaded successfully:", scene_path)
 	_update_ui()
 
 func get_hand_state() -> Array:
@@ -120,24 +142,22 @@ func get_board_state() -> Array:
 
 
 func _on_fight_button_pressed() -> void:
+	print("Fight button pressed. Saving state and transitioning to Fight scene.")
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
-	# Load the Fight scene
 	_load_scene("res://Scenes/forest_board/forestboard.tscn")
 
-
 func _on_combine_button_pressed() -> void:
+	print("Combine button pressed. Saving state and transitioning to Combine scene.")
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
-	# Load the Combine scene
 	_load_scene("res://Scenes/combine_board/combineboard.tscn")
 
-
 func _on_shop_button_pressed() -> void:
+	print("Shop button pressed. Saving state and transitioning to Shop scene.")
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
-	# Load the Shop scene
 	_load_scene("res://Scenes/Board/board.tscn")

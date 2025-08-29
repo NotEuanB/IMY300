@@ -120,6 +120,7 @@ func _on_fight_button_pressed() -> void:
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	await get_tree().create_timer(0.5).timeout
+	GameState.advance()
 	GameState.save_state(board_state, hand_state)
 	get_tree().change_scene_to_file("res://Scenes/game_flow_manager/GameFlowManager.tscn")
 
@@ -136,6 +137,12 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 		unit_mover.setup_unit(unit)
 
 func _show_step_popup() -> void:
+	# Only show tutorial popups if in Tutorial Mode
+	if GameState.game_mode != GameState.GameMode.TUTORIAL:
+		tutorial_popup.visible = false  # Ensure the popup is hidden in Main Game Mode
+		return
+
+	# Show tutorial popups based on the current step
 	match GameState.current_step:
 		GameState.GameStep.STEP_1_1:
 			tutorial_text.text = "This is the shop screen, where you can buy units and manipulate your board area to create effective battle teams!"

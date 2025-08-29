@@ -39,6 +39,7 @@ func go_to_fight_scene():
 	var hand_state = get_hand_state()
 	await get_tree().create_timer(0.5).timeout
 	GameState.save_state(board_state, hand_state)
+	GameState.advance()
 	get_tree().change_scene_to_file("res://Scenes/game_flow_manager/GameFlowManager.tscn")
 
 
@@ -128,3 +129,18 @@ func get_board_state() -> Array:
 					"tile": tile
 				})
 	return board
+
+func _on_reward_ui_closed():
+	if not is_inside_tree():
+		print("Node is no longer in the scene tree. Cannot change scene.")
+		return
+
+	$OverlayLayer/Dimmer.visible = false
+	if GameState.game_mode == GameState.GameMode.MAIN_GAME:
+		GameState.advance()
+		if GameState.is_main_complete():
+			call_deferred("change_scene", "res://Scenes/main_menu/main_menu.tscn")
+		else:
+			call_deferred("change_scene", "res://Scenes/game_flow_manager/GameFlowManager.tscn")
+	else:
+		print("Game mode is TUTORIAL. Returning to tutorial flow.")
