@@ -52,13 +52,13 @@ func _on_mouse_exited() -> void:
 	$"../Visuals/CombineBoardAnimation/CombineBoardAnimation".play("CombineBoard_idle")
 
 var combination_db := {
-	"Golem+Rat": preload("res://data/units/rolet.tres"), 
-	"Flame Imp+Rat": preload("res://data/units/ashfang_scoundrel.tres"),
-	"Flame Imp+Golem": preload("res://data/units/magma_sentinel.tres"),
-	"Golem+Moss Troll": preload("res://data/units/bogbound_colossus.tres"),
-	"Golem+Spectre": preload("res://data/units/gravestone_warden.tres"),
-	"Flame Imp+Moss Troll": preload("res://data/units/blightflame_shaman.tres"),
-	"Flame Imp+Spectre": preload("res://data/units/ashwraith.tres")
+	"Golem+Rat": preload("res://data/units/combined/rolet.tres"), 
+	"Flame Imp+Rat": preload("res://data/units/combined/ashfang_scoundrel.tres"),
+	"Flame Imp+Golem": preload("res://data/units/combined/magma_sentinel.tres"),
+	"Golem+Moss Troll": preload("res://data/units/combined/bogbound_colossus.tres"),
+	"Golem+Spectre": preload("res://data/units/combined/gravestone_warden.tres"),
+	"Flame Imp+Moss Troll": preload("res://data/units/combined/blightflame_shaman.tres"),
+	"Flame Imp+Spectre": preload("res://data/units/combined/ashwraith.tres")
 }
 
 @export var slot_one_area: PlayArea

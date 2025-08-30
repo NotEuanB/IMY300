@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://bjp5j8n36uxm4"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_43gcn"]
+[ext_resource type="Texture2D" uid="uid://bn45coi5yw8gg" path="res://assets/units/Spectre.png" id="2_n4ysc"]
+[ext_resource type="PackedScene" uid="uid://dfgv6quigunb5" path="res://Scenes/Unit/MossTrollUnit.tscn" id="3_wbyw0"]
+
+[resource]
+script = ExtResource("1_43gcn")
+name = "Spectre"
+unit_scene = ExtResource("3_wbyw0")
+gold_cost = 5
+attack = 4
+health = 4
+pool_count = 100
+tier = 2
+skin = ExtResource("2_n4ysc")
+description = "Spook man"
+buff_used = false
+metadata/_custom_type_script = "uid://d2inypj55y68q"

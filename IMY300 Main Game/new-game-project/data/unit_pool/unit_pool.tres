@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="UnitPool" load_steps=8 format=3 uid="uid://bn1waem751oqp"]
 
 [ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_mc54o"]
-[ext_resource type="Resource" uid="uid://cc31lth8kllsv" path="res://data/units/golem.tres" id="2_1aqrh"]
+[ext_resource type="Resource" uid="uid://cc31lth8kllsv" path="res://data/units/base/golem.tres" id="2_1aqrh"]
 [ext_resource type="Script" uid="uid://or8rrjcsjo64" path="res://data/unit_pool/unit_pool.gd" id="2_qbk8p"]
-[ext_resource type="Resource" uid="uid://24ojvr82jtob" path="res://data/units/rat.tres" id="3_mht32"]
-[ext_resource type="Resource" uid="uid://drdktlcrfcjfq" path="res://data/units/flame_imp.tres" id="4_mht32"]
-[ext_resource type="Resource" uid="uid://cwplf0fisypoh" path="res://data/units/moss_troll.tres" id="5_2sl0h"]
-[ext_resource type="Resource" uid="uid://bjp5j8n36uxm4" path="res://data/units/spectre.tres" id="6_pq0gh"]
+[ext_resource type="Resource" uid="uid://24ojvr82jtob" path="res://data/units/base/rat.tres" id="3_mht32"]
+[ext_resource type="Resource" uid="uid://drdktlcrfcjfq" path="res://data/units/base/flame_imp.tres" id="4_mht32"]
+[ext_resource type="Resource" uid="uid://cwplf0fisypoh" path="res://data/units/base/moss_troll.tres" id="5_2sl0h"]
+[ext_resource type="Resource" uid="uid://bjp5j8n36uxm4" path="res://data/units/base/spectre.tres" id="6_pq0gh"]
 
 [resource]
 script = ExtResource("2_qbk8p")

@@ -9,6 +9,7 @@ extends Resource
 @export var attack := 2
 @export var health := 1
 @export var pool_count := 5
+@export var tier: int = 1
 
 @export_category("Visuals")
 @export var skin: Texture2D
