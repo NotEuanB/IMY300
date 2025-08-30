@@ -25,13 +25,19 @@ func _ready() -> void:
 func set_hand_full(is_full: bool) -> void:
 	for unit_card: UnitCard in shop_cards.get_children():
 		unit_card.hand_full = is_full
-		unit_card.disabled = is_full
-		unit_card.modulate = Color(1, 1, 1, 0.5) if is_full else Color(1, 1, 1, 1)
+		# Don't override the modulate here - let the card handle its own visual state
+		# unit_card.disabled = is_full
+		# unit_card.modulate = Color(1, 1, 1, 0.5) if is_full else Color(1, 1, 1, 1)
+		
+		# Instead, trigger the card's own update function
+		if unit_card.has_method("_on_player_stats_changed"):
+			unit_card._on_player_stats_changed()
 
 func _roll_units() -> void:
 	for i in 6:
 		var new_card: UnitCard = UNIT_CARD.instantiate()
 		new_card.unit_stats = unit_pool.get_random_unit()
+		new_card.player_stats = player_stats  # ADD THIS LINE
 		new_card.unit_bought.connect(_on_unit_bought)
 		shop_cards.add_child(new_card)
 	
@@ -48,6 +54,18 @@ func _put_back_remaining_to_pool() -> void:
 		unit_card.queue_free()
 
 func _on_unit_bought(unit: UnitStats) -> void:
+	# Check if player has enough gold (safety check)
+	if player_stats.gold < unit.gold_cost:
+		print("Not enough gold to buy this unit!")
+		return
+	
+	# Deduct gold and emit the signal
+	print("Gold before purchase:", player_stats.gold)
+	player_stats.gold -= unit.gold_cost
+	print("Gold after purchase:", player_stats.gold)
+	player_stats.changed.emit()
+	
+	# Emit the unit_bought signal to the board
 	unit_bought.emit(unit)
 
 func _on_reroll_button_pressed() -> void:

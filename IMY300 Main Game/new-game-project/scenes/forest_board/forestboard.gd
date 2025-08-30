@@ -129,6 +129,8 @@ func start_combat() -> void:
 		$Lose.play()
 		show_reward_ui("You Lose", "You lost 2 HP!")
 	elif get_living_unit_count(enemy_area.unit_grid) == 0:
+		player_stats.gold += 4 
+		player_stats.changed.emit() 
 		$Win.play()
 		show_reward_ui("You Win", "You got 4 gold!")
 

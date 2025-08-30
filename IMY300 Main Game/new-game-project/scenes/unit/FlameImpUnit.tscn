@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://calac11tun34t"]
 
-[ext_resource type="Script" uid="uid://bxx5yvfa7jk2o" path="res://scenes/unit/golem_unit.gd" id="1_2dmh2"]
+[ext_resource type="Script" uid="uid://q3dx4qvqmarb" path="res://Scenes/Unit/flameimp_unit.gd" id="1_hktnv"]
 [ext_resource type="Texture2D" uid="uid://k0xe3d80qixm" path="res://assets/units/frame_uncracked.png" id="2_5cet1"]
 [ext_resource type="Texture2D" uid="uid://cig4bq0e4ia0p" path="res://assets/units/Flame_Imp.png" id="3_2dmh2"]
 [ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="4_y2qvv"]
@@ -13,7 +13,7 @@
 size = Vector2(177, 303)
 
 [node name="Unit" type="Area2D" groups=["units"]]
-script = ExtResource("1_2dmh2")
+script = ExtResource("1_hktnv")
 metadata/_edit_group_ = true
 
 [node name="CardBack" type="TextureRect" parent="."]

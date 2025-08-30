@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://co8gr1xy3kq4o"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_bw0rl"]
+[ext_resource type="Texture2D" uid="uid://cpnq6t0h3cde7" path="res://assets/units/Bogbound_Colossus.png" id="2_xdkwq"]
+[ext_resource type="PackedScene" uid="uid://3mgoq14i7xyh" path="res://Scenes/Unit/BogboundColossus.tscn" id="3_eleqc"]
+
+[resource]
+script = ExtResource("1_bw0rl")
+name = "Bogbound Colossus"
+unit_scene = ExtResource("3_eleqc")
+gold_cost = 5
+attack = 6
+health = 3
+pool_count = 100
+skin = ExtResource("2_xdkwq")
+description = "Boggy man"
+buff_used = false
+metadata/_custom_type_script = "uid://d2inypj55y68q"

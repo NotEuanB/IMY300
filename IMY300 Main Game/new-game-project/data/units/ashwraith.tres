@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://cfv06l2g8gw6w"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_oivvv"]
+[ext_resource type="Texture2D" uid="uid://dcpx12ca3vdwm" path="res://assets/units/Ashwraith.png" id="2_oivvv"]
+[ext_resource type="PackedScene" uid="uid://dfgv6quigunb5" path="res://Scenes/Unit/MossTrollUnit.tscn" id="3_lk3f1"]
+
+[resource]
+script = ExtResource("1_oivvv")
+name = "Ashwraith"
+unit_scene = ExtResource("3_lk3f1")
+gold_cost = 5
+attack = 8
+health = 8
+pool_count = 100
+skin = ExtResource("2_oivvv")
+description = "Ashwraith man"
+buff_used = false
+metadata/_custom_type_script = "uid://d2inypj55y68q"

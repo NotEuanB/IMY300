@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://du7agduduen18"]
 
-[ext_resource type="Script" uid="uid://boxnrwvq7tlfv" path="res://scenes/unit/magmasentinel_unit.gd" id="1_16ifw"]
+[ext_resource type="Script" uid="uid://boxnrwvq7tlfv" path="res://Scenes/Unit/magmasentinel_unit.gd" id="1_16ifw"]
 [ext_resource type="Texture2D" uid="uid://dsd8sa5eu5en6" path="res://assets/units/frame_cracked.png" id="2_3otv8"]
 [ext_resource type="Texture2D" uid="uid://dh1hx2aib8w8y" path="res://assets/units/Rat.png" id="3_05ti7"]
 [ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="4_nofx7"]

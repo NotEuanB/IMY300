@@ -55,6 +55,10 @@ var combination_db := {
 	"Golem+Rat": preload("res://data/units/rolet.tres"), 
 	"Flame Imp+Rat": preload("res://data/units/ashfang_scoundrel.tres"),
 	"Flame Imp+Golem": preload("res://data/units/magma_sentinel.tres"),
+	"Golem+Moss Troll": preload("res://data/units/bogbound_colossus.tres"),
+	"Golem+Spectre": preload("res://data/units/gravestone_warden.tres"),
+	"Flame Imp+Moss Troll": preload("res://data/units/blightflame_shaman.tres"),
+	"Flame Imp+Spectre": preload("res://data/units/ashwraith.tres")
 }
 
 @export var slot_one_area: PlayArea
@@ -131,10 +135,6 @@ func get_board_state() -> Array:
 	return board
 
 func _on_reward_ui_closed():
-	if not is_inside_tree():
-		print("Node is no longer in the scene tree. Cannot change scene.")
-		return
-
 	$OverlayLayer/Dimmer.visible = false
 	if GameState.game_mode == GameState.GameMode.MAIN_GAME:
 		GameState.advance()
