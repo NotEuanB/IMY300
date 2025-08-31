@@ -1,8 +1,8 @@
 [gd_scene load_steps=13 format=3 uid="uid://bt0uy01056sim"]
 
-[ext_resource type="Script" uid="uid://dcccasptyoysi" path="res://scenes/unit_card/unit_card.gd" id="1_fxb4e"]
+[ext_resource type="Script" uid="uid://dcccasptyoysi" path="res://Scenes/unit_card/unit_card.gd" id="1_fxb4e"]
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="2_apj8s"]
-[ext_resource type="Texture2D" uid="uid://br881ewjuyyb4" path="res://assets/units/frame.png" id="4_24gas"]
+[ext_resource type="Texture2D" uid="uid://k0xe3d80qixm" path="res://assets/units/frame_uncracked.png" id="3_8oo5w"]
 [ext_resource type="Texture2D" uid="uid://bbyd14agefhwg" path="res://assets/units/Golem.png" id="5_apj8s"]
 [ext_resource type="LabelSettings" uid="uid://hmjcs0b768nu" path="res://assets/font/font_stat.tres" id="5_f1w4f"]
 [ext_resource type="LabelSettings" uid="uid://w0i76r03armr" path="res://assets/font/font_name.tres" id="6_j1fqa"]
@@ -33,7 +33,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_24gas")
+texture = ExtResource("3_8oo5w")
 stretch_mode = 4
 
 [node name="UnitImage" type="TextureRect" parent="CardBackground"]
@@ -71,9 +71,9 @@ horizontal_alignment = 1
 
 [node name="Name" type="Label" parent="Stats"]
 offset_left = 13.0
-offset_top = 202.0
+offset_top = 215.0
 offset_right = 187.0
-offset_bottom = 225.0
+offset_bottom = 238.0
 label_settings = ExtResource("6_j1fqa")
 horizontal_alignment = 1
 vertical_alignment = 1

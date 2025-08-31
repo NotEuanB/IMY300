@@ -39,8 +39,14 @@ func _set_unit_stats(value: UnitStats) -> void:
 	if not unit_stats:
 		placeholder.show()
 		disabled = true
-		bought = true
+		# Don't set bought = true here - this makes it appear as a bought card
+		# bought = true  # REMOVE THIS LINE
 		return
+	
+	# Hide placeholder when we have valid unit stats
+	placeholder.hide()
+	disabled = false
+	bought = false  # Reset bought state
 	
 	unit_image.texture = unit_stats.skin
 	unit_name.text = unit_stats.name
@@ -54,21 +60,33 @@ func _on_player_stats_changed() -> void:
 		return
 	
 	var has_enough_gold := player_stats.gold >= unit_stats.gold_cost
-	disabled = not has_enough_gold or hand_full or bought
 	
-	if not disabled:
-		modulate = Color(Color.WHITE, 1.0)
-	else:
+	# Dim the card if:
+	# 1. It's already bought, OR
+	# 2. Player doesn't have enough gold, OR  
+	# 3. Hand is full
+	if bought or not has_enough_gold or hand_full:
+		disabled = true
 		modulate = Color(Color.WHITE, 0.5)
+		if bought:
+			print("Unit Card - Bought (dimmed)")
+		elif not has_enough_gold:
+			print("Unit Card - Can't afford (dimmed)")
+		else:
+			print("Unit Card - Hand full (dimmed)")
+	else:
+		disabled = false
+		modulate = Color(Color.WHITE, 1.0)
+		print("Unit Card - Available (full brightness)")
 
 
 func _on_pressed() -> void:
-	if bought or disabled:
+	if bought or disabled or not _can_be_bought():
 		return
 	
+	# Don't deduct gold here - let shop_container handle it
 	bought = true
 	placeholder.show()
-	player_stats.gold -= unit_stats.gold_cost
 	unit_bought.emit(unit_stats)
 	$Buy.play()
 	$TextureRect.visible = false

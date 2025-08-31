@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=2]
+
+[node name="PlayGame" type="Node2D"]
+[export] var play_time: float = 0.0
+[export] var happiness_increase: int = 10
+[export] var energy_decrease: int = 5
+
+[node name="PlayArea" type="Control"]
+rect_min_size = Vector2(400, 300)
+
+[node name="PlayButton" type="Button"]
+text = "Play with Pet"
+rect_min_size = Vector2(200, 50)
+connect("pressed", self, "_on_PlayButton_pressed")
+
+[node name="HappinessLabel" type="Label"]
+text = "Happiness: 0"
+rect_position = Vector2(10, 10)
+
+[node name="EnergyLabel" type="Label"]
+text = "Energy: 100"
+rect_position = Vector2(10, 30)
+
+func _on_PlayButton_pressed():
+    play_time += 1.0
+    update_pet_status()
+
+func update_pet_status():
+    var happiness = int(HappinessLabel.text.split(": ")[1]) + happiness_increase
+    var energy = int(EnergyLabel.text.split(": ")[1]) - energy_decrease
+
+    HappinessLabel.text = "Happiness: " + str(happiness)
+    EnergyLabel.text = "Energy: " + str(energy)
+
+    if energy < 0:
+        EnergyLabel.text = "Energy: 0"
+        # Additional logic for when the pet is too tired can be added here.

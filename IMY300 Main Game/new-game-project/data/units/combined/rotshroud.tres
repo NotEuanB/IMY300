@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://dqxm8fsejquip"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_fuc4a"]
+[ext_resource type="Texture2D" uid="uid://c2i0jywt268tf" path="res://assets/units/Rotshroud.png" id="2_fuc4a"]
+[ext_resource type="PackedScene" uid="uid://li35p5fl8v2t" path="res://Scenes/Unit/Rotshroud.tscn" id="3_fuc4a"]
+
+[resource]
+script = ExtResource("1_fuc4a")
+name = "Rotshroud"
+unit_scene = ExtResource("3_fuc4a")
+gold_cost = 5
+attack = 5
+health = 5
+pool_count = 100
+tier = 1
+skin = ExtResource("2_fuc4a")
+description = "Rotshroud man"
+buff_used = false
+base_attack = 5
+base_health = 0
+metadata/_custom_type_script = "uid://d2inypj55y68q"

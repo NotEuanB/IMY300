@@ -1,0 +1,94 @@
+[gd_scene load_steps=3 format=3 uid="uid://m0tpu0g77r8y"]
+
+[ext_resource type="Script" uid="uid://bpkuhh52eku3f" path="res://scenes/UI/main_ui.gd" id="1_sb5dd"]
+[ext_resource type="PackedScene" uid="uid://vmwegvlscr32" path="res://scenes/Pet.tscn" id="2_h4gv2"]
+
+[node name="MainUI" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_sb5dd")
+
+[node name="ButtonContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 438.0
+offset_top = 184.0
+offset_right = 568.0
+offset_bottom = 355.0
+
+[node name="FeedButton" type="Button" parent="ButtonContainer"]
+layout_mode = 2
+text = "Feed Pet"
+
+[node name="PlayButton" type="Button" parent="ButtonContainer"]
+layout_mode = 2
+text = "Play with Pet"
+
+[node name="SleepButton" type="Button" parent="ButtonContainer"]
+layout_mode = 2
+text = "Put Pet to Sleep"
+
+[node name="SimulateButton" type="Button" parent="ButtonContainer"]
+layout_mode = 2
+text = "Simulate"
+
+[node name="ResetButton" type="Button" parent="ButtonContainer"]
+layout_mode = 2
+text = "Reset"
+
+[node name="VBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 44.0
+offset_top = 72.0
+offset_right = 1094.0
+offset_bottom = 192.0
+theme_override_constants/separation = 150
+
+[node name="HappinessBar" type="ProgressBar" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="HungerBar" type="ProgressBar" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="HealthBar" type="ProgressBar" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="EnergyBar" type="ProgressBar" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="VBoxLabels" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 71.0
+offset_top = -10.0
+offset_right = 1065.0
+offset_bottom = 112.0
+theme_override_constants/separation = 240
+
+[node name="HappinessBar" type="Label" parent="VBoxLabels"]
+layout_mode = 2
+text = "Happiness"
+
+[node name="HungerBar" type="Label" parent="VBoxLabels"]
+layout_mode = 2
+text = "Hunger"
+
+[node name="HealthBar" type="Label" parent="VBoxLabels"]
+layout_mode = 2
+text = "Health"
+
+[node name="EnergyBar" type="Label" parent="VBoxLabels"]
+layout_mode = 2
+text = "Energy"
+
+[node name="Pet" parent="." instance=ExtResource("2_h4gv2")]
+position = Vector2(197, 320)
+
+[node name="EvolutionLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 491.0
+offset_top = 9.0
+offset_right = 531.0
+offset_bottom = 32.0

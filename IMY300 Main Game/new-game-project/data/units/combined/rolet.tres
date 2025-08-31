@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://0vrcrhlrvltw"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_ec45m"]
+[ext_resource type="Texture2D" uid="uid://d1noeddl70tu1" path="res://assets/units/Rolet.png" id="2_1c76a"]
+[ext_resource type="PackedScene" uid="uid://qtirc8oll53w" path="res://Scenes/Unit/RoletUnit.tscn" id="3_baw7k"]
+
+[resource]
+script = ExtResource("1_ec45m")
+name = "Rolet"
+unit_scene = ExtResource("3_baw7k")
+gold_cost = 4
+attack = 10
+health = 10
+pool_count = 0
+tier = 1
+skin = ExtResource("2_1c76a")
+description = "This is a rot golem"
+buff_used = false
+base_attack = 10
+base_health = 10
+metadata/_custom_type_script = "uid://d2inypj55y68q"

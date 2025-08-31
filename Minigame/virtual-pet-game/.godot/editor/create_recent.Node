@@ -1,0 +1,9 @@
+Label
+HBoxContainer
+ProgressBar
+Button
+AnimationPlayer
+Sprite2D
+VBoxContainer
+Node
+CharacterBody2D

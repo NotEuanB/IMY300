@@ -1,0 +1,39 @@
+{
+  "name": "Fluffy",
+  "type": "cat",
+  "stats": {
+	"hunger": 100,
+	"health": 100,
+	"happiness": 100,
+	"energy": 100
+  },
+  "growth_stages": [
+	{
+	  "stage": "kitten",
+	  "requirements": {
+		"hunger": 80,
+		"happiness": 80,
+		"health": 80,
+		"energy": 80
+	  }
+	},
+	{
+	  "stage": "adult",
+	  "requirements": {
+		"hunger": 60,
+		"happiness": 60,
+		"health": 60,
+		"energy": 60
+	  }
+	},
+	{
+	  "stage": "senior",
+	  "requirements": {
+		"hunger": 40,
+		"happiness": 40,
+		"health": 40,
+		"energy": 40
+	  }
+	}
+  ]
+}

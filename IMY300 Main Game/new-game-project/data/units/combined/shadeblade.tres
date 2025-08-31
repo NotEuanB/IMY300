@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://cgvegrv0gva2u"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_qbdoq"]
+[ext_resource type="Texture2D" uid="uid://qljw0kbvbiic" path="res://assets/units/Shadeblade.png" id="2_qbdoq"]
+[ext_resource type="PackedScene" uid="uid://cchtmnmmnbbms" path="res://Scenes/Unit/Shadeblade.tscn" id="3_qbdoq"]
+
+[resource]
+script = ExtResource("1_qbdoq")
+name = "Shadeblade"
+unit_scene = ExtResource("3_qbdoq")
+gold_cost = 4
+attack = 3
+health = 6
+pool_count = 0
+tier = 1
+skin = ExtResource("2_qbdoq")
+description = "Shadeblade man"
+buff_used = false
+base_attack = 3
+base_health = 6
+metadata/_custom_type_script = "uid://d2inypj55y68q"

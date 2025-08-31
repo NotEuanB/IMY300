@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://cmdipt3vukvse"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_mwhjf"]
+[ext_resource type="Texture2D" uid="uid://c3eby75mh011u" path="res://assets/units/Blightflame_Shaman.png" id="2_bh28c"]
+[ext_resource type="PackedScene" uid="uid://pd4fdsvjq2pe" path="res://Scenes/Unit/BlightflameShaman.tscn" id="3_evnnj"]
+
+[resource]
+script = ExtResource("1_mwhjf")
+name = "Blightflame Shaman"
+unit_scene = ExtResource("3_evnnj")
+gold_cost = 1
+attack = 1
+health = 1
+pool_count = 100
+tier = 1
+skin = ExtResource("2_bh28c")
+description = "Blightflame Shaman"
+buff_used = false
+base_attack = 1
+base_health = 1
+metadata/_custom_type_script = "uid://d2inypj55y68q"

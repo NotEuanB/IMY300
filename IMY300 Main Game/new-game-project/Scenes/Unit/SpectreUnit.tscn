@@ -1,0 +1,89 @@
+[gd_scene load_steps=10 format=3 uid="uid://dr5v2d4lj5og4"]
+
+[ext_resource type="Script" uid="uid://cm58bqarcnm32" path="res://Scenes/Unit/spectreunit.gd" id="1_0anke"]
+[ext_resource type="Texture2D" uid="uid://k0xe3d80qixm" path="res://assets/units/frame_uncracked.png" id="2_g3ul2"]
+[ext_resource type="Texture2D" uid="uid://dh1hx2aib8w8y" path="res://assets/units/Rat.png" id="3_42s2f"]
+[ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="4_pxgov"]
+[ext_resource type="Texture2D" uid="uid://kx62at88usu4" path="res://assets/units/gem_uncracked.png" id="5_7i3cm"]
+[ext_resource type="LabelSettings" uid="uid://w0i76r03armr" path="res://assets/font/font_name.tres" id="7_wehxl"]
+[ext_resource type="LabelSettings" uid="uid://d3kcq1iyjj6cf" path="res://assets/font/font_desc.tres" id="8_flngn"]
+[ext_resource type="AudioStream" uid="uid://dubwbrp3e8hg3" path="res://assets/sfx/upgrade_card.ogg" id="9_kjfjj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ulevp"]
+size = Vector2(177, 303)
+
+[node name="Unit" type="Area2D" groups=["units"]]
+script = ExtResource("1_0anke")
+metadata/_edit_group_ = true
+
+[node name="CardBack" type="TextureRect" parent="."]
+offset_right = 200.0
+offset_bottom = 305.0
+texture = ExtResource("2_g3ul2")
+
+[node name="Skin" type="Sprite2D" parent="."]
+position = Vector2(100, 153)
+texture = ExtResource("3_42s2f")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(99.5, 152.5)
+shape = SubResource("RectangleShape2D_ulevp")
+
+[node name="DragAndDrop" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("4_pxgov")
+target = NodePath("..")
+
+[node name="Gem" type="TextureRect" parent="."]
+offset_left = 90.0
+offset_top = 195.0
+offset_right = 110.0
+offset_bottom = 215.0
+texture = ExtResource("5_7i3cm")
+
+[node name="Stats" type="Node2D" parent="."]
+position = Vector2(-10, 0)
+
+[node name="Name" type="Label" parent="Stats"]
+offset_left = 23.0
+offset_top = 212.0
+offset_right = 197.0
+offset_bottom = 240.0
+text = "Rat"
+label_settings = ExtResource("7_wehxl")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Description" type="Label" parent="Stats"]
+offset_left = 23.0
+offset_top = 236.0
+offset_right = 200.0
+offset_bottom = 302.0
+text = "On entering: Choose a unit to give +1/+1"
+label_settings = ExtResource("8_flngn")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="AttackStat" type="RichTextLabel" parent="Stats"]
+offset_left = 16.0
+offset_top = 179.0
+offset_right = 77.0
+offset_bottom = 213.0
+bbcode_enabled = true
+text = "2"
+horizontal_alignment = 1
+
+[node name="HealthStat" type="RichTextLabel" parent="Stats"]
+offset_left = 147.0
+offset_top = 179.0
+offset_right = 203.0
+offset_bottom = 210.0
+bbcode_enabled = true
+text = "1"
+horizontal_alignment = 1
+
+[node name="Buff" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_kjfjj")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

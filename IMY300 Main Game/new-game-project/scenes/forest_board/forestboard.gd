@@ -30,6 +30,10 @@ func _process(_delta: float) -> void:
 
 func _ready() -> void:
 	randomize()
+	
+	# Set the background based on the current round
+	_set_background_for_round()
+	
 	var states = GameState.load_state()
 	var board_units = states["board_units"]
 	var hand_units = states["hand_units"]
@@ -41,6 +45,28 @@ func _ready() -> void:
 	unit_mover.set_enabled(false)
 	await get_tree().create_timer(3.0).timeout  # Add delay between turns
 	start_combat()
+
+func _set_background_for_round() -> void:
+	# Assuming you have a background node in your scene
+	var background_node = $Visuals/Background  # Adjust the path to your background node
+	
+	match GameState.main_round:
+		1:
+			background_node.texture = preload("res://assets/Forest_board.png")
+			print("Set background for Round 1")
+		2:
+			background_node.texture = preload("res://assets/Grave_Hollow.png")
+			print("Set background for Round 2")
+		3:
+			background_node.texture = preload("res://assets/Scorched_Gate.png")
+			print("Set background for Round 3")
+		4:
+			background_node.texture = preload("res://assets/Ashfangs_Keep.png")
+			print("Set background for Round 4")
+		_:
+			# Default background
+			background_node.texture = preload("res://assets/Forest_board.png")
+			print("Set default background")
 
 func _show_tutorial_popup() -> void:
 	match GameState.current_step:
@@ -61,6 +87,9 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 		play_area.unit_grid.add_unit(tile, unit)
 		unit.global_position = play_area.get_global_from_tile(tile)
 		unit.stats = stats.duplicate()
+		
+		# Initialize max_health_reached to current health
+		unit.max_health_reached = unit.stats.health
 
 func _spawn_enemy_units() -> void:
 	for i in range(enemy_stats.units.size()):
@@ -94,9 +123,29 @@ func show_reward_ui(title_text: String, description_text: String) -> void:
 	reward_ui.connect("tree_exited", Callable(self, "_on_reward_ui_closed"))
 
 func _on_reward_ui_closed():
+	print("Reward UI closed. Game mode:", GameState.game_mode, ", Main step:", GameState.main_step, ", Round:", GameState.main_round)
+
+	# Ensure the node is still in the scene tree
+	if not is_inside_tree():
+		print("Node is no longer in the scene tree. Cannot change scene.")
+		return
+
 	$OverlayLayer/Dimmer.visible = false
 	_show_tutorial_popup()
 
+	# Handle scene transition based on game mode
+	if GameState.game_mode == GameState.GameMode.MAIN_GAME:
+		GameState.advance()
+		if GameState.is_main_complete():
+			call_deferred("change_scene", "res://Scenes/main_menu/main_menu.tscn")
+		else:
+			call_deferred("change_scene", "res://Scenes/game_flow_manager/GameFlowManager.tscn")
+
+func change_scene(scene_path: String) -> void:
+	if get_tree():
+		get_tree().change_scene_to_file(scene_path)
+	else:
+		print("Cannot change scene. get_tree() is null.")
 
 func start_combat() -> void:
 	while get_living_unit_count(player_area.unit_grid) > 0 and get_living_unit_count(enemy_area.unit_grid) > 0:		
@@ -109,6 +158,8 @@ func start_combat() -> void:
 		$Lose.play()
 		show_reward_ui("You Lose", "You lost 2 HP!")
 	elif get_living_unit_count(enemy_area.unit_grid) == 0:
+		player_stats.gold += 4 
+		player_stats.changed.emit() 
 		$Win.play()
 		show_reward_ui("You Win", "You got 4 gold!")
 
@@ -225,8 +276,17 @@ func _attack(attacker, defender) -> void:
 	$Attack.play()
 
 func _update_health_display(unit):
-	if unit.has_node("Stats/HealthStat"):
-		unit.get_node("Stats/HealthStat").text = str(unit.stats.health)
+	# Update max_health_reached if current health is higher (for healing)
+	if unit.stats.health > unit.max_health_reached:
+		unit.max_health_reached = unit.stats.health
+	
+	# Use the unit's own display update functions instead of directly setting text
+	if unit.has_method("update_stat_display_health") and unit.unit_hp:
+		unit.update_stat_display_health(unit.unit_hp, unit.stats.health, unit.base_health, unit.max_health_reached)
+	
+	# Also update attack display in case it changed
+	if unit.has_method("update_stat_display_attack") and unit.unit_atk:
+		unit.update_stat_display_attack(unit.unit_atk, unit.stats.attack, unit.base_attack)
 
 func _set_all_units_enabled(enabled: bool) -> void:
 	for unit in player_area.unit_grid.units.values():

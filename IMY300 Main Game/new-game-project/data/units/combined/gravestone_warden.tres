@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://b1nfpwc5er4fi"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_8e31h"]
+[ext_resource type="Texture2D" uid="uid://cp5xpl0ns45lo" path="res://assets/units/Gravestone_Warden.png" id="2_2peox"]
+[ext_resource type="PackedScene" uid="uid://dfgv6quigunb5" path="res://Scenes/Unit/MossTrollUnit.tscn" id="3_q828p"]
+
+[resource]
+script = ExtResource("1_8e31h")
+name = "Gravestone Warden"
+unit_scene = ExtResource("3_q828p")
+gold_cost = 7
+attack = 3
+health = 3
+pool_count = 100
+tier = 1
+skin = ExtResource("2_2peox")
+description = "Gravestone man"
+buff_used = false
+base_attack = 3
+base_health = 3
+metadata/_custom_type_script = "uid://d2inypj55y68q"

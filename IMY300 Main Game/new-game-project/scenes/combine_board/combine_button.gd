@@ -39,6 +39,7 @@ func go_to_fight_scene():
 	var hand_state = get_hand_state()
 	await get_tree().create_timer(0.5).timeout
 	GameState.save_state(board_state, hand_state)
+	GameState.advance()
 	get_tree().change_scene_to_file("res://Scenes/game_flow_manager/GameFlowManager.tscn")
 
 
@@ -51,9 +52,16 @@ func _on_mouse_exited() -> void:
 	$"../Visuals/CombineBoardAnimation/CombineBoardAnimation".play("CombineBoard_idle")
 
 var combination_db := {
-	"Golem+Rat": preload("res://data/units/rolet.tres"), 
-	"Flame Imp+Rat": preload("res://data/units/ashfang_scoundrel.tres"),
-	"Flame Imp+Golem": preload("res://data/units/magma_sentinel.tres"),
+	"Golem+Rat": preload("res://data/units/combined/rolet.tres"), 
+	"Flame Imp+Rat": preload("res://data/units/combined/ashfang_scoundrel.tres"),
+	"Flame Imp+Golem": preload("res://data/units/combined/magma_sentinel.tres"),
+	"Golem+Moss Troll": preload("res://data/units/combined/bogbound_colossus.tres"),
+	"Golem+Spectre": preload("res://data/units/combined/gravestone_warden.tres"),
+	"Flame Imp+Moss Troll": preload("res://data/units/combined/blightflame_shaman.tres"),
+	"Flame Imp+Spectre": preload("res://data/units/combined/ashwraith.tres"),
+	"Moss Troll+Spectre": preload("res://data/units/combined/rotshroud.tres"),
+	"Rat+Spectre": preload("res://data/units/combined/shadeblade.tres"),
+	"Moss Troll+Rat": preload("res://data/units/combined/rootsnare_bandit.tres")
 }
 
 @export var slot_one_area: PlayArea
@@ -71,13 +79,35 @@ func combine_units() -> bool:
 	if combined_stats == null:
 		return false
 	
+	# Create a duplicate of the combined stats to modify
+	var buffed_combined_stats = combined_stats.duplicate()
+	
+	# Initialize base stats for the combined unit FIRST
+	if buffed_combined_stats.has_method("initialize_base_stats"):
+		buffed_combined_stats.initialize_base_stats()
+	
+	# Calculate total buffs from both units
+	var slot_one_attack_buff = slot_one_unit.stats.attack - slot_one_unit.base_attack
+	var slot_one_health_buff = slot_one_unit.stats.health - slot_one_unit.base_health
+	var slot_two_attack_buff = slot_two_unit.stats.attack - slot_two_unit.base_attack
+	var slot_two_health_buff = slot_two_unit.stats.health - slot_two_unit.base_health
+	
+	# Apply the combined buffs to the new unit (ONLY ONCE)
+	buffed_combined_stats.attack += slot_one_attack_buff + slot_two_attack_buff
+	buffed_combined_stats.health += slot_one_health_buff + slot_two_health_buff
+	
+	print("Unit 1 buffs: +", slot_one_attack_buff, " attack, +", slot_one_health_buff, " health")
+	print("Unit 2 buffs: +", slot_two_attack_buff, " attack, +", slot_two_health_buff, " health")
+	print("Combined unit final stats: ", buffed_combined_stats.attack, " attack, ", buffed_combined_stats.health, " health")
+	
 	# Remove units from slots
 	slot_one_area.unit_grid.remove_unit(_get_unit_tile(slot_one_area, slot_one_unit))
 	slot_two_area.unit_grid.remove_unit(_get_unit_tile(slot_two_area, slot_two_unit))
 	slot_one_unit.queue_free()
 	slot_two_unit.queue_free()
 	
-	unit_spawner.spawn_unit(combined_stats)
+	# Spawn the buffed combined unit
+	unit_spawner.spawn_unit(buffed_combined_stats)
 	$Combination.play()
 	emit_signal("units_combined")
 	return true
@@ -128,3 +158,14 @@ func get_board_state() -> Array:
 					"tile": tile
 				})
 	return board
+
+func _on_reward_ui_closed():
+	$OverlayLayer/Dimmer.visible = false
+	if GameState.game_mode == GameState.GameMode.MAIN_GAME:
+		GameState.advance()
+		if GameState.is_main_complete():
+			call_deferred("change_scene", "res://Scenes/main_menu/main_menu.tscn")
+		else:
+			call_deferred("change_scene", "res://Scenes/game_flow_manager/GameFlowManager.tscn")
+	else:
+		print("Game mode is TUTORIAL. Returning to tutorial flow.")

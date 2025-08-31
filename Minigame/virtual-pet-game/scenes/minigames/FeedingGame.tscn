@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://d2mxjavh8djow"]
+
+[node name="FeedingGame" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+stretch_mode = 2
+
+[node name="FeedingButton" type="Button" parent="."]
+layout_mode = 0
+text = "Feed Your Pet"
+
+[node name="FeedbackLabel" type="Label" parent="."]
+layout_mode = 0
+text = "Your pet is waiting to be fed!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0

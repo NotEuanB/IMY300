@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://bm62aqygnglc0"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_2xb6p"]
+[ext_resource type="Texture2D" uid="uid://eryy4ms66pkl" path="res://assets/units/Rootsnare_Bandit.png" id="2_2xb6p"]
+[ext_resource type="PackedScene" uid="uid://bqfqon2x5qdo2" path="res://Scenes/Unit/Rootsnare_Bandit.tscn" id="3_2xb6p"]
+
+[resource]
+script = ExtResource("1_2xb6p")
+name = "Rootsnare Bandit"
+unit_scene = ExtResource("3_2xb6p")
+gold_cost = 4
+attack = 3
+health = 4
+pool_count = 0
+tier = 1
+skin = ExtResource("2_2xb6p")
+description = "Rootsnare Bandit"
+buff_used = false
+base_attack = 3
+base_health = 4
+metadata/_custom_type_script = "uid://d2inypj55y68q"

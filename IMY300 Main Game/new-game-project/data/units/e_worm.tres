@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_fvhjn"]
 [ext_resource type="Texture2D" uid="uid://dldqv52stul4h" path="res://assets/units/Enemy_worm.png" id="2_kqlbi"]
-[ext_resource type="PackedScene" uid="uid://5htrjvrecufi" path="res://scenes/unit/EWormUnit.tscn" id="3_kqlbi"]
+[ext_resource type="PackedScene" uid="uid://5htrjvrecufi" path="res://Scenes/Unit/EWormUnit.tscn" id="3_kqlbi"]
 
 [resource]
 script = ExtResource("1_fvhjn")
@@ -12,7 +12,10 @@ gold_cost = 0
 attack = 2
 health = 1
 pool_count = 0
+tier = 1
 skin = ExtResource("2_kqlbi")
 description = ""
 buff_used = false
+base_attack = 0
+base_health = 0
 metadata/_custom_type_script = "uid://d2inypj55y68q"
