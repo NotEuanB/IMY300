@@ -8,10 +8,10 @@
 script = ExtResource("1_06ef6")
 name = "Bogbound Colossus"
 unit_scene = ExtResource("3_77to2")
-gold_cost = 5
+gold_cost = 6
 attack = 6
 health = 3
-pool_count = 100
+pool_count = 1
 tier = 1
 skin = ExtResource("2_ime5g")
 description = "Boggy man"

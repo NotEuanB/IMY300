@@ -8,10 +8,10 @@
 script = ExtResource("1_aefri")
 name = "Golem"
 unit_scene = ExtResource("3_0pntr")
-gold_cost = 3
+gold_cost = 4
 attack = 3
 health = 4
-pool_count = 100
+pool_count = 20
 tier = 3
 skin = ExtResource("2_0pntr")
 description = "Aura: Give adjacent units +2/+2"

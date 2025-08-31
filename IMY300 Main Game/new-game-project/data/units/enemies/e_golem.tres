@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://b11lvhg6ug1d"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_jcobc"]
+[ext_resource type="Texture2D" uid="uid://bbyd14agefhwg" path="res://assets/units/Golem.png" id="2_7g4qk"]
+[ext_resource type="PackedScene" uid="uid://d1v1e8miycwhf" path="res://Scenes/Unit/GolemUnit.tscn" id="3_q4j7w"]
+
+[resource]
+script = ExtResource("1_jcobc")
+name = "Golem"
+unit_scene = ExtResource("3_q4j7w")
+gold_cost = 4
+attack = 3
+health = 4
+pool_count = 20
+tier = 3
+skin = ExtResource("2_7g4qk")
+description = "Aura: Give adjacent units +2/+2"
+buff_used = false
+base_attack = 3
+base_health = 4
+metadata/_custom_type_script = "uid://d2inypj55y68q"

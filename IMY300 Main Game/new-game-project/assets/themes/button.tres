@@ -1,26 +1,20 @@
-[gd_resource type="Theme" load_steps=8 format=3 uid="uid://i51js88lpwix"]
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://i51js88lpwix"]
 
 [ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="2_idhui"]
-[ext_resource type="Texture2D" uid="uid://0g3qn006ohak" path="res://assets/tutorial/tutorial_gui.png" id="2_rp3em"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rp3em"]
-texture = ExtResource("2_rp3em")
 region_rect = Rect2(112, 16, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m5ied"]
-texture = ExtResource("2_rp3em")
 region_rect = Rect2(16, 16, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_idhui"]
-texture = ExtResource("2_rp3em")
 region_rect = Rect2(64, 16, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w1frq"]
-texture = ExtResource("2_rp3em")
 region_rect = Rect2(16, 16, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8722f"]
-texture = ExtResource("2_rp3em")
 region_rect = Rect2(64, 16, 32, 32)
 
 [resource]

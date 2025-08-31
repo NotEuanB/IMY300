@@ -135,6 +135,7 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 		unit.global_position = play_area.get_global_from_tile(tile)
 		unit.stats = stats.duplicate()
 		unit_mover.setup_unit(unit)
+		sell_portal.setup_unit(unit)  # ADD THIS LINE
 
 func _show_step_popup() -> void:
 	# Only show tutorial popups if in Tutorial Mode

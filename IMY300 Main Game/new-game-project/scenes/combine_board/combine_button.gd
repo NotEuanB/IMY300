@@ -100,6 +100,21 @@ func combine_units() -> bool:
 	print("Unit 2 buffs: +", slot_two_attack_buff, " attack, +", slot_two_health_buff, " health")
 	print("Combined unit final stats: ", buffed_combined_stats.attack, " attack, ", buffed_combined_stats.health, " health")
 	
+	# Check if this combined unit is already in the pool
+	var pool = GameState.get_unit_pool()
+	if pool:
+		var already_exists = false
+		for existing_unit in pool.unit_pool:
+			if existing_unit.name == combined_stats.name:
+				already_exists = true
+				break
+		
+		if not already_exists:
+			pool.add_unit(combined_stats)
+			print("Added 1 copy of ", combined_stats.name, " to unit pool!")
+		else:
+			print("Combined unit ", combined_stats.name, " already exists in pool - not adding duplicate")
+	
 	# Remove units from slots
 	slot_one_area.unit_grid.remove_unit(_get_unit_tile(slot_one_area, slot_one_unit))
 	slot_two_area.unit_grid.remove_unit(_get_unit_tile(slot_two_area, slot_two_unit))

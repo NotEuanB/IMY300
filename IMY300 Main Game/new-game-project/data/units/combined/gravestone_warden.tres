@@ -8,10 +8,10 @@
 script = ExtResource("1_8e31h")
 name = "Gravestone Warden"
 unit_scene = ExtResource("3_q828p")
-gold_cost = 7
+gold_cost = 6
 attack = 3
 health = 3
-pool_count = 100
+pool_count = 1
 tier = 1
 skin = ExtResource("2_2peox")
 description = "Gravestone man"
