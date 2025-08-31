@@ -135,14 +135,14 @@ func get_next_scene_path() -> String:
 	if game_mode == GameMode.MAIN_GAME:
 		match main_step:
 			MainStep.SHOP:
-				return "res://Scenes/Board/board.tscn"
+				return "res://scenes/board/board.tscn"
 			MainStep.COMBINE:
-				return "res://Scenes/combine_board/combineboard.tscn"
+				return "res://scenes/combine_board/combineboard.tscn"
 			MainStep.FIGHT:
-				return "res://Scenes/forest_board/forestboard.tscn"
+				return "res://scenes/forest_board/forestboard.tscn"
 		return ""
 	# Tutorial flow is driven by your UI in game_flow_manager, so stay there.
-	return "res://Scenes/game_flow_manager/game_flow_manager.tscn"
+	return "res://scenes/game_flow_manager/GameFlowManager.tscn"
 
 func is_main_complete() -> bool:
 	return main_complete
@@ -172,10 +172,10 @@ func get_unit_pool() -> UnitPool:
 	
 	return global_unit_pool
 
-func get_enemies_for_round(round: int) -> EnemyStats:
+func get_enemies_for_round(round_num: int) -> EnemyStats:
 	var enemy_pool: Array[EnemyStats] = []
 	
-	match round:
+	match round_num:
 		1:
 			enemy_pool = [
 				preload("res://data/enemy/goblin.tres")
@@ -196,7 +196,7 @@ func get_enemies_for_round(round: int) -> EnemyStats:
 			enemy_pool = [preload("res://data/enemy/goblin.tres")]
 	
 	if enemy_pool.size() == 0:
-		print("No enemies configured for round ", round)
+		print("No enemies configured for round ", round_num)
 		return null
 	
 	# Pick a random enemy from the pool

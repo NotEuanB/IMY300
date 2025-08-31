@@ -38,11 +38,11 @@ func _ready() -> void:
 	print("Tutorial: Starting tutorial flow.")
 	$FlowMenuAnimation/FlowMenuAnimation.play("Flowmenu_idle")
 	_update_ui()
-	var states = GameState.load_state()
-	var board_units = states["board_units"]
-	var hand_units = states["hand_units"]
-	_spawn_units(board_units, $PlayArea)
-	_spawn_units(hand_units, $HandArea)
+	var tut_states = GameState.load_state()
+	var tut_board_units = tut_states["board_units"]
+	var tut_hand_units = tut_states["hand_units"]
+	_spawn_units(tut_board_units, $PlayArea)
+	_spawn_units(tut_hand_units, $HandArea)
 	_show_tutorial_popup()
 
 func _show_tutorial_popup() -> void:
@@ -146,18 +146,18 @@ func _on_fight_button_pressed() -> void:
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
-	_load_scene("res://Scenes/forest_board/forestboard.tscn")
+	_load_scene("res://scenes/forest_board/forestboard.tscn")
 
 func _on_combine_button_pressed() -> void:
 	print("Combine button pressed. Saving state and transitioning to Combine scene.")
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
-	_load_scene("res://Scenes/combine_board/combineboard.tscn")
+	_load_scene("res://scenes/combine_board/combineboard.tscn")
 
 func _on_shop_button_pressed() -> void:
 	print("Shop button pressed. Saving state and transitioning to Shop scene.")
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
-	_load_scene("res://Scenes/Board/board.tscn")
+	_load_scene("res://scenes/board/board.tscn")

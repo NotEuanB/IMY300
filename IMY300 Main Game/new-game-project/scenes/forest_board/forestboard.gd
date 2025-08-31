@@ -1,6 +1,8 @@
 class_name ForestBoard
 extends Node2D
 
+#dom
+
 @onready var unit_mover: UnitMover = $UnitMover
 @onready var player_area: PlayArea = $PlayArea
 @onready var hand_area: PlayArea = $HandArea
@@ -176,9 +178,9 @@ func _on_reward_ui_closed():
 	if GameState.game_mode == GameState.GameMode.MAIN_GAME:
 		GameState.advance()
 		if GameState.is_main_complete():
-			call_deferred("change_scene", "res://Scenes/main_menu/main_menu.tscn")
+			call_deferred("change_scene", "res://scenes/main_menu/main_menu.tscn")
 		else:
-			call_deferred("change_scene", "res://Scenes/game_flow_manager/GameFlowManager.tscn")
+			call_deferred("change_scene", "res://scenes/game_flow_manager/GameFlowManager.tscn")
 
 func change_scene(scene_path: String) -> void:
 	if get_tree():

@@ -122,7 +122,7 @@ func _on_fight_button_pressed() -> void:
 	await get_tree().create_timer(0.5).timeout
 	GameState.advance()
 	GameState.save_state(board_state, hand_state)
-	get_tree().change_scene_to_file("res://Scenes/game_flow_manager/GameFlowManager.tscn")
+	get_tree().change_scene_to_file("res://scenes/game_flow_manager/GameFlowManager.tscn")
 
 func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 	for unit_data in units_data:
