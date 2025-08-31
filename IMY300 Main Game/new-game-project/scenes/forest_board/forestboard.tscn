@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://3so8lnmdjcjo"]
+[gd_scene load_steps=21 format=3 uid="uid://3so8lnmdjcjo"]
 
 [ext_resource type="Script" uid="uid://bbhwy2e8n6afe" path="res://scenes/forest_board/forestboard.gd" id="1_6whip"]
 [ext_resource type="Texture2D" uid="uid://bmg1gbvddjd4a" path="res://assets/backgrounds/Forest_board.png" id="1_7wfkq"]
@@ -15,12 +15,11 @@
 [ext_resource type="AudioStream" uid="uid://5uchen6u0i0k" path="res://assets/sfx/forest_ambience.mp3" id="13_wha1q"]
 [ext_resource type="AudioStream" uid="uid://cck8y8ttv2i3r" path="res://assets/sfx/damage.mp3" id="14_wha1q"]
 [ext_resource type="AudioStream" uid="uid://b2jyrgw6375gj" path="res://assets/sfx/win.wav" id="16_p7wka"]
+[ext_resource type="Texture2D" uid="uid://bw7mtb164ef4f" path="res://assets/backgrounds/Ashfang_Boss_Intro.png" id="16_q581a"]
 [ext_resource type="PackedScene" uid="uid://dquecal5snr3a" path="res://scenes/pause_menu/pause_menu.tscn" id="17_lwoeu"]
 [ext_resource type="PackedScene" uid="uid://dh2dbq6xklqss" path="res://scenes/tutorial/tutorial_popup.tscn" id="18_keofs"]
 [ext_resource type="LabelSettings" uid="uid://d3kcq1iyjj6cf" path="res://assets/font/font_desc.tres" id="19_mfj7e"]
 [ext_resource type="Script" uid="uid://dsyf78p28rgua" path="res://components/camera_shake.gd" id="20_shake"]
-[ext_resource type="Texture2D" uid="uid://duow1o6t54knp" path="res://assets/backgrounds/Ashfang_Boss_Intro.png" id="21_intro_img"]
-[ext_resource type="AudioStream" uid="uid://bie16o7nuegj3" path="res://assets/sfx/boss_fight.wav" id="22_boss_music"]
 
 [node name="Forestboard" type="Node2D"]
 script = ExtResource("1_6whip")
@@ -109,10 +108,6 @@ stream = ExtResource("14_wha1q")
 [node name="Win" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("16_p7wka")
 
-[node name="Music" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("22_boss_music")
-volume_db = -10.0
-
 [node name="OverlayLayer" type="CanvasLayer" parent="."]
 
 [node name="Dimmer" type="ColorRect" parent="OverlayLayer"]
@@ -120,6 +115,30 @@ visible = false
 offset_right = 1920.0
 offset_bottom = 1080.0
 color = Color(0, 0, 0, 0.5)
+
+[node name="IntroLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="BossIntro" type="Control" parent="IntroLayer"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="IntroLayer/BossIntro"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_q581a")
+stretch_mode = 5
 
 [node name="PauseLayer" type="CanvasLayer" parent="."]
 
@@ -147,21 +166,4 @@ autowrap_mode = 2
 position = Vector2(960, 540)
 script = ExtResource("20_shake")
 
-[node name="IntroLayer" type="CanvasLayer" parent="."]
-layer = 3
-
-[node name="BossIntro" type="Control" parent="IntroLayer"]
-visible = false
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Image" type="TextureRect" parent="IntroLayer/BossIntro"]
-layout_mode = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
-texture = ExtResource("21_intro_img")
-stretch_mode = 6
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
