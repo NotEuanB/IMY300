@@ -97,7 +97,11 @@ var main_complete: bool = false
 # Helper API (does not change your existing tutorial update_step)
 func start_tutorial() -> void:
 	game_mode = GameMode.TUTORIAL
-	reset_step() # your existing function that sets current_step = STEP_1
+	current_step = GameStep.STEP_1  # Start from STEP_1, not STEP_1_1
+	main_round = 1
+	main_step = MainStep.SHOP
+	reset_state() # Clear any existing board/hand state
+	print("Started tutorial mode, step: ", current_step)
 
 func start_main_game() -> void:
 	game_mode = GameMode.MAIN_GAME

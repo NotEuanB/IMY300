@@ -146,6 +146,13 @@ func _on_fight_button_pressed() -> void:
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
+	
+	# If in tutorial mode, advance the step
+	if GameState.game_mode == GameState.GameMode.TUTORIAL:
+		print("Tutorial mode - advancing step from: ", GameState.current_step)
+		GameState.advance()  # This should advance to next tutorial step
+		print("Tutorial mode - advanced to step: ", GameState.current_step)
+	
 	_load_scene("res://scenes/forest_board/forestboard.tscn")
 
 func _on_combine_button_pressed() -> void:
@@ -153,6 +160,13 @@ func _on_combine_button_pressed() -> void:
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
+	
+	# If in tutorial mode, advance the step
+	if GameState.game_mode == GameState.GameMode.TUTORIAL:
+		print("Tutorial mode - advancing step from: ", GameState.current_step)
+		GameState.advance()  # This should advance to next tutorial step
+		print("Tutorial mode - advanced to step: ", GameState.current_step)
+	
 	_load_scene("res://scenes/combine_board/combineboard.tscn")
 
 func _on_shop_button_pressed() -> void:
@@ -160,4 +174,11 @@ func _on_shop_button_pressed() -> void:
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
+	
+	# If in tutorial mode, advance the step
+	if GameState.game_mode == GameState.GameMode.TUTORIAL:
+		print("Tutorial mode - advancing step from: ", GameState.current_step)
+		GameState.advance()  # This should go from STEP_1 (0) to STEP_1_1 (3)
+		print("Tutorial mode - advanced to step: ", GameState.current_step)
+	
 	_load_scene("res://scenes/board/board.tscn")
