@@ -16,4 +16,6 @@ tier = 3
 skin = ExtResource("2_hln0b")
 description = "Moss man"
 buff_used = false
+base_attack = 2
+base_health = 2
 metadata/_custom_type_script = "uid://d2inypj55y68q"

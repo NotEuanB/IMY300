@@ -1,11 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://5htrjvrecufi"]
+[gd_scene load_steps=9 format=3 uid="uid://5htrjvrecufi"]
 
 [ext_resource type="Script" uid="uid://navurmx1e1fi" path="res://Scenes/Unit/unit.gd" id="1_urabe"]
 [ext_resource type="Resource" uid="uid://24ojvr82jtob" path="res://data/units/base/rat.tres" id="2_yg6pq"]
 [ext_resource type="Texture2D" uid="uid://br881ewjuyyb4" path="res://assets/units/frame.png" id="3_frd6v"]
 [ext_resource type="Texture2D" uid="uid://dh1hx2aib8w8y" path="res://assets/units/Rat.png" id="4_oltkq"]
 [ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="5_hcwoj"]
-[ext_resource type="LabelSettings" uid="uid://hmjcs0b768nu" path="res://assets/font/font_stat.tres" id="6_067lq"]
 [ext_resource type="LabelSettings" uid="uid://w0i76r03armr" path="res://assets/font/font_name.tres" id="7_r0ufy"]
 [ext_resource type="LabelSettings" uid="uid://d3kcq1iyjj6cf" path="res://assets/font/font_desc.tres" id="8_x2phb"]
 
@@ -37,24 +36,6 @@ target = NodePath("..")
 [node name="Stats" type="Node2D" parent="."]
 position = Vector2(-10, 0)
 
-[node name="AttackStat" type="Label" parent="Stats"]
-offset_left = 16.0
-offset_top = 183.0
-offset_right = 77.0
-offset_bottom = 217.0
-text = "2"
-label_settings = ExtResource("6_067lq")
-horizontal_alignment = 1
-
-[node name="HealthStat" type="Label" parent="Stats"]
-offset_left = 147.0
-offset_top = 183.0
-offset_right = 203.0
-offset_bottom = 214.0
-text = "1"
-label_settings = ExtResource("6_067lq")
-horizontal_alignment = 1
-
 [node name="Name" type="Label" parent="Stats"]
 offset_left = 23.0
 offset_top = 206.0
@@ -75,6 +56,24 @@ label_settings = ExtResource("8_x2phb")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="AttackStat" type="RichTextLabel" parent="Stats"]
+offset_left = 16.0
+offset_top = 179.0
+offset_right = 77.0
+offset_bottom = 213.0
+bbcode_enabled = true
+text = "2"
+horizontal_alignment = 1
+
+[node name="HealthStat" type="RichTextLabel" parent="Stats"]
+offset_left = 147.0
+offset_top = 179.0
+offset_right = 203.0
+offset_bottom = 210.0
+bbcode_enabled = true
+text = "1"
+horizontal_alignment = 1
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

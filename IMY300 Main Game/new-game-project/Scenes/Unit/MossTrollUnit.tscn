@@ -1,11 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://dfgv6quigunb5"]
+[gd_scene load_steps=10 format=3 uid="uid://dfgv6quigunb5"]
 
 [ext_resource type="Script" uid="uid://cghdwu2o1112f" path="res://Scenes/Unit/moss_troll_unit.gd" id="1_apnhm"]
 [ext_resource type="Texture2D" uid="uid://k0xe3d80qixm" path="res://assets/units/frame_uncracked.png" id="2_6r3dy"]
 [ext_resource type="Texture2D" uid="uid://dh1hx2aib8w8y" path="res://assets/units/Rat.png" id="3_otcdu"]
 [ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="4_gyouu"]
 [ext_resource type="Texture2D" uid="uid://kx62at88usu4" path="res://assets/units/gem_uncracked.png" id="5_pxrv0"]
-[ext_resource type="LabelSettings" uid="uid://hmjcs0b768nu" path="res://assets/font/font_stat.tres" id="6_i7yl1"]
 [ext_resource type="LabelSettings" uid="uid://w0i76r03armr" path="res://assets/font/font_name.tres" id="7_8is0w"]
 [ext_resource type="LabelSettings" uid="uid://d3kcq1iyjj6cf" path="res://assets/font/font_desc.tres" id="8_h71jc"]
 [ext_resource type="AudioStream" uid="uid://dubwbrp3e8hg3" path="res://assets/sfx/upgrade_card.ogg" id="9_brc06"]
@@ -44,24 +43,6 @@ texture = ExtResource("5_pxrv0")
 [node name="Stats" type="Node2D" parent="."]
 position = Vector2(-10, 0)
 
-[node name="AttackStat" type="Label" parent="Stats"]
-offset_left = 16.0
-offset_top = 183.0
-offset_right = 77.0
-offset_bottom = 217.0
-text = "2"
-label_settings = ExtResource("6_i7yl1")
-horizontal_alignment = 1
-
-[node name="HealthStat" type="Label" parent="Stats"]
-offset_left = 147.0
-offset_top = 183.0
-offset_right = 203.0
-offset_bottom = 214.0
-text = "1"
-label_settings = ExtResource("6_i7yl1")
-horizontal_alignment = 1
-
 [node name="Name" type="Label" parent="Stats"]
 offset_left = 23.0
 offset_top = 212.0
@@ -82,6 +63,24 @@ label_settings = ExtResource("8_h71jc")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="AttackStat" type="RichTextLabel" parent="Stats"]
+offset_left = 16.0
+offset_top = 179.0
+offset_right = 77.0
+offset_bottom = 213.0
+bbcode_enabled = true
+text = "2"
+horizontal_alignment = 1
+
+[node name="HealthStat" type="RichTextLabel" parent="Stats"]
+offset_left = 147.0
+offset_top = 179.0
+offset_right = 203.0
+offset_bottom = 210.0
+bbcode_enabled = true
+text = "1"
+horizontal_alignment = 1
 
 [node name="Buff" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("9_brc06")

@@ -39,8 +39,14 @@ func _set_unit_stats(value: UnitStats) -> void:
 	if not unit_stats:
 		placeholder.show()
 		disabled = true
-		bought = true
+		# Don't set bought = true here - this makes it appear as a bought card
+		# bought = true  # REMOVE THIS LINE
 		return
+	
+	# Hide placeholder when we have valid unit stats
+	placeholder.hide()
+	disabled = false
+	bought = false  # Reset bought state
 	
 	unit_image.texture = unit_stats.skin
 	unit_name.text = unit_stats.name

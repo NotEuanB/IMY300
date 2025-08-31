@@ -17,5 +17,14 @@ extends Resource
 
 @export var buff_used := false
 
+@export var base_attack: int = 0
+@export var base_health: int = 0
+
 func _to_string() -> String:
 	return name
+
+func initialize_base_stats():
+	if base_attack == 0:
+		base_attack = attack
+	if base_health == 0:
+		base_health = health

@@ -20,6 +20,4 @@ func _on_player_stats_changed() -> void:
 		h_box_container.modulate.a = 0.5
 
 func _on_pressed() -> void:
-	player_stats.gold -= 2
-	player_stats.changed.emit()
 	$Reroll.play()

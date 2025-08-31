@@ -27,7 +27,7 @@ enemy_stats = ExtResource("2_w21hk")
 
 [node name="Visuals" type="Node2D" parent="."]
 
-[node name="Forestbackground" type="TextureRect" parent="Visuals"]
+[node name="Background" type="TextureRect" parent="Visuals"]
 offset_right = 1920.0
 offset_bottom = 1080.0
 texture = ExtResource("1_7wfkq")

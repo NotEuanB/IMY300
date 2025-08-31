@@ -16,4 +16,6 @@ tier = 2
 skin = ExtResource("2_n4ysc")
 description = "Spook man"
 buff_used = false
+base_attack = 4
+base_health = 4
 metadata/_custom_type_script = "uid://d2inypj55y68q"

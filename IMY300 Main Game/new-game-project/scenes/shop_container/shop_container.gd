@@ -48,6 +48,8 @@ func _roll_units() -> void:
 	
 	# Get which slots should be active
 	var active_slots = get_shop_slot_positions()
+	print("Active slots:", active_slots)
+	print("Unit pool size:", unit_pool.unit_pool.size())
 	
 	# Populate only the active slots
 	for i in 6:
@@ -55,6 +57,7 @@ func _roll_units() -> void:
 		if i in active_slots:
 			# Get a unit from the pool
 			var unit = unit_pool.get_random_unit()
+			print("Slot", i, "got unit:", unit.name if unit else "null")
 			if unit:  # Check if we actually got a unit
 				# Populate this slot with a real unit
 				card.unit_stats = unit
@@ -85,10 +88,13 @@ func get_shop_slot_positions() -> Array[int]:
 
 func _put_back_remaining_to_pool() -> void:
 	for unit_card: UnitCard in shop_cards.get_children():
-		if not unit_card.bought:
+		# Only put back units that actually exist and weren't bought
+		if unit_card.unit_stats != null and not unit_card.bought:
 			unit_pool.add_unit(unit_card.unit_stats)
-		
-		unit_card.queue_free()
+	
+	# Clear the cards after putting units back
+	for child: Node in shop_cards.get_children():
+		child.queue_free()
 
 func _on_unit_bought(unit: UnitStats) -> void:
 	# Check if player has enough gold (safety check)
@@ -107,9 +113,12 @@ func _on_unit_bought(unit: UnitStats) -> void:
 
 func _on_reroll_button_pressed() -> void:
 	if player_stats.gold >= 2:
-		player_stats.gold -= 2  # ADD THIS LINE - you're missing the gold deduction
+		player_stats.gold -= 2
 		player_stats.changed.emit()
-		print(unit_pool.unit_pool)
+		print("Pool before putting back:", unit_pool.unit_pool.size())
 		_put_back_remaining_to_pool()
-		print(unit_pool.unit_pool)
+		print("Pool after putting back:", unit_pool.unit_pool.size())
+		await get_tree().process_frame  # Wait for queue_free to process
 		_roll_units()
+	else:
+		print("Not enough gold to reroll!")

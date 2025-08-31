@@ -28,7 +28,7 @@ func spawn_unit(unit: UnitStats) -> Unit:
 	var area := _get_first_available_area()
 	if area == null:
 		print("⚠ No available space to add unit to hand!")
-		return null# Do nothing
+		return null
 	
 	var unit_scene := unit.unit_scene if unit.unit_scene else UNIT
 	var new_unit := unit_scene.instantiate()
@@ -37,6 +37,13 @@ func spawn_unit(unit: UnitStats) -> Unit:
 	area.unit_grid.add_child(new_unit)
 	area.unit_grid.add_unit(tile, new_unit)
 	new_unit.global_position = area.get_global_from_tile(tile)
-	new_unit.stats = unit.duplicate()
+	
+	# Ensure base stats are initialized before duplicating
+	unit.initialize_base_stats()
+	
+	# Duplicate the stats (this will now include the base stats)
+	var duplicated_stats = unit.duplicate()
+	
+	new_unit.stats = duplicated_stats
 	unit_spawned.emit(new_unit)
 	return new_unit
