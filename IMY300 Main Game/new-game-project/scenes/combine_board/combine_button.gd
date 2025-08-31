@@ -29,7 +29,6 @@ func _on_pressed() -> void:
 	if valid:
 		$Button.play()
 		await get_tree().create_timer(3).timeout
-		GameState.update_step()
 		go_to_fight_scene()
 	else: 
 		$Error.play()
@@ -39,8 +38,16 @@ func go_to_fight_scene():
 	var hand_state = get_hand_state()
 	await get_tree().create_timer(0.5).timeout
 	GameState.save_state(board_state, hand_state)
-	GameState.advance()
-	get_tree().change_scene_to_file("res://Scenes/game_flow_manager/GameFlowManager.tscn")
+	
+	# Handle tutorial vs main game progression differently
+	if GameState.game_mode == GameState.GameMode.TUTORIAL:
+		print("Tutorial mode - advancing tutorial step from: ", GameState.current_step)
+		GameState.update_step()  # Use tutorial-specific step advancement
+		print("Tutorial mode - advanced to step: ", GameState.current_step)
+	else:
+		GameState.advance()  # Use main game advancement
+	
+	get_tree().change_scene_to_file("res://scenes/game_flow_manager/GameFlowManager.tscn")
 
 
 func _on_mouse_entered() -> void:
@@ -181,6 +188,6 @@ func _on_reward_ui_closed():
 		if GameState.is_main_complete():
 			call_deferred("change_scene", "res://Scenes/main_menu/main_menu.tscn")
 		else:
-			call_deferred("change_scene", "res://Scenes/game_flow_manager/GameFlowManager.tscn")
+			call_deferred("change_scene", "res://scenes/game_flow_manager/GameFlowManager.tscn")
 	else:
 		print("Game mode is TUTORIAL. Returning to tutorial flow.")

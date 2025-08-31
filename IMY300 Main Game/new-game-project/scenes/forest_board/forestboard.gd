@@ -1,6 +1,8 @@
 class_name ForestBoard
 extends Node2D
 
+#dom
+
 @onready var unit_mover: UnitMover = $UnitMover
 @onready var player_area: PlayArea = $PlayArea
 @onready var hand_area: PlayArea = $HandArea
@@ -12,6 +14,9 @@ var enemy_stats: EnemyStats
 @onready var tutorial_text = $TutorialPopup/TutorialText
 @onready var camera_shake: Node = $Camera2D
 @onready var enemy_avatar_display: Sprite2D = $Visuals/Goblin
+@onready var intro_layer: CanvasLayer = $IntroLayer
+@onready var boss_intro: Control = $IntroLayer/BossIntro
+@onready var music: AudioStreamPlayer2D = $Music
 var paused = false
 
 # Attack/combat timing (adjust in Inspector)
@@ -19,6 +24,11 @@ var paused = false
 @export var attack_move_duration: float = 0.35
 @export var attack_return_duration: float = 0.35
 @export var attack_cooldown: float = 0.5
+
+# Boss intro timings
+@export var boss_intro_fade_in: float = 0.5
+@export var boss_intro_hold: float = 3.0
+@export var boss_intro_fade_out: float = 0.5
 
 
 func pauseMenu():
@@ -63,8 +73,12 @@ func _ready() -> void:
 	_set_all_drag_and_drop_enabled(false)
 	_set_all_units_enabled(false) 
 	unit_mover.set_enabled(false)
-	await get_tree().create_timer(combat_start_delay).timeout
-	start_combat()
+	if GameState.main_round == 4:
+		await show_boss_intro_then_start()
+	else:
+		if combat_start_delay > 0.0:
+			await get_tree().create_timer(combat_start_delay).timeout
+		start_combat()
 
 func _set_enemy_avatar() -> void:
 	if enemy_stats and enemy_stats.skin and enemy_avatar_display:
@@ -164,15 +178,51 @@ func _on_reward_ui_closed():
 	if GameState.game_mode == GameState.GameMode.MAIN_GAME:
 		GameState.advance()
 		if GameState.is_main_complete():
-			call_deferred("change_scene", "res://Scenes/main_menu/main_menu.tscn")
+			call_deferred("change_scene", "res://scenes/main_menu/main_menu.tscn")
 		else:
-			call_deferred("change_scene", "res://Scenes/game_flow_manager/GameFlowManager.tscn")
+			call_deferred("change_scene", "res://scenes/game_flow_manager/GameFlowManager.tscn")
 
 func change_scene(scene_path: String) -> void:
 	if get_tree():
 		get_tree().change_scene_to_file(scene_path)
 	else:
 		print("Cannot change scene. get_tree() is null.")
+
+func show_boss_intro_then_start() -> void:
+	# Fade in the boss intro image and swap music to boss_fight, then start combat
+	boss_intro.visible = true
+	boss_intro.modulate.a = 0.0
+	var t1 = create_tween()
+	t1.tween_property(boss_intro, "modulate:a", 1.0, boss_intro_fade_in)
+	await t1.finished
+
+	# Fade out ambience if playing
+	if $Ambience.playing:
+		var ta = create_tween()
+		ta.tween_property($Ambience, "volume_db", -40.0, 0.25)
+		await ta.finished
+		$Ambience.stop()
+
+	# Switch to boss music
+	if music.playing:
+		music.stop()
+	music.volume_db = -12.0
+	music.play()
+	create_tween().tween_property(music, "volume_db", 0.0, 0.4)
+
+	# Hold the image briefly
+	await get_tree().create_timer(boss_intro_hold).timeout
+
+	# Fade out intro
+	var t2 = create_tween()
+	t2.tween_property(boss_intro, "modulate:a", 0.0, boss_intro_fade_out)
+	await t2.finished
+	boss_intro.visible = false
+
+	# Small start delay if configured
+	if combat_start_delay > 0.0:
+		await get_tree().create_timer(combat_start_delay).timeout
+	start_combat()
 
 func start_combat() -> void:
 	var initial_enemy_count = get_living_unit_count(enemy_area.unit_grid)

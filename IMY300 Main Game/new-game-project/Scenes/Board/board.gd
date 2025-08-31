@@ -120,9 +120,17 @@ func _on_fight_button_pressed() -> void:
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	await get_tree().create_timer(0.5).timeout
-	GameState.advance()
+	
+	# Handle tutorial vs main game progression differently
+	if GameState.game_mode == GameState.GameMode.TUTORIAL:
+		print("Tutorial mode - NOT advancing step (already advanced by Next button)")
+		# Don't advance step in tutorial mode - Next button handles that
+	else:
+		print("Main game mode - advancing main game step")
+		GameState.advance()  # Use main game advancement
+	
 	GameState.save_state(board_state, hand_state)
-	get_tree().change_scene_to_file("res://Scenes/game_flow_manager/GameFlowManager.tscn")
+	get_tree().change_scene_to_file("res://scenes/game_flow_manager/GameFlowManager.tscn")
 
 func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 	for unit_data in units_data:
@@ -138,19 +146,30 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 		sell_portal.setup_unit(unit)  # ADD THIS LINE
 
 func _show_step_popup() -> void:
+	print("=== BOARD TUTORIAL DEBUG ===")
+	print("Game mode: ", GameState.game_mode)
+	print("Current step enum value: ", GameState.current_step)
+	print("TUTORIAL enum value: ", GameState.GameMode.TUTORIAL)
+	
 	# Only show tutorial popups if in Tutorial Mode
 	if GameState.game_mode != GameState.GameMode.TUTORIAL:
+		print("Not in tutorial mode - hiding popup")
 		tutorial_popup.visible = false  # Ensure the popup is hidden in Main Game Mode
 		return
-
+	
+	print("In tutorial mode - checking step match...")
+	print("Looking for STEP_1_1 which has value: ", GameState.GameStep.STEP_1_1)
+	
 	# Show tutorial popups based on the current step
 	match GameState.current_step:
 		GameState.GameStep.STEP_1_1:
+			print("✅ MATCHED STEP_1_1 - Showing popup")
 			tutorial_text.text = "This is the shop screen, where you can buy units and manipulate your board area to create effective battle teams!"
 			tutorial_popup.position.x = 960
 			tutorial_popup.position.y = 500
 			tutorial_popup.visible = true
 		GameState.GameStep.STEP_1_2:
+			print("✅ MATCHED STEP_1_2 - Showing popup")
 			tutorial_text.text = "This is the units that are currently active in the shop.\nThe shop will always have 6 choices available to purchase."
 			tutorial_popup.position.x = 960
 			tutorial_popup.position.y = 800
@@ -210,12 +229,14 @@ func _show_step_popup() -> void:
 			tutorial_popup.position.y = 500
 			tutorial_popup.visible = true
 		_:
+			print("❌ NO MATCH - Current step: ", GameState.current_step)
 			tutorial_popup.visible = false  # Hide the popup if no matching step
 
 
 func _on_next_step_pressed() -> void:
 	# Update the game step
 	GameState.update_step()
+	print("Next button - advanced to step: ", GameState.current_step)
 
 	# Show the tutorial popup for the next step
 	_show_step_popup()
