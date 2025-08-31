@@ -1,8 +1,6 @@
 class_name ForestBoard
 extends Node2D
 
-#dom
-
 @onready var unit_mover: UnitMover = $UnitMover
 @onready var player_area: PlayArea = $PlayArea
 @onready var hand_area: PlayArea = $HandArea
@@ -14,9 +12,6 @@ var enemy_stats: EnemyStats
 @onready var tutorial_text = $TutorialPopup/TutorialText
 @onready var camera_shake: Node = $Camera2D
 @onready var enemy_avatar_display: Sprite2D = $Visuals/Goblin
-@onready var intro_layer: CanvasLayer = $IntroLayer
-@onready var boss_intro: Control = $IntroLayer/BossIntro
-@onready var music: AudioStreamPlayer2D = $Music
 var paused = false
 
 # Attack/combat timing (adjust in Inspector)
@@ -25,10 +20,28 @@ var paused = false
 @export var attack_return_duration: float = 0.35
 @export var attack_cooldown: float = 0.5
 
-# Boss intro timings
+# Boss intro settings (assign in Inspector; DIY-friendly)
+@export var boss_intro_enabled: bool = true
 @export var boss_intro_fade_in: float = 0.5
-@export var boss_intro_hold: float = 3.0
+@export var boss_intro_hold: float = 3
 @export var boss_intro_fade_out: float = 0.5
+@export var boss_music_fade_out: float = 0.25
+@export var boss_music_fade_in: float = 0.4
+@export var boss_intro_image: Texture2D
+@export var boss_music_stream: AudioStream
+
+const DEFAULT_BOSS_INTRO_IMAGE_PATH := "res://assets/backgrounds/Ashfang_Boss_Intro.png"
+const DEFAULT_BOSS_MUSIC_PATHS := [
+	"res://assets/sfx/music/boss_fight.ogg",
+	"res://assets/sfx/music/boss_fight.wav",
+	"res://assets/sfx/boss_fight.ogg",
+	"res://assets/sfx/boss_fight.wav"
+]
+
+@onready var intro_layer: CanvasLayer = $IntroLayer if has_node("IntroLayer") else null
+@onready var boss_intro: Control = $IntroLayer/BossIntro if has_node("IntroLayer/BossIntro") else null
+@onready var intro_texrect: TextureRect = $IntroLayer/BossIntro/TextureRect if has_node("IntroLayer/BossIntro/TextureRect") else null
+@onready var music: AudioStreamPlayer2D = $Music if has_node("Music") else null
 
 
 func pauseMenu():
@@ -73,12 +86,69 @@ func _ready() -> void:
 	_set_all_drag_and_drop_enabled(false)
 	_set_all_units_enabled(false) 
 	unit_mover.set_enabled(false)
-	if GameState.main_round == 4:
+	# Show boss intro on Round 4 (or toggle with boss_intro_enabled), else keep normal delay
+	if GameState.main_round == 4 and boss_intro_enabled:
 		await show_boss_intro_then_start()
 	else:
-		if combat_start_delay > 0.0:
-			await get_tree().create_timer(combat_start_delay).timeout
+		await get_tree().create_timer(combat_start_delay).timeout
 		start_combat()
+
+func show_boss_intro_then_start() -> void:
+	$Ambience.stop()
+	# Safeguards: require overlay nodes; if missing, fall back
+	if boss_intro == null or intro_texrect == null:
+		await get_tree().create_timer(combat_start_delay).timeout
+		start_combat()
+		return
+
+	# Fallback: allow unassigned assets by loading defaults
+	if boss_intro_image == null:
+		var tex: Texture2D = load(DEFAULT_BOSS_INTRO_IMAGE_PATH)
+		if tex:
+			boss_intro_image = tex
+	if boss_music_stream == null:
+		for p in DEFAULT_BOSS_MUSIC_PATHS:
+			var s: AudioStream = load(p)
+			if s:
+				boss_music_stream = s
+				break
+
+	# If we still don't have an image, skip the intro gracefully
+	if boss_intro_image == null:
+		await get_tree().create_timer(combat_start_delay).timeout
+		start_combat()
+		return
+
+	print("Boss intro: round=", GameState.main_round, ", image=", boss_intro_image != null, ", music=", boss_music_stream != null)
+
+	# Set image and fade in
+	intro_texrect.texture = boss_intro_image
+	boss_intro.visible = true
+	boss_intro.modulate.a = 0.0
+	var t_in = create_tween()
+	t_in.tween_property(boss_intro, "modulate:a", 1.0, boss_intro_fade_in)
+	await t_in.finished
+
+	# Music swap with fade
+	if music:
+		if music.playing:
+			var tf = create_tween()
+			tf.tween_property(music, "volume_db", -24.0, boss_music_fade_out)
+			await tf.finished
+		music.stop()
+		if boss_music_stream:
+			music.stream = boss_music_stream
+		music.volume_db = -24.0
+		music.play()
+		create_tween().tween_property(music, "volume_db", 0.0, boss_music_fade_in)
+
+	# Hold, then fade out and start combat
+	await get_tree().create_timer(boss_intro_hold).timeout
+	var t_out = create_tween()
+	t_out.tween_property(boss_intro, "modulate:a", 0.0, boss_intro_fade_out)
+	await t_out.finished
+	boss_intro.visible = false
+	start_combat()
 
 func _set_enemy_avatar() -> void:
 	if enemy_stats and enemy_stats.skin and enemy_avatar_display:
@@ -187,42 +257,6 @@ func change_scene(scene_path: String) -> void:
 		get_tree().change_scene_to_file(scene_path)
 	else:
 		print("Cannot change scene. get_tree() is null.")
-
-func show_boss_intro_then_start() -> void:
-	# Fade in the boss intro image and swap music to boss_fight, then start combat
-	boss_intro.visible = true
-	boss_intro.modulate.a = 0.0
-	var t1 = create_tween()
-	t1.tween_property(boss_intro, "modulate:a", 1.0, boss_intro_fade_in)
-	await t1.finished
-
-	# Fade out ambience if playing
-	if $Ambience.playing:
-		var ta = create_tween()
-		ta.tween_property($Ambience, "volume_db", -40.0, 0.25)
-		await ta.finished
-		$Ambience.stop()
-
-	# Switch to boss music
-	if music.playing:
-		music.stop()
-	music.volume_db = -12.0
-	music.play()
-	create_tween().tween_property(music, "volume_db", 0.0, 0.4)
-
-	# Hold the image briefly
-	await get_tree().create_timer(boss_intro_hold).timeout
-
-	# Fade out intro
-	var t2 = create_tween()
-	t2.tween_property(boss_intro, "modulate:a", 0.0, boss_intro_fade_out)
-	await t2.finished
-	boss_intro.visible = false
-
-	# Small start delay if configured
-	if combat_start_delay > 0.0:
-		await get_tree().create_timer(combat_start_delay).timeout
-	start_combat()
 
 func start_combat() -> void:
 	var initial_enemy_count = get_living_unit_count(enemy_area.unit_grid)

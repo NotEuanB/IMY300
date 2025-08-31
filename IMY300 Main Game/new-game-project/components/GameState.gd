@@ -97,11 +97,7 @@ var main_complete: bool = false
 # Helper API (does not change your existing tutorial update_step)
 func start_tutorial() -> void:
 	game_mode = GameMode.TUTORIAL
-	current_step = GameStep.STEP_1  # Start from STEP_1, not STEP_1_1
-	main_round = 1
-	main_step = MainStep.SHOP
-	reset_state() # Clear any existing board/hand state
-	print("Started tutorial mode, step: ", current_step)
+	reset_step() # your existing function that sets current_step = STEP_1
 
 func start_main_game() -> void:
 	game_mode = GameMode.MAIN_GAME
@@ -176,10 +172,10 @@ func get_unit_pool() -> UnitPool:
 	
 	return global_unit_pool
 
-func get_enemies_for_round(round_num: int) -> EnemyStats:
+func get_enemies_for_round(round: int) -> EnemyStats:
 	var enemy_pool: Array[EnemyStats] = []
 	
-	match round_num:
+	match round:
 		1:
 			enemy_pool = [
 				preload("res://data/enemy/goblin.tres")
@@ -200,7 +196,7 @@ func get_enemies_for_round(round_num: int) -> EnemyStats:
 			enemy_pool = [preload("res://data/enemy/goblin.tres")]
 	
 	if enemy_pool.size() == 0:
-		print("No enemies configured for round ", round_num)
+		print("No enemies configured for round ", round)
 		return null
 	
 	# Pick a random enemy from the pool
