@@ -1,30 +1,30 @@
-[gd_resource type="Theme" load_steps=8 format=3 uid="uid://i51js88lpwix"]
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://kxpl1qpwmmlh"]
 
-[ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="2_idhui"]
-[ext_resource type="Texture2D" uid="uid://0g3qn006ohak" path="res://assets/tutorial/tutorial_gui.png" id="2_rp3em"]
+[ext_resource type="FontFile" uid="uid://c5dxgygsn4b18" path="res://assets/font/calamity.otf" id="1_6ucvw"]
+[ext_resource type="Texture2D" uid="uid://0g3qn006ohak" path="res://assets/tutorial/tutorial_gui.png" id="2_ffgey"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rp3em"]
-texture = ExtResource("2_rp3em")
+texture = ExtResource("2_ffgey")
 region_rect = Rect2(112, 16, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m5ied"]
-texture = ExtResource("2_rp3em")
+texture = ExtResource("2_ffgey")
 region_rect = Rect2(16, 16, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_idhui"]
-texture = ExtResource("2_rp3em")
+texture = ExtResource("2_ffgey")
 region_rect = Rect2(64, 16, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w1frq"]
-texture = ExtResource("2_rp3em")
+texture = ExtResource("2_ffgey")
 region_rect = Rect2(16, 16, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8722f"]
-texture = ExtResource("2_rp3em")
+texture = ExtResource("2_ffgey")
 region_rect = Rect2(64, 16, 32, 32)
 
 [resource]
-default_font = ExtResource("2_idhui")
+default_font = ExtResource("1_6ucvw")
 Button/colors/font_color = Color(1, 1, 1, 1)
 Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
 Button/colors/font_focus_color = Color(1, 1, 1, 1)
@@ -42,8 +42,8 @@ Button/constants/align_to_largest_stylebox = 0
 Button/constants/h_separation = 4
 Button/constants/icon_max_width = 0
 Button/constants/outline_size = 0
-Button/font_sizes/font_size = 50
-Button/fonts/font = ExtResource("2_idhui")
+Button/font_sizes/font_size = 15
+Button/fonts/font = ExtResource("1_6ucvw")
 Button/styles/disabled = SubResource("StyleBoxTexture_rp3em")
 Button/styles/focus = SubResource("StyleBoxTexture_m5ied")
 Button/styles/hover = SubResource("StyleBoxTexture_idhui")

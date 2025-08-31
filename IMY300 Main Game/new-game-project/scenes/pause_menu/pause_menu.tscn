@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://d4by11su4pxvj" path="res://scenes/pause_menu/pause_menu.gd" id="1_5bgjm"]
 [ext_resource type="Shader" uid="uid://oqxqy6rpcjj7" path="res://scenes/pause_menu/pause_menu.gdshader" id="2_qcmsd"]
 [ext_resource type="Theme" uid="uid://ci51k626vqn64" path="res://assets/themes/popup_panel.tres" id="3_0a7io"]
-[ext_resource type="Theme" uid="uid://i51js88lpwix" path="res://assets/themes/button.tres" id="3_10tpt"]
+[ext_resource type="Theme" uid="uid://kxpl1qpwmmlh" path="res://assets/themes/menu_button.tres" id="4_0a7io"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_10tpt"]
 shader = ExtResource("2_qcmsd")
@@ -67,7 +67,7 @@ offset_bottom = 35.0
 grow_horizontal = 2
 scale = Vector2(0.5, 0.5)
 pivot_offset = Vector2(30, 10)
-theme = ExtResource("3_10tpt")
+theme = ExtResource("4_0a7io")
 text = "Resume"
 
 [node name="Quit" type="Button" parent="Panel"]
@@ -85,7 +85,7 @@ grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(0.5, 0.5)
 pivot_offset = Vector2(30, 10)
-theme = ExtResource("3_10tpt")
+theme = ExtResource("4_0a7io")
 text = "Quit"
 
 [connection signal="pressed" from="Panel/Resume" to="." method="_on_resume_pressed"]

@@ -52,20 +52,20 @@ func _set_background_for_round() -> void:
 	
 	match GameState.main_round:
 		1:
-			background_node.texture = preload("res://assets/Forest_board.png")
+			background_node.texture = preload("res://assets/backgrounds/Forest_board.png")
 			print("Set background for Round 1")
 		2:
-			background_node.texture = preload("res://assets/Grave_Hollow.png")
+			background_node.texture = preload("res://assets/backgrounds/Grave_Hollow.png")
 			print("Set background for Round 2")
 		3:
-			background_node.texture = preload("res://assets/Scorched_Gate.png")
+			background_node.texture = preload("res://assets/backgrounds/Scorched_Gate.png")
 			print("Set background for Round 3")
 		4:
-			background_node.texture = preload("res://assets/Ashfangs_Keep.png")
+			background_node.texture = preload("res://assets/backgrounds/Ashfangs_Keep.png")
 			print("Set background for Round 4")
 		_:
 			# Default background
-			background_node.texture = preload("res://assets/Forest_board.png")
+			background_node.texture = preload("res://assets/backgrounds/Forest_board.png")
 			print("Set default background")
 
 func _show_tutorial_popup() -> void:

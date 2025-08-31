@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cdg1vkn7q0cgl"
-path="res://.godot/imported/Scorched_Gate.png-8f435e789f95ad21ada4d8f877887eb1.ctex"
+uid="uid://yk88735okhda"
+path="res://.godot/imported/Grave_Hollow.png-15ec611eb75b6f1a5bf08f56ade9ac54.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Scorched_Gate.png"
-dest_files=["res://.godot/imported/Scorched_Gate.png-8f435e789f95ad21ada4d8f877887eb1.ctex"]
+source_file="res://assets/backgrounds/Grave_Hollow.png"
+dest_files=["res://.godot/imported/Grave_Hollow.png-15ec611eb75b6f1a5bf08f56ade9ac54.ctex"]
 
 [params]
 
