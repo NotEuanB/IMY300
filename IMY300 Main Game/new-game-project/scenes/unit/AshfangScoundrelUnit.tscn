@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://cmffoo2c4m6xx"]
 
-[ext_resource type="Script" uid="uid://2w30212ewk58" path="res://Scenes/Unit/ashfangscoundrel_unit.gd" id="1_oheww"]
+[ext_resource type="Script" uid="uid://2w30212ewk58" path="res://scenes/unit/ashfangscoundrel_unit.gd" id="1_oheww"]
 [ext_resource type="Texture2D" uid="uid://dsd8sa5eu5en6" path="res://assets/units/frame_cracked.png" id="2_1e0yi"]
 [ext_resource type="Texture2D" uid="uid://cucmhv5r7tfo3" path="res://assets/units/Ashfang_Scoundrel.png" id="3_oheww"]
 [ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="4_3y4gi"]

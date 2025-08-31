@@ -13,6 +13,12 @@ extends Node2D
 @onready var camera_shake: Node = $Camera2D
 var paused = false
 
+# Attack/combat timing (adjust in Inspector)
+@export var combat_start_delay: float = 1.5
+@export var attack_move_duration: float = 0.35
+@export var attack_return_duration: float = 0.35
+@export var attack_cooldown: float = 0.35
+
 
 func pauseMenu():
 	if paused:
@@ -44,7 +50,7 @@ func _ready() -> void:
 	_set_all_drag_and_drop_enabled(false)
 	_set_all_units_enabled(false) 
 	unit_mover.set_enabled(false)
-	await get_tree().create_timer(3.0).timeout  # Add delay between turns
+	await get_tree().create_timer(combat_start_delay).timeout
 	start_combat()
 
 func _set_background_for_round() -> void:
@@ -235,7 +241,7 @@ func _attack(attacker, defender) -> void:
 
 	# Animate attacker moving to defender
 	var tween = create_tween()
-	tween.tween_property(attacker, "global_position", target_pos, 0.5)
+	tween.tween_property(attacker, "global_position", target_pos, attack_move_duration)
 	await tween.finished
 
 	# Both units deal damage to each other
@@ -252,7 +258,7 @@ func _attack(attacker, defender) -> void:
 
 	# Animate attacker moving back to original position
 	var tween_back = create_tween()
-	tween_back.tween_property(attacker, "global_position", original_pos, 0.5)
+	tween_back.tween_property(attacker, "global_position", original_pos, attack_return_duration)
 	await tween_back.finished
 
 	# Restore original z_index
@@ -345,7 +351,7 @@ func _combat_round() -> void:
 			var enemy_tile = living_enemy_tiles[randi() % living_enemy_tiles.size()]
 			var enemy_unit = enemy_area.unit_grid.units[enemy_tile]
 			await _attack(player_unit, enemy_unit)
-			await get_tree().create_timer(0.5).timeout
+			await get_tree().create_timer(attack_cooldown).timeout
 		i += 1
 
 		# Enemy attacks
@@ -362,5 +368,5 @@ func _combat_round() -> void:
 			var player_tile = living_player_tiles[randi() % living_player_tiles.size()]
 			var player_unit = player_area.unit_grid.units[player_tile]
 			await _attack(enemy_unit, player_unit)
-			await get_tree().create_timer(0.5).timeout
+			await get_tree().create_timer(attack_cooldown).timeout
 		j += 1
