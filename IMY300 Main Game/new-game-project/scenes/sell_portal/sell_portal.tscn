@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://lqm5228wqvl6"]
 
-[ext_resource type="Script" uid="uid://b1r0xrvnff084" path="res://Scenes/sell_portal/sell_portal.gd" id="1_7mc5g"]
+[ext_resource type="Script" uid="uid://b1r0xrvnff084" path="res://scenes/sell_portal/sell_portal.gd" id="1_7mc5g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7mc5g"]
 size = Vector2(122.5, 13.4583)
