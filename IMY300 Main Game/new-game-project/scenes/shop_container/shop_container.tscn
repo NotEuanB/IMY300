@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=3 uid="uid://ehcpt7j0kkj3"]
 
-[ext_resource type="PackedScene" uid="uid://bjew0osvaa0rm" path="res://Scenes/reroll_button/reroll_button.tscn" id="1_f18wc"]
-[ext_resource type="Script" uid="uid://7sdaeso87g1t" path="res://Scenes/shop_container/shop_container.gd" id="1_fkysy"]
-[ext_resource type="PackedScene" uid="uid://df7fpuhmkgi11" path="res://Scenes/gold_display/gold_display.tscn" id="2_fkysy"]
+[ext_resource type="PackedScene" uid="uid://bjew0osvaa0rm" path="res://scenes/reroll_button/reroll_button.tscn" id="1_f18wc"]
+[ext_resource type="Script" uid="uid://7sdaeso87g1t" path="res://scenes/shop_container/shop_container.gd" id="1_fkysy"]
+[ext_resource type="PackedScene" uid="uid://df7fpuhmkgi11" path="res://scenes/gold_display/gold_display.tscn" id="2_fkysy"]
 [ext_resource type="Resource" uid="uid://bn1waem751oqp" path="res://data/unit_pool/unit_pool.tres" id="2_q8x0b"]
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="3_88t2e"]
-[ext_resource type="PackedScene" uid="uid://bt0uy01056sim" path="res://Scenes/unit_card/unit_card.tscn" id="3_cfpj3"]
+[ext_resource type="PackedScene" uid="uid://bt0uy01056sim" path="res://scenes/unit_card/unit_card.tscn" id="3_cfpj3"]
 [ext_resource type="Resource" uid="uid://cc31lth8kllsv" path="res://data/units/base/golem.tres" id="5_cfpj3"]
 [ext_resource type="AudioStream" uid="uid://dh38avwq8jjgm" path="res://assets/sfx/reroll.mp3" id="5_q8x0b"]
 
