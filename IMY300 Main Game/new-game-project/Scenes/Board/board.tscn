@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://soguh4yny0f0"]
+[gd_scene load_steps=49 format=3 uid="uid://soguh4yny0f0"]
 
 [ext_resource type="Script" uid="uid://bvvuks1qgil6" path="res://scenes/board/board.gd" id="1_ef5ss"]
 [ext_resource type="Texture2D" uid="uid://c6xr4umn1qegw" path="res://assets/backgrounds/board.png" id="2_brcfe"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="7_x1pfr"]
 [ext_resource type="AudioStream" uid="uid://c8msd2v5ehaox" path="res://assets/sfx/place_on_board.mp3" id="8_dqnt6"]
 [ext_resource type="PackedScene" uid="uid://lqm5228wqvl6" path="res://scenes/sell_portal/sell_portal.tscn" id="8_qlllu"]
+[ext_resource type="Script" uid="uid://dsyf78p28rgua" path="res://components/camera_shake.gd" id="8_shake"]
 [ext_resource type="Resource" uid="uid://defp4jshbm1ep" path="res://data/player/player_stats.tres" id="9_me64r"]
 [ext_resource type="PackedScene" uid="uid://cnhx7egcrqt28" path="res://scenes/tooltip/tooltip.tscn" id="11_gti8d"]
 [ext_resource type="PackedScene" uid="uid://ehcpt7j0kkj3" path="res://scenes/shop_container/shop_container.tscn" id="12_dkxek"]
@@ -461,6 +462,10 @@ offset_left = -34.0
 offset_top = -33.0
 offset_right = -34.0
 offset_bottom = -33.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(960, 540)
+script = ExtResource("8_shake")
 
 [connection signal="mouse_entered" from="FightButton" to="FightButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="FightButton" to="FightButton" method="_on_mouse_exited"]
