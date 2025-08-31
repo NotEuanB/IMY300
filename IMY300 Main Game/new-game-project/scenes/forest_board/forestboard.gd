@@ -10,6 +10,7 @@ extends Node2D
 @onready var pause_menu = $PauseLayer/PauseMenu
 @onready var tutorial_popup = $TutorialPopup
 @onready var tutorial_text = $TutorialPopup/TutorialText
+@onready var camera_shake: Node = $Camera2D
 var paused = false
 
 
@@ -238,6 +239,8 @@ func _attack(attacker, defender) -> void:
 	await tween.finished
 
 	# Both units deal damage to each other
+	if camera_shake and camera_shake.has_method("shake"):
+		camera_shake.shake(10.0, 0.2, 8)
 	defender.stats.health -= attacker.stats.attack
 	attacker.stats.health -= defender.stats.attack
 	_update_health_display(defender)

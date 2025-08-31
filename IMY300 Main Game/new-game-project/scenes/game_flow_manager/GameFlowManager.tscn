@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bgok4ypq3xs5u"]
+[gd_scene load_steps=34 format=3 uid="uid://bgok4ypq3xs5u"]
 
 [ext_resource type="Script" uid="uid://efm64ucm2nxo" path="res://scenes/game_flow_manager/game_flow_manager.gd" id="1_wiyfw"]
 [ext_resource type="Texture2D" uid="uid://c5xrec5k25gbs" path="res://assets/backgrounds/flow_menu.png" id="2_fmoox"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://d3pjknjfj6ynk" path="res://components/unit_mover.gd" id="4_fmoox"]
 [ext_resource type="AudioStream" uid="uid://c8msd2v5ehaox" path="res://assets/sfx/place_on_board.mp3" id="5_1hjlv"]
 [ext_resource type="Script" uid="uid://cxcur3lg0d5d7" path="res://components/unit_spawner.gd" id="6_c4sdh"]
+[ext_resource type="Script" uid="uid://dsyf78p28rgua" path="res://components/camera_shake.gd" id="7_shake"]
 [ext_resource type="AudioStream" uid="uid://ju6kya03qjrf" path="res://assets/sfx/button.mp3" id="8_1hjlv"]
 [ext_resource type="Texture2D" uid="uid://olxlpg20w7ce" path="res://assets/buttons/menu_spritesheet.png" id="8_c4sdh"]
 [ext_resource type="Script" uid="uid://bma27uxgvks5h" path="res://scenes/game_flow_manager/fight_button.gd" id="8_ml3ms"]
@@ -346,6 +347,10 @@ autowrap_mode = 2
 [node name="Ambience" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("16_8b3oi")
 autoplay = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(960, 540)
+script = ExtResource("7_shake")
 
 [connection signal="pressed" from="FightButton" to="." method="_on_fight_button_pressed"]
 [connection signal="pressed" from="CombineButton" to="." method="_on_combine_button_pressed"]

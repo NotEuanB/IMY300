@@ -58,6 +58,13 @@ func _move_unit(unit: Unit, play_area: PlayArea, tile: Vector2i) -> void:
 	unit.global_position = play_area.get_global_from_tile(tile)
 	unit.reparent(play_area.unit_grid)
 	play_area.unit_grid.add_unit(tile, unit)
+	# Subtle shake on successful placement on the board
+	if play_area.area_type == "board":
+		var cams := get_tree().get_nodes_in_group("camera_shake")
+		if cams.size() > 0:
+			var cam = cams[0]
+			if cam and cam.has_method("shake"):
+				cam.shake(3.0, 0.08, 5)
 
 
 func _on_unit_drag_started(unit: Unit) -> void:
