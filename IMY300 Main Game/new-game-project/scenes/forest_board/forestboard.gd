@@ -6,11 +6,12 @@ extends Node2D
 @onready var hand_area: PlayArea = $HandArea
 @onready var enemy_area: PlayArea = $EnemyArea
 @export var player_stats: Resource
-@export var enemy_stats: EnemyStats
+var enemy_stats: EnemyStats
 @onready var pause_menu = $PauseLayer/PauseMenu
 @onready var tutorial_popup = $TutorialPopup
 @onready var tutorial_text = $TutorialPopup/TutorialText
 @onready var camera_shake: Node = $Camera2D
+@onready var enemy_avatar_display: Sprite2D = $Visuals/Goblin
 var paused = false
 
 # Attack/combat timing (adjust in Inspector)
@@ -38,6 +39,18 @@ func _process(_delta: float) -> void:
 func _ready() -> void:
 	randomize()
 	
+	# Get enemies for the current round FIRST
+	enemy_stats = GameState.get_enemies_for_round(GameState.main_round)
+	if not enemy_stats:
+		print("ERROR: No enemy stats found for round ", GameState.main_round)
+		# Fallback to a default enemy if needed
+		enemy_stats = preload("res://data/enemy/goblin.tres")
+	
+	print("Fighting enemies for round ", GameState.main_round, ": ", enemy_stats.resource_path)
+	
+	# Set the enemy avatar (skin) based on the current enemy
+	_set_enemy_avatar()
+	
 	# Set the background based on the current round
 	_set_background_for_round()
 	
@@ -52,6 +65,13 @@ func _ready() -> void:
 	unit_mover.set_enabled(false)
 	await get_tree().create_timer(combat_start_delay).timeout
 	start_combat()
+
+func _set_enemy_avatar() -> void:
+	if enemy_stats and enemy_stats.skin and enemy_avatar_display:
+		enemy_avatar_display.texture = enemy_stats.skin
+		print("Set enemy avatar (skin) for: ", enemy_stats.resource_path)
+	else:
+		print("No enemy skin found or avatar display element missing")
 
 func _set_background_for_round() -> void:
 	# Assuming you have a background node in your scene
@@ -155,20 +175,47 @@ func change_scene(scene_path: String) -> void:
 		print("Cannot change scene. get_tree() is null.")
 
 func start_combat() -> void:
+	var initial_enemy_count = get_living_unit_count(enemy_area.unit_grid)
+	
 	while get_living_unit_count(player_area.unit_grid) > 0 and get_living_unit_count(enemy_area.unit_grid) > 0:		
 		await _combat_round()
 
-	# Determine the winner
-	if get_living_unit_count(player_area.unit_grid) == 0:
-		player_stats.health -= 2
+	# Calculate enemies killed
+	var final_enemy_count = get_living_unit_count(enemy_area.unit_grid)
+	var enemies_killed = initial_enemy_count - final_enemy_count
+	
+	# Award gold for enemies killed
+	var gold_earned = enemies_killed
+	player_stats.gold += gold_earned
+	player_stats.changed.emit()
+	
+	# Determine the outcome
+	var player_units_alive = get_living_unit_count(player_area.unit_grid)
+	var enemy_units_alive = get_living_unit_count(enemy_area.unit_grid)
+	
+	if player_units_alive == 0 and enemy_units_alive == 0:
+		# Draw - both sides wiped out
+		$Lose.play()  # or create a separate draw sound
+		show_reward_ui("Draw", "Both armies were wiped out!\n+" + str(gold_earned) + " gold for killing " + str(enemies_killed) + " enemies!")
+		
+	elif player_units_alive == 0:
+		# Player loses - lose health equal to remaining enemies
+		var health_lost = enemy_units_alive
+		player_stats.health -= health_lost
 		$Visuals/HealthDisplay/Health.text = str(player_stats.health)
 		$Lose.play()
-		show_reward_ui("You Lose", "You lost 2 HP!")
-	elif get_living_unit_count(enemy_area.unit_grid) == 0:
-		player_stats.gold += 4 
-		player_stats.changed.emit() 
+		
+		if enemies_killed > 0:
+			show_reward_ui("You Lose", "You lost " + str(health_lost) + " HP!\n(" + str(enemy_units_alive) + " enemies remain)\n+" + str(gold_earned) + " gold for killing " + str(enemies_killed) + " enemies!")
+		else:
+			show_reward_ui("You Lose", "You lost " + str(health_lost) + " HP! (" + str(enemy_units_alive) + " enemies remain)")
+			
+	elif enemy_units_alive == 0:
+		# Player wins - get bonus gold plus kill gold
 		$Win.play()
-		show_reward_ui("You Win", "You got 4 gold!")
+		player_stats.gold += 3
+		player_stats.changed.emit()
+		show_reward_ui("You Win", "Victory!\n+3 Gold \n+" + str(gold_earned) + " gold for killing " + str(enemies_killed) + " enemies!")
 
 func _player_turn() -> void:
 	var living_player_tiles = []

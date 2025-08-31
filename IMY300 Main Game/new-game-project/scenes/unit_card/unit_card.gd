@@ -68,16 +68,9 @@ func _on_player_stats_changed() -> void:
 	if bought or not has_enough_gold or hand_full:
 		disabled = true
 		modulate = Color(Color.WHITE, 0.5)
-		if bought:
-			print("Unit Card - Bought (dimmed)")
-		elif not has_enough_gold:
-			print("Unit Card - Can't afford (dimmed)")
-		else:
-			print("Unit Card - Hand full (dimmed)")
 	else:
 		disabled = false
 		modulate = Color(Color.WHITE, 1.0)
-		print("Unit Card - Available (full brightness)")
 
 
 func _on_pressed() -> void:

@@ -10,6 +10,18 @@ var current_step: GameStep = GameStep.STEP_1
 var board_units: Array = []
 var hand_units: Array = []
 
+var global_unit_pool: UnitPool
+var last_generated_round: int = -1
+
+@export var round_1_enemies: Array[EnemyStats] = []
+@export var round_2_enemies: Array[EnemyStats] = []
+@export var round_3_enemies: Array[EnemyStats] = []
+@export var round_4_enemies: Array[EnemyStats] = []
+
+func _ready():
+	# Load the unit pool but don't generate it yet
+	global_unit_pool = preload("res://data/unit_pool/unit_pool.tres")
+
 func save_state(board_state: Array, hand_state: Array) -> void:
 	board_units = board_state
 	hand_units = hand_state
@@ -93,6 +105,12 @@ func start_main_game() -> void:
 	main_round = 1
 	main_complete = false
 	reset_state() # keep your existing board/hand clear
+	
+	# Clear the unit pool to remove any leftover combined units from previous games
+	if global_unit_pool:
+		global_unit_pool.generate_unit_pool_for_round(main_round)
+		last_generated_round = main_round
+		print("Cleared unit pool for new main game - removed all combined units")
 
 func advance() -> void:
 	if game_mode == GameMode.TUTORIAL:
@@ -128,3 +146,60 @@ func get_next_scene_path() -> String:
 
 func is_main_complete() -> bool:
 	return main_complete
+
+func get_unit_pool() -> UnitPool:
+	if not global_unit_pool:
+		global_unit_pool = preload("res://data/unit_pool/unit_pool.tres")
+		global_unit_pool.generate_unit_pool_for_round(main_round)
+		last_generated_round = main_round
+		print("Initial generation for round ", main_round)
+	elif last_generated_round != main_round:
+		# Only regenerate base pool, but preserve any added units
+		var added_units = []
+		# Save any combined units first
+		for unit in global_unit_pool.unit_pool:
+			if not unit.name in ["Rat", "Golem", "Flame Imp", "Moss Troll", "Spectre"]:  # Your base units
+				added_units.append(unit)
+		
+		global_unit_pool.generate_unit_pool_for_round(main_round)
+		
+		# Add back the combined units
+		for unit in added_units:
+			global_unit_pool.add_unit(unit)
+		
+		last_generated_round = main_round
+		print("Regenerated pool for round ", main_round, " with ", added_units.size(), " preserved units")
+	
+	return global_unit_pool
+
+func get_enemies_for_round(round: int) -> EnemyStats:
+	var enemy_pool: Array[EnemyStats] = []
+	
+	match round:
+		1:
+			enemy_pool = [
+				preload("res://data/enemy/goblin.tres")
+			]
+		2:
+			enemy_pool = [
+				preload("res://data/enemy/goblin2.tres")
+			]
+		3:
+			enemy_pool = [
+				preload("res://data/enemy/goblin3.tres") 
+			]
+		4:
+			enemy_pool = [
+				preload("res://data/enemy/goblin_boss.tres") 
+			]
+		_:
+			enemy_pool = [preload("res://data/enemy/goblin.tres")]
+	
+	if enemy_pool.size() == 0:
+		print("No enemies configured for round ", round)
+		return null
+	
+	# Pick a random enemy from the pool
+	var selected_enemy = enemy_pool[randi() % enemy_pool.size()]
+	print("Selected enemy: ", selected_enemy.resource_path)
+	return selected_enemy

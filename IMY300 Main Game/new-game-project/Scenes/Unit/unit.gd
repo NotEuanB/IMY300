@@ -60,7 +60,6 @@ func set_stats(value: Resource) -> void:
 	if stats.health > max_health_reached:
 		max_health_reached = stats.health
 	
-	print("Base stats set - attack:", base_attack, " health:", base_health, " max_health:", max_health_reached)
 	
 	if not is_node_ready():
 		await ready
@@ -88,20 +87,16 @@ func update_stat_display_attack(label: RichTextLabel, current_value: int, base_v
 	# Ensure BBCode is enabled
 	label.bbcode_enabled = true
 	
-	print("Updating attack: current=", current_value, " base=", base_value)
 	
 	if current_value > base_value:
 		# Dark green, bold, and larger for increased stats
 		label.text = "[color=#006400][b][font_size=20]" + str(current_value) + "[/font_size][/b][/color]"
-		print("Set to DARK GREEN with BBCode")
 	elif current_value < base_value:
 		# Dark red, bold, and larger for decreased stats
 		label.text = "[color=#4A0000[b][font_size=20]" + str(current_value) + "[/font_size][/b][/color]"
-		print("Set to DARK RED with BBCode")
 	else:
 		# Black for normal/base stats
 		label.text = "[color=black]" + str(current_value) + "[/color]"
-		print("Set to BLACK (normal)")
 
 func update_stat_display_health(label: RichTextLabel, current_value: int, base_value: int, max_value: int) -> void:
 	if not label:
@@ -111,20 +106,16 @@ func update_stat_display_health(label: RichTextLabel, current_value: int, base_v
 	# Ensure BBCode is enabled
 	label.bbcode_enabled = true
 	
-	print("Updating health: current=", current_value, " base=", base_value, " max=", max_value)
 	
 	if current_value < max_value:
 		# Very dark red/maroon for damaged health - readable on light red background
 		label.text = "[color=#2B0000][b][font_size=20]" + str(current_value) + "[/font_size][/b][/color]"
-		print("Set to VERY DARK RED (damaged)")
 	elif current_value > base_value:
 		# Green if health is above base value (buffed)
 		label.text = "[color=#006400][b][font_size=20]" + str(current_value) + "[/font_size][/b][/color]"
-		print("Set to DARK GREEN (buffed)")
 	else:
 		# Black for normal/base health
 		label.text = "[color=black]" + str(current_value) + "[/color]"
-		print("Set to BLACK (normal)")
 
 
 func _on_mouse_entered() -> void:
@@ -154,9 +145,6 @@ func _ready() -> void:
 		call_deferred("refresh_stats_display")
 		
 func refresh_stats_display() -> void:
-	print("Refresh called - stats:", stats != null, " unit_atk:", unit_atk != null, " unit_hp:", unit_hp != null)
-	print("Base values - attack:", base_attack, " health:", base_health, " max_health:", max_health_reached)
-	print("Current values - attack:", stats.attack if stats else "null", " health:", stats.health if stats else "null")
 	
 	if stats and unit_atk and unit_hp and base_attack > 0:
 		update_stat_display_attack(unit_atk, stats.attack, base_attack)

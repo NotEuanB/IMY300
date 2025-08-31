@@ -8,10 +8,10 @@
 script = ExtResource("1_mwhjf")
 name = "Blightflame Shaman"
 unit_scene = ExtResource("3_evnnj")
-gold_cost = 1
+gold_cost = 6
 attack = 1
 health = 1
-pool_count = 100
+pool_count = 1
 tier = 1
 skin = ExtResource("2_bh28c")
 description = "Blightflame Shaman"

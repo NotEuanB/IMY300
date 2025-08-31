@@ -8,10 +8,10 @@
 script = ExtResource("1_g7j3v")
 name = "Rat"
 unit_scene = ExtResource("3_e05mq")
-gold_cost = 1
+gold_cost = 2
 attack = 2
 health = 1
-pool_count = 100
+pool_count = 20
 tier = 1
 skin = ExtResource("2_7crau")
 description = "On entering: Choose a unit to give +1/+1"

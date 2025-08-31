@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnemyStats" load_steps=7 format=3 uid="uid://dkk5veiumtufw"]
+
+[ext_resource type="Script" uid="uid://crbjf0i6q7xqi" path="res://data/enemy/enemy_stats.gd" id="1_aywwk"]
+[ext_resource type="Texture2D" uid="uid://u3n13mxow2g6" path="res://assets/avatars/enemy_avatar.png" id="2_8sxlb"]
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="3_t6wow"]
+[ext_resource type="Resource" uid="uid://2ivstpkcfwyj" path="res://data/units/enemies/e_spectre.tres" id="4_8sxlb"]
+[ext_resource type="PackedScene" uid="uid://5htrjvrecufi" path="res://Scenes/Unit/EWormUnit.tscn" id="5_51ert"]
+[ext_resource type="Resource" uid="uid://b11lvhg6ug1d" path="res://data/units/enemies/e_golem.tres" id="5_t6wow"]
+
+[resource]
+script = ExtResource("1_aywwk")
+skin = ExtResource("2_8sxlb")
+units = Array[PackedScene]([ExtResource("5_51ert"), ExtResource("5_51ert"), ExtResource("5_51ert")])
+unit_stats = Array[ExtResource("3_t6wow")]([ExtResource("4_8sxlb"), ExtResource("5_t6wow"), ExtResource("4_8sxlb")])
+metadata/_custom_type_script = "uid://crbjf0i6q7xqi"

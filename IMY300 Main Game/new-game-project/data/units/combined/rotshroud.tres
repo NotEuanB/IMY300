@@ -8,14 +8,14 @@
 script = ExtResource("1_fuc4a")
 name = "Rotshroud"
 unit_scene = ExtResource("3_fuc4a")
-gold_cost = 5
+gold_cost = 6
 attack = 5
 health = 5
-pool_count = 100
+pool_count = 1
 tier = 1
 skin = ExtResource("2_fuc4a")
 description = "Rotshroud man"
 buff_used = false
 base_attack = 5
-base_health = 0
+base_health = 5
 metadata/_custom_type_script = "uid://d2inypj55y68q"
