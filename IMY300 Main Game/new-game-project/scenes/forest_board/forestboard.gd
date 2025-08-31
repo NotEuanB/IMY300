@@ -14,10 +14,10 @@ extends Node2D
 var paused = false
 
 # Attack/combat timing (adjust in Inspector)
-@export var combat_start_delay: float = 1.5
+@export var combat_start_delay: float = 3
 @export var attack_move_duration: float = 0.35
 @export var attack_return_duration: float = 0.35
-@export var attack_cooldown: float = 0.35
+@export var attack_cooldown: float = 0.5
 
 
 func pauseMenu():
