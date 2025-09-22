@@ -34,6 +34,8 @@ func _on_pressed() -> void:
 		$Error.play()
 
 func go_to_fight_scene():
+	# Cancel any active dragging before saving state
+	_cancel_all_dragging()
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	await get_tree().create_timer(0.5).timeout
@@ -48,6 +50,13 @@ func go_to_fight_scene():
 		GameState.advance()  # Use main game advancement
 	
 	get_tree().change_scene_to_file("res://scenes/game_flow_manager/GameFlowManager.tscn")
+
+func _cancel_all_dragging():
+	# Cancel any active dragging in any unit mover components
+	var drag_components = get_tree().get_nodes_in_group("drag_components")
+	for component in drag_components:
+		if component and component.has_method("cancel_drag"):
+			component.cancel_drag()
 
 
 func _on_mouse_entered() -> void:
@@ -162,6 +171,12 @@ func get_hand_state() -> Array:
 	for tile in hand_area.unit_grid.units:
 		var unit = hand_area.unit_grid.units[tile]
 		if unit:
+			# Safety check: don't save units that are currently being dragged
+			var unit_mover = unit.get_node_or_null("UnitMover")
+			if unit_mover and unit_mover.is_dragging:
+				print("Skipping dragged unit in hand state: ", unit.stats.name)
+				continue
+			
 			hand.append({
 				"stats": unit.stats,
 				"tile": tile
@@ -175,6 +190,12 @@ func get_board_state() -> Array:
 		for tile in board_area.unit_grid.units:
 			var unit = board_area.unit_grid.units[tile]
 			if unit:
+				# Safety check: don't save units that are currently being dragged
+				var unit_mover = unit.get_node_or_null("UnitMover")
+				if unit_mover and unit_mover.is_dragging:
+					print("Skipping dragged unit in board state: ", unit.stats.name)
+					continue
+				
 				board.append({
 					"stats": unit.stats,
 					"tile": tile

@@ -26,6 +26,16 @@ func _ready() -> void:
 	unit_spawner.unit_spawned.connect(sell_portal.setup_unit)
 	shop_container.unit_bought.connect(_on_unit_bought)
 	$FightButton.fight_pressed.connect(_on_fight_button_pressed)
+	
+	# Connect to reroll button for tutorial advancement
+	if shop_container.has_node("Top/RerollButton"):
+		shop_container.get_node("Top/RerollButton").pressed.connect(_on_reroll_pressed)
+	
+	# Connect to sell portal for tutorial advancement
+	sell_portal.unit_sold.connect(_on_unit_sold)
+	
+	# Connect to unit mover for tutorial advancement
+	unit_mover.unit_moved_to_board.connect(_on_unit_moved_to_board)
 
 	# Restore the saved state
 	var states = GameState.load_state()
@@ -34,10 +44,24 @@ func _ready() -> void:
 	_spawn_units(board_units, board_area)
 	_spawn_units(hand_units, hand_area)
 
-	_show_step_popup()
+	print("=== BOARD READY DEBUG ===")
+	print("GameState.game_mode: ", GameState.game_mode)
+	print("GameState.current_step: ", GameState.current_step)
+	print("=== END BOARD READY DEBUG ===")
+	
+	# Use call_deferred to ensure shop_container is fully ready
+	call_deferred("_show_step_popup")
 
 func _on_unit_bought(unit_stats: UnitStats) -> void:
 	unit_spawner.spawn_unit(unit_stats)
+	
+	# Auto-advance tutorial when buying in tutorial mode
+	if GameState.game_mode == GameState.GameMode.TUTORIAL:
+		# Only advance if we're in the specific step for buying (don't advance past 1_9)
+		if GameState.current_step == GameState.GameStep.STEP_1_6:
+			print("Unit bought - advancing tutorial from STEP_1_6")
+			GameState.update_step()
+			call_deferred("_show_step_popup")
 
 # Tooltip handlers
 func _on_unit_hovered(unit: Node) -> void:
@@ -98,10 +122,18 @@ func get_hand_state() -> Array:
 	for tile in unit_spawner.hand_area.unit_grid.units:
 		var unit = unit_spawner.hand_area.unit_grid.units[tile]
 		if unit:
-			hand.append({
-				"stats": unit.stats,
-				"tile": tile
-			})
+			# Only save units that aren't currently being dragged
+			var is_dragging = false
+			if unit.has_node("DragAndDrop"):
+				is_dragging = unit.get_node("DragAndDrop").dragging
+			
+			if not is_dragging:
+				hand.append({
+					"stats": unit.stats,
+					"tile": tile
+				})
+			else:
+				print("Skipping dragged unit in hand: ", unit.stats.name)
 	return hand
 
 func get_board_state() -> Array:
@@ -110,21 +142,37 @@ func get_board_state() -> Array:
 	for tile in board_area.unit_grid.units:
 		var unit = board_area.unit_grid.units[tile]
 		if unit:
-			board.append({
-				"stats": unit.stats,
-				"tile": tile
-			})
+			# Only save units that aren't currently being dragged
+			var is_dragging = false
+			if unit.has_node("DragAndDrop"):
+				is_dragging = unit.get_node("DragAndDrop").dragging
+			
+			if not is_dragging:
+				board.append({
+					"stats": unit.stats,
+					"tile": tile
+				})
+			else:
+				print("Skipping dragged unit on board: ", unit.stats.name)
 	return board
 
 func _on_fight_button_pressed() -> void:
+	# Cancel any active dragging before scene change
+	_cancel_all_dragging()
+	
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	await get_tree().create_timer(0.5).timeout
 	
 	# Handle tutorial vs main game progression differently
 	if GameState.game_mode == GameState.GameMode.TUTORIAL:
-		print("Tutorial mode - NOT advancing step (already advanced by Next button)")
-		# Don't advance step in tutorial mode - Next button handles that
+		# Special case: In STEP_1_9, the Fight button should advance the tutorial
+		if GameState.current_step == GameState.GameStep.STEP_1_9:
+			print("Tutorial mode STEP_1_9 - Fight button pressed, advancing tutorial")
+			GameState.update_step()  # Advance from STEP_1_9 to next step
+		else:
+			print("Tutorial mode - NOT advancing step (already advanced by Next button)")
+			# Don't advance step in tutorial mode for other steps - Next button handles that
 	else:
 		print("Main game mode - advancing main game step")
 		GameState.advance()  # Use main game advancement
@@ -149,16 +197,20 @@ func _show_step_popup() -> void:
 	print("=== BOARD TUTORIAL DEBUG ===")
 	print("Game mode: ", GameState.game_mode)
 	print("Current step enum value: ", GameState.current_step)
-	print("TUTORIAL enum value: ", GameState.GameMode.TUTORIAL)
 	
 	# Only show tutorial popups if in Tutorial Mode
 	if GameState.game_mode != GameState.GameMode.TUTORIAL:
 		print("Not in tutorial mode - hiding popup")
-		tutorial_popup.visible = false  # Ensure the popup is hidden in Main Game Mode
+		tutorial_popup.visible = false
+		_enable_all_interactions()  # Enable everything in main game
 		return
 	
+	# If we're in tutorial mode but at STEP_1, advance to STEP_1_1
+	if GameState.current_step == GameState.GameStep.STEP_1:
+		print("At STEP_1, advancing to STEP_1_1")
+		GameState.current_step = GameState.GameStep.STEP_1_1
+	
 	print("In tutorial mode - checking step match...")
-	print("Looking for STEP_1_1 which has value: ", GameState.GameStep.STEP_1_1)
 	
 	# Show tutorial popups based on the current step
 	match GameState.current_step:
@@ -168,75 +220,196 @@ func _show_step_popup() -> void:
 			tutorial_popup.position.x = 960
 			tutorial_popup.position.y = 500
 			tutorial_popup.visible = true
+			tutorial_next.visible = true  # Show next button for informational step
+			_set_tutorial_interactions(false, false, false, false)  # Disable everything
+			
 		GameState.GameStep.STEP_1_2:
 			print("✅ MATCHED STEP_1_2 - Showing popup")
-			tutorial_text.text = "This is the units that are currently active in the shop.\nThe shop will always have 6 choices available to purchase."
+			tutorial_text.text = "These are the units that are currently available in the shop."
 			tutorial_popup.position.x = 960
 			tutorial_popup.position.y = 800
 			$HighlightBoard.visible = true
 			$HighlightBoard/HighlightAnimation.play("Board")
 			tutorial_popup.visible = true
+			tutorial_next.visible = true  # Show next button for informational step
+			_set_tutorial_interactions(false, false, false, false)  # Still disabled
+			
 		GameState.GameStep.STEP_1_3:
 			$HighlightBoard.visible = false
-			tutorial_text.text = "This is the unit card itself.\nYou can see the cost of the card, as well as the attack value in green and the health value in red.\nThe middle part of the card explains what effect it has."
+			tutorial_text.text = "This is the unit card itself."
 			tutorial_popup.position.x = 800
 			tutorial_popup.position.y = 400
 			$HighlightUnit.visible = true
 			$HighlightUnit/HighlightAnimation.play("Unit")
 			tutorial_popup.visible = true
+			tutorial_next.visible = true  # Show next button for informational step
+			_set_tutorial_interactions(false, false, false, false)
+			
 		GameState.GameStep.STEP_1_4:
 			$HighlightUnit.visible = false
-			tutorial_text.text = "You can see your available gold here.\nYou can get more gold by winning fights and certain team compositions also give other bonuses.\nExperiment to see what works best for you!"
+			tutorial_text.text = "You can see your available gold here."
 			tutorial_popup.position.x = 1150
 			tutorial_popup.position.y = 300
 			$HighlightGold.visible = true
 			$HighlightGold/HighlightAnimation.play("Gold")
 			tutorial_popup.visible = true
+			tutorial_next.visible = true  # Show next button for informational step
+			_set_tutorial_interactions(false, false, false, false)
+			
 		GameState.GameStep.STEP_1_5:
 			$HighlightGold.visible = false
-			tutorial_text.text = "You can reroll the units you see in the shop here.\nThe reroll costs 2 gold, but it will allow you to see more units to create better team compositions."
+			tutorial_text.text = "Try using the reroll button!"
 			tutorial_popup.position.x = 800
 			tutorial_popup.position.y = 300
 			$HighlightReroll.visible = true
 			$HighlightReroll/HighlightAnimation.play("Reroll")
 			tutorial_popup.visible = true
+			tutorial_next.visible = false 
+			_set_tutorial_interactions(false, false, true, false)  # Enable reroll only
+			
 		GameState.GameStep.STEP_1_6:
 			$HighlightReroll.visible = false
-			tutorial_text.text = "Go ahead and use the shop to buy a Rat, Golem, and a Flame Imp.\nRemember to use the shop reroll to find the units if they are not available!"
+			tutorial_text.text = "Buy a unit by clicking on it!"
 			tutorial_popup.position.x = 960
 			tutorial_popup.position.y = 250
 			tutorial_popup.visible = true
+			tutorial_next.visible = false 
+			_set_tutorial_interactions(true, false, true, false)  # Enable shop buying + reroll
+			
 		GameState.GameStep.STEP_1_7:
-			tutorial_text.text = "After buying a card, it goes into your hand space here. You can fit 6 cards into your hand.\nBuying cards and combining units are the only ways to get cards into your hand. Once the units are on the board, they cannot be moved back to your hand.\nMove your units from the hand to the board space above."
+			tutorial_text.text = "Move your unit from the hand to the board space above."
 			tutorial_popup.position.x = 960
 			tutorial_popup.position.y = 600
 			$HighlightBoard.position.y = 1040
 			$HighlightBoard.visible = true
 			$HighlightBoard/HighlightAnimation.play("Board")
 			tutorial_popup.visible = true
+			tutorial_next.visible = false 
+			_set_tutorial_interactions(false, true, false, false)  # Enable unit moving only
+			
 		GameState.GameStep.STEP_1_8:
-			tutorial_text.text = "This is your board space, which is your active team composition. This team will fight for you.\nLike the hand, there are only 6 available spots, which means you need to plan carefully.\nTo create a spot when the board is full, or to remove a unit you do not want, drag the unit from the board to the sell area above.\nTry selling your flame imp."
+			tutorial_text.text = "Try selling your unit by dragging to the top of the screen."
 			tutorial_popup.position.x = 960
 			tutorial_popup.position.y = 500
 			$HighlightBoard.position.y = 700
 			$HighlightBoard.visible = true
 			$HighlightBoard/HighlightAnimation.play("Board")
 			tutorial_popup.visible = true
+			tutorial_next.visible = false 
+			_set_tutorial_interactions(false, true, false, true)  # Enable moving + selling
+			
 		GameState.GameStep.STEP_1_9:
 			$HighlightBoard.visible = false
-			tutorial_text.text = "Buy some more units and place them on the board like you want to place, then, once you are happy, proceed to the next stage by clicking next!"
+			tutorial_text.text = "Buy some more units and place them on the board like you want to place, then, once you are happy, proceed to the next stage by clicking the Fight button!"
 			tutorial_popup.position.x = 960
 			tutorial_popup.position.y = 500
 			tutorial_popup.visible = true
+			tutorial_next.visible = false
+			_set_tutorial_interactions(true, true, true, true)  # Enable everything
+			
+		GameState.GameStep.STEP_2, GameState.GameStep.STEP_2_1, GameState.GameStep.FIGHT:
+			# Tutorial has moved beyond shop steps - hide popup and enable everything
+			print("✅ TUTORIAL PAST SHOP - Hiding popup and enabling all interactions")
+			tutorial_popup.visible = false
+			_enable_all_interactions()  # Enable everything including fight button
+			
 		_:
 			print("❌ NO MATCH - Current step: ", GameState.current_step)
-			tutorial_popup.visible = false  # Hide the popup if no matching step
+			tutorial_popup.visible = false
+			_enable_all_interactions()  # Enable everything if no match
 
+func _set_tutorial_interactions(shopping: bool, moving: bool, rerolling: bool, selling: bool) -> void:
+	# Control shop buying
+	shop_container.set_purchasing_enabled(shopping)
+	
+	# Control unit moving
+	unit_mover.set_enabled(moving)
+	_set_all_drag_and_drop_enabled(moving)
+	
+	# Control reroll button
+	if shop_container.has_node("Top/RerollButton"):
+		shop_container.get_node("Top/RerollButton").disabled = !rerolling
+	
+	# Control selling
+	sell_portal.set_enabled(selling)
+	
+	# Control fight button - enable when tutorial reaches final shop steps or moves beyond shop
+	var fight_enabled = (GameState.game_mode != GameState.GameMode.TUTORIAL) or (GameState.current_step == GameState.GameStep.STEP_1_9) or (GameState.current_step == GameState.GameStep.STEP_2) or (GameState.current_step == GameState.GameStep.STEP_2_1) or (GameState.current_step == GameState.GameStep.FIGHT)
+	
+	if has_node("FightButton"):
+		$FightButton.disabled = !fight_enabled
+		print("Fight button disabled state: ", $FightButton.disabled, " (current_step: ", GameState.current_step, ", fight_enabled: ", fight_enabled, ")")
+	
+	print("Tutorial interactions - Shopping:", shopping, " Moving:", moving, " Rerolling:", rerolling, " Selling:", selling, " Fight:", fight_enabled)
+
+func _enable_all_interactions() -> void:
+	_set_tutorial_interactions(true, true, true, true)
+
+func _set_all_drag_and_drop_enabled(enabled: bool) -> void:
+	print("Setting drag and drop enabled: ", enabled)
+	var hand_count = 0
+	var board_count = 0
+	
+	# Enable/disable drag and drop for units in hand
+	for unit in hand_area.unit_grid.units.values():
+		if unit and unit.has_node("DragAndDrop"):
+			unit.get_node("DragAndDrop").enabled = enabled
+			hand_count += 1
+	
+	# Enable/disable drag and drop for units on board
+	for unit in board_area.unit_grid.units.values():
+		if unit and unit.has_node("DragAndDrop"):
+			unit.get_node("DragAndDrop").enabled = enabled
+			board_count += 1
+	
+	print("Updated drag and drop for ", hand_count, " hand units and ", board_count, " board units")
 
 func _on_next_step_pressed() -> void:
-	# Update the game step
+	print("Next button pressed - current step: ", GameState.current_step)
 	GameState.update_step()
-	print("Next button - advanced to step: ", GameState.current_step)
-
-	# Show the tutorial popup for the next step
+	print("After update - new step: ", GameState.current_step)
 	_show_step_popup()
+
+func _on_reroll_pressed() -> void:
+	# Auto-advance tutorial when rerolling in tutorial mode
+	if GameState.game_mode == GameState.GameMode.TUTORIAL:
+		# Only advance if we're in the specific step for rerolling (don't advance past 1_9)
+		if GameState.current_step == GameState.GameStep.STEP_1_5:
+			print("Reroll pressed - advancing tutorial from STEP_1_5")
+			GameState.update_step()
+			call_deferred("_show_step_popup")
+
+func _on_unit_sold(_unit: Unit) -> void:
+	# Auto-advance tutorial when selling in tutorial mode
+	if GameState.game_mode == GameState.GameMode.TUTORIAL:
+		# Check if we're in a step where selling should advance the tutorial
+		if GameState.current_step == GameState.GameStep.STEP_1_8:
+			print("Unit sold - advancing tutorial from STEP_1_8")
+			GameState.update_step()
+			call_deferred("_show_step_popup")
+
+func _on_unit_moved_to_board(_unit: Unit) -> void:
+	# Auto-advance tutorial when moving unit to board in tutorial mode
+	if GameState.game_mode == GameState.GameMode.TUTORIAL:
+		# Check if we're in a step where moving to board should advance the tutorial
+		if GameState.current_step == GameState.GameStep.STEP_1_7:
+			print("Unit moved to board - advancing tutorial from STEP_1_7")
+			GameState.update_step()
+			call_deferred("_show_step_popup")
+
+func _cancel_all_dragging() -> void:
+	# Cancel dragging for all units in hand
+	for unit in hand_area.unit_grid.units.values():
+		if unit and unit.has_node("DragAndDrop"):
+			var drag_drop = unit.get_node("DragAndDrop")
+			if drag_drop.dragging:
+				print("Cancelling drag for hand unit: ", unit.stats.name)
+				drag_drop._cancel_dragging()
+	
+	# Cancel dragging for all units on board
+	for unit in board_area.unit_grid.units.values():
+		if unit and unit.has_node("DragAndDrop"):
+			var drag_drop = unit.get_node("DragAndDrop")
+			if drag_drop.dragging:
+				print("Cancelling drag for board unit: ", unit.stats.name)
+				drag_drop._cancel_dragging()

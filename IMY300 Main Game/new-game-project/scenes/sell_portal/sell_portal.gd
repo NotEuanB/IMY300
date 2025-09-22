@@ -8,6 +8,7 @@ extends Area2D
 @onready var gold_label: Label = %GoldLabel
 
 var current_unit: Unit
+var enabled = true
 
 func _ready() -> void:
 	# Connect to existing units with a delay to ensure they're ready
@@ -15,6 +16,9 @@ func _ready() -> void:
 	
 	# Connect to new units that might be spawned
 	get_tree().node_added.connect(_on_node_added)
+
+func set_enabled(is_enabled: bool) -> void:
+	enabled = is_enabled
 
 func _setup_existing_units() -> void:
 	var units := get_tree().get_nodes_in_group("units")
@@ -39,7 +43,12 @@ func setup_unit(unit: Unit) -> void:
 	# Connect the signal with the unit bound
 	unit.drag_and_drop.dropped.connect(_on_unit_dropped.bind(unit))
 
+signal unit_sold(unit: Unit)
+
 func _sell_unit(unit: Unit) -> void:
+	if not enabled:
+		return
+		
 	player_stats.gold += unit.stats.gold_cost
 	player_stats.changed.emit() # Make sure to emit the change signal
 	
@@ -53,13 +62,22 @@ func _sell_unit(unit: Unit) -> void:
 				grid.remove_unit(tile)
 				break
 	
+	# Emit signal for tutorial advancement
+	unit_sold.emit(unit)
+	
 	unit.queue_free()
 
 func _on_unit_dropped(_starting_position: Vector2, unit: Unit) -> void:
+	if not enabled:
+		return
+		
 	if unit and unit == current_unit:
 		_sell_unit(unit)
 
 func _on_area_entered(unit: Unit) -> void:
+	if not enabled:
+		return
+		
 	current_unit = unit
 	if unit and unit.stats:
 		gold_label.text = str(unit.stats.gold_cost)

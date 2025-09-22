@@ -122,6 +122,11 @@ func get_hand_state() -> Array:
 	for tile in unit_spawner.hand_area.unit_grid.units:
 		var unit = unit_spawner.hand_area.unit_grid.units[tile]
 		if unit:
+			var unit_drag_component = unit.get_node_or_null("UnitMover")
+			if unit_drag_component and unit_drag_component.is_dragging:
+				print("Skipping dragged unit in hand state: ", unit.stats.name)
+				continue
+			
 			hand.append({
 				"stats": unit.stats,
 				"tile": tile
@@ -134,6 +139,11 @@ func get_board_state() -> Array:
 	for tile in board_area.unit_grid.units:
 		var unit = board_area.unit_grid.units[tile]
 		if unit:
+			var unit_drag_component = unit.get_node_or_null("UnitMover")
+			if unit_drag_component and unit_drag_component.is_dragging:
+				print("Skipping dragged unit in board state: ", unit.stats.name)
+				continue
+			
 			board.append({
 				"stats": unit.stats,
 				"tile": tile
@@ -143,6 +153,7 @@ func get_board_state() -> Array:
 
 func _on_fight_button_pressed() -> void:
 	print("Fight button pressed. Saving state and transitioning to Fight scene.")
+	_cancel_all_dragging()
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
@@ -157,6 +168,8 @@ func _on_fight_button_pressed() -> void:
 
 func _on_combine_button_pressed() -> void:
 	print("Combine button pressed. Saving state and transitioning to Combine scene.")
+	# Cancel any active dragging before saving state
+	_cancel_all_dragging()
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
@@ -171,6 +184,8 @@ func _on_combine_button_pressed() -> void:
 
 func _on_shop_button_pressed() -> void:
 	print("Shop button pressed. Saving state and transitioning to Shop scene.")
+	# Cancel any active dragging before saving state
+	_cancel_all_dragging()
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
 	GameState.save_state(board_state, hand_state)
@@ -182,3 +197,10 @@ func _on_shop_button_pressed() -> void:
 		print("Tutorial mode - advanced to step: ", GameState.current_step)
 	
 	_load_scene("res://scenes/board/board.tscn")
+
+func _cancel_all_dragging():
+	# Cancel any active dragging in any unit mover components
+	var drag_components = get_tree().get_nodes_in_group("drag_components")
+	for component in drag_components:
+		if component and component.has_method("cancel_drag"):
+			component.cancel_drag()

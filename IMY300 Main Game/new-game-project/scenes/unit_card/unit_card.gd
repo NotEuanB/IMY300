@@ -16,6 +16,7 @@ signal unit_bought(unit: UnitStats)
 var bought := false
 var hand_full: bool = false:
 	set = set_hand_full
+var buy_enabled := true
 
 
 func _ready() -> void:
@@ -24,7 +25,7 @@ func _ready() -> void:
 	_on_player_stats_changed()
 
 func _can_be_bought() -> bool:
-	return unit_stats != null and player_stats.gold >= unit_stats.gold_cost and not bought and not hand_full
+	return unit_stats != null and player_stats.gold >= unit_stats.gold_cost and not bought and not hand_full and buy_enabled
 
 func set_hand_full(value: bool) -> void:
 	hand_full = value
@@ -64,8 +65,9 @@ func _on_player_stats_changed() -> void:
 	# Dim the card if:
 	# 1. It's already bought, OR
 	# 2. Player doesn't have enough gold, OR  
-	# 3. Hand is full
-	if bought or not has_enough_gold or hand_full:
+	# 3. Hand is full, OR
+	# 4. Buying is disabled (tutorial)
+	if bought or not has_enough_gold or hand_full or not buy_enabled:
 		disabled = true
 		modulate = Color(Color.WHITE, 0.5)
 	else:
@@ -74,7 +76,8 @@ func _on_player_stats_changed() -> void:
 
 
 func _on_pressed() -> void:
-	if bought or disabled or not _can_be_bought():
+	if bought or disabled or not _can_be_bought() or not buy_enabled:
+		print("Purchase blocked - bought:", bought, " disabled:", disabled, " can_be_bought:", _can_be_bought(), " buy_enabled:", buy_enabled)
 		return
 	
 	# Don't deduct gold here - let shop_container handle it
@@ -83,3 +86,15 @@ func _on_pressed() -> void:
 	unit_bought.emit(unit_stats)
 	$Buy.play()
 	$TextureRect.visible = false
+
+func set_buy_enabled(enabled: bool) -> void:
+	buy_enabled = enabled
+	
+	# Visual feedback - make it semi-transparent when disabled
+	if enabled:
+		modulate = Color(1, 1, 1, 1)  # Fully opaque
+	else:
+		modulate = Color(1, 1, 1, 0.5)  # Semi-transparent
+	
+	# Update the disabled state
+	_on_player_stats_changed()
