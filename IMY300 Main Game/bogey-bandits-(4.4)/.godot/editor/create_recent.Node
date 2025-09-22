@@ -1,0 +1,14 @@
+RichTextLabel
+Button
+Label
+Panel
+PopupPanel
+VBoxContainer
+MarginContainer
+ColorRect
+AnimationPlayer
+Sprite2D
+TextureButton
+TextureRect
+CanvasLayer
+AudioStreamPlayer2D
