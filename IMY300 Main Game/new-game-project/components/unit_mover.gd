@@ -1,16 +1,18 @@
 class_name UnitMover
 extends Node
 
+signal unit_moved_to_board(unit: Unit)
+
 static var is_selecting_target: bool = false
 static var selecting_rat: RatUnit = null
 @export var play_area_paths: Array[NodePath]
 
 var play_areas: Array[PlayArea] = []
 
-var enabled: bool = true
+var enabled = true
 
-func set_enabled(value: bool) -> void:
-	enabled = value
+func set_enabled(is_enabled: bool) -> void:
+	enabled = is_enabled
 
 func _ready() -> void:
 	play_areas.clear()
@@ -65,6 +67,9 @@ func _move_unit(unit: Unit, play_area: PlayArea, tile: Vector2i) -> void:
 			var cam = cams[0]
 			if cam and cam.has_method("shake"):
 				cam.shake(3.0, 0.08, 5)
+		
+		# Emit signal for tutorial advancement when moving to board
+		unit_moved_to_board.emit(unit)
 
 
 func _on_unit_drag_started(unit: Unit) -> void:

@@ -5,6 +5,8 @@ signal unit_bought(unit: UnitStats)
 
 const UNIT_CARD = preload("res://scenes/unit_card/unit_card.tscn")
 
+var purchasing_enabled = true
+
 @export var unit_pool: UnitPool
 @export var player_stats: PlayerStats
 @export var unit_spawner: UnitSpawner
@@ -53,16 +55,16 @@ func set_hand_full(is_full: bool) -> void:
 		if unit_card.has_method("_on_player_stats_changed"):
 			unit_card._on_player_stats_changed()
 
-func _is_unit_valid_for_round(unit_stats: UnitStats, round: int) -> bool:
+func _is_unit_valid_for_round(unit_stats: UnitStats, current_round: int) -> bool:
 	var tier = unit_stats.tier
 	
 	match tier:
 		1: # Tier 1 - always valid
 			return true
 		2: # Tier 2 - valid from round 2+
-			return round >= 2
+			return current_round >= 2
 		3: # Tier 3 - valid from round 3+
-			return round >= 3
+			return current_round >= 3
 		_:
 			return true
 
@@ -151,6 +153,11 @@ func _roll_units() -> void:
 	if unit_spawner:
 		var is_full = unit_spawner.hand_area.unit_grid.is_grid_full()
 		set_hand_full(is_full)
+	
+	# Apply the current purchasing state to new cards
+	for child in shop_cards.get_children():
+		if child is UnitCard:
+			child.set_buy_enabled(purchasing_enabled)
 
 func get_shop_slot_positions() -> Array[int]:
 	var current_round = GameState.main_round if GameState.game_mode == GameState.GameMode.MAIN_GAME else 1
@@ -163,7 +170,21 @@ func get_shop_slot_positions() -> Array[int]:
 		_:
 			return [0, 1, 2, 3, 4, 5]  # All 6 slots
 
+func set_purchasing_enabled(enabled: bool) -> void:
+	purchasing_enabled = enabled
+	print("ShopContainer purchasing enabled: ", enabled)
+	
+	# Enable/disable all unit cards in the shop
+	for child in shop_cards.get_children():
+		if child is UnitCard:
+			child.set_buy_enabled(enabled)
+
 func _on_unit_bought(unit: UnitStats) -> void:
+	# Check if purchasing is enabled
+	if not purchasing_enabled:
+		print("Purchasing is disabled - blocking buy action")
+		return
+		
 	if player_stats.gold < unit.gold_cost:
 		print("Not enough gold to buy this unit!")
 		return
