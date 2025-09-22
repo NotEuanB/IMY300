@@ -14,7 +14,7 @@ config/name="Bogey Bandits"
 config/description="Project Deliverable 3 - Mechanic variation"
 config/version="0.3"
 run/main_scene="uid://6c48rcspqsb8"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.5", "Forward Plus")
 run/max_fps=150
 config/icon="uid://bxpny2v5xpali"
 
