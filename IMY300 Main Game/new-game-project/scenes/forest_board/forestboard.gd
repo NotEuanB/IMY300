@@ -14,6 +14,12 @@ var enemy_stats: EnemyStats
 @onready var enemy_avatar_display: Sprite2D = $Visuals/Goblin
 var paused = false
 
+# Track original unit positions and stats for respawning
+var original_board_units = []
+var original_hand_units = []
+# Track units that died during combat with their final stats
+var dead_units_final_stats = {}
+
 # Attack/combat timing (adjust in Inspector)
 @export var combat_start_delay: float = 3
 @export var attack_move_duration: float = 0.35
@@ -259,6 +265,18 @@ func change_scene(scene_path: String) -> void:
 		print("Cannot change scene. get_tree() is null.")
 
 func start_combat() -> void:
+	# Store original unit states at combat start (before any deaths)
+	_store_original_unit_states()
+	
+	# Reset resurrection flag for new combat
+	_resurrection_used_this_combat = false
+	
+	# Trigger combat start abilities for all player units
+	for unit in player_area.unit_grid.units.values():
+		if unit and unit.stats and unit.stats.health > 0:
+			if unit.has_method("on_combat_start"):
+				unit.on_combat_start(enemy_area)
+	
 	var initial_enemy_count = get_living_unit_count(enemy_area.unit_grid)
 	
 	while get_living_unit_count(player_area.unit_grid) > 0 and get_living_unit_count(enemy_area.unit_grid) > 0:		
@@ -272,6 +290,9 @@ func start_combat() -> void:
 	var gold_earned = enemies_killed
 	player_stats.gold += gold_earned
 	player_stats.changed.emit()
+	
+	# Save the updated unit states (including any Soul Drain bonuses)
+	_save_combat_results()
 	
 	# Determine the outcome
 	var player_units_alive = get_living_unit_count(player_area.unit_grid)
@@ -395,25 +416,52 @@ func _attack(attacker, defender) -> void:
 	# Restore original z_index
 	attacker.z_index = original_z
 
-	# Remove defender if dead
+	# Handle unit deaths using the helper function
 	if defender.stats.health <= 0:
-		if defender in player_area.unit_grid.units.values():
-			var tile = player_area.unit_grid.units.keys()[player_area.unit_grid.units.values().find(defender)]
-			player_area.unit_grid.remove_unit(tile)
-		elif defender in enemy_area.unit_grid.units.values():
-			var tile = enemy_area.unit_grid.units.keys()[enemy_area.unit_grid.units.values().find(defender)]
-			enemy_area.unit_grid.remove_unit(tile)
-		defender.queue_free()
-	# Remove attacker if dead (from counterattack)
+		_handle_unit_death(defender, attacker)
 	if attacker.stats.health <= 0:
-		if attacker in player_area.unit_grid.units.values():
-			var tile = player_area.unit_grid.units.keys()[player_area.unit_grid.units.values().find(attacker)]
-			player_area.unit_grid.remove_unit(tile)
-		elif attacker in enemy_area.unit_grid.units.values():
-			var tile = enemy_area.unit_grid.units.keys()[enemy_area.unit_grid.units.values().find(attacker)]
-			enemy_area.unit_grid.remove_unit(tile)
-		attacker.queue_free()
+		_handle_unit_death(attacker, defender)
 	$Attack.play()
+
+# Helper function to handle unit death properly
+func _handle_unit_death(dead_unit: Unit, killer_unit: Unit = null) -> void:
+	if not is_instance_valid(dead_unit) or dead_unit.stats.health > 0:
+		return
+	
+	# Check for Shadow Resurrection FIRST (before removing from grid)
+	var was_resurrected = false
+	if dead_unit in player_area.unit_grid.units.values():
+		was_resurrected = _try_shadow_resurrection(dead_unit)
+	
+	# If resurrected, don't process death
+	if was_resurrected:
+		print("Unit was resurrected - skipping death processing")
+		return
+	
+	# Save final stats of player units that die (for proper respawning with bonuses)
+	if dead_unit in player_area.unit_grid.units.values():
+		var tile = player_area.unit_grid.units.keys()[player_area.unit_grid.units.values().find(dead_unit)]
+		dead_units_final_stats[tile] = {
+			"stats": dead_unit.stats.duplicate(),
+			"max_health_reached": dead_unit.max_health_reached
+		}
+		print("Saved final stats for dead unit ", dead_unit.stats.name, " at tile ", tile)
+	
+	# Trigger on_kill for the killer if it exists and survived
+	if killer_unit and is_instance_valid(killer_unit) and killer_unit.stats.health > 0:
+		killer_unit.on_kill(dead_unit)
+	
+	# Remove unit from the appropriate grid
+	if dead_unit in player_area.unit_grid.units.values():
+		var tile = player_area.unit_grid.units.keys()[player_area.unit_grid.units.values().find(dead_unit)]
+		player_area.unit_grid.remove_unit(tile)
+	elif dead_unit in enemy_area.unit_grid.units.values():
+		var tile = enemy_area.unit_grid.units.keys()[enemy_area.unit_grid.units.values().find(dead_unit)]
+		enemy_area.unit_grid.remove_unit(tile)
+	
+	# Queue the unit for deletion
+	dead_unit.queue_free()
+	print(dead_unit.stats.name, " was removed from the battlefield")
 
 func _update_health_display(unit):
 	# Update max_health_reached if current health is higher (for healing)
@@ -501,3 +549,193 @@ func _combat_round() -> void:
 			await _attack(enemy_unit, player_unit)
 			await get_tree().create_timer(attack_cooldown).timeout
 		j += 1
+
+func _save_combat_results() -> void:
+	# Collect unit states using original stored units (includes dead units)
+	var updated_board_state = []
+	var updated_hand_state = []
+	
+	# Restore all original board units (including those that died)
+	for unit_data in original_board_units:
+		var stats = unit_data["stats"]
+		var tile = unit_data["tile"]
+		var stored_max_health = unit_data["max_health_reached"]
+		
+		# Check if unit is still alive to get current buffed state
+		var current_unit = player_area.unit_grid.units.get(tile)
+		if current_unit and current_unit.stats:
+			# Unit survived - use its current buffed stats but restore health
+			stats = current_unit.stats.duplicate()
+			var original_damaged_health = stats.health
+			
+			# Restore health based on unit type
+			if stats.name == "Spectre":
+				print("=== SPECTRE HEALTH RESTORATION ===")
+				print("Current health: ", stats.health)
+				print("Current attack: ", stats.attack)
+				print("Max health reached: ", current_unit.max_health_reached)
+				print("Base health: ", stats.base_health)
+				print("Base attack: ", stats.base_attack)
+				
+				# The correct health should match the attack pattern
+				var attack_bonus = stats.attack - stats.base_attack
+				var correct_health = stats.base_health + attack_bonus
+				
+				print("Attack bonus: ", attack_bonus)
+				print("Calculated correct health: ", correct_health)
+				stats.health = correct_health
+				print("Set health to: ", stats.health)
+				print("=== END SPECTRE RESTORATION ===")
+			else:
+				# For all units, restore health to the highest value reached during combat
+				var target_health = current_unit.max_health_reached if current_unit.max_health_reached > 0 else stats.base_health
+				stats.health = target_health
+				print("Unit ", stats.name, " health restored from ", original_damaged_health, " to ", target_health)
+		else:
+			# Unit died - check if we have final stats saved
+			if dead_units_final_stats.has(tile):
+				var final_data = dead_units_final_stats[tile]
+				stats = final_data["stats"]
+				var final_max_health = final_data["max_health_reached"]
+				
+				print("Unit ", stats.name, " died in combat, using final stats for respawn")
+				if stats.name == "Spectre":
+					# For Spectres, maintain any Soul Drain bonuses they had when they died
+					var attack_bonus = stats.attack - stats.base_attack
+					stats.health = stats.base_health + attack_bonus
+					print("Respawning Spectre with Soul Drain bonuses: ", stats.attack, "/", stats.health)
+				else:
+					# For other units, restore to their max health reached
+					stats.health = final_max_health if final_max_health > 0 else stats.base_health
+					print("Respawning ", stats.name, " with health: ", stats.health)
+			else:
+				# Fallback to original stored stats (shouldn't happen with proper tracking)
+				print("Unit ", stats.name, " died but no final stats found, using original")
+				if stats.name == "Spectre":
+					var attack_bonus = stats.attack - stats.base_attack
+					stats.health = stats.base_health + attack_bonus
+				else:
+					stats.health = stored_max_health if stored_max_health > 0 else stats.base_health
+		
+		updated_board_state.append({
+			"stats": stats,
+			"tile": tile
+		})
+	
+	# Save all hand units (use original stored states since hand units don't change during combat)
+	for unit_data in original_hand_units:
+		var stats = unit_data["stats"]
+		var tile = unit_data["tile"]
+		
+		updated_hand_state.append({
+			"stats": stats,
+			"tile": tile
+		})
+	
+	# Save the updated state back to GameState
+	print("Combat ended - saving updated unit states with restored health")
+	GameState.save_state(updated_board_state, updated_hand_state)
+
+# Try to resurrect a dead player unit immediately if Shadeblade is present
+var _resurrection_used_this_combat = false
+
+func _try_shadow_resurrection(dead_unit: Unit) -> bool:
+	# Check if resurrection was already used this combat
+	if _resurrection_used_this_combat:
+		print("Shadow Resurrection already used this combat")
+		return false
+	
+	# Check if there's a living Shadeblade on the board
+	var has_shadeblade = false
+	for unit in player_area.unit_grid.units.values():
+		if unit and unit.stats and unit.stats.health > 0 and unit.stats.name == "Shadeblade":
+			has_shadeblade = true
+			break
+	
+	if not has_shadeblade:
+		print("No living Shadeblade found for resurrection")
+		return false
+	
+	print("=== SHADOW RESURRECTION TRIGGERED ===")
+	print("Shadeblade is immediately resurrecting ", dead_unit.stats.name)
+	
+	# Find the original tile where the unit died
+	var original_tile = null
+	for tile in player_area.unit_grid.units.keys():
+		if player_area.unit_grid.units[tile] == dead_unit:
+			original_tile = tile
+			break
+	
+	# Find the next available slot (prefer not the original slot)
+	var resurrection_tile = null
+	
+	# First, try to find any empty slot that's not the original
+	for x in range(player_area.unit_grid.size.x):
+		for y in range(player_area.unit_grid.size.y):
+			var tile = Vector2i(x, y)
+			if not player_area.unit_grid.units.has(tile) or player_area.unit_grid.units[tile] == null:
+				if tile != original_tile:
+					resurrection_tile = tile
+					break
+		if resurrection_tile:
+			break
+	
+	# If no other empty slot found, use the original slot
+	if not resurrection_tile:
+		resurrection_tile = original_tile
+		print("No alternative slot found - using original position")
+	else:
+		print("Resurrecting in new slot: ", resurrection_tile, " (original was: ", original_tile, ")")
+	
+	# Revive the unit with 1 HP
+	dead_unit.stats.health = 1
+	dead_unit.max_health_reached = max(dead_unit.max_health_reached, 1)
+	
+	# Add unit back to grid at resurrection tile
+	if resurrection_tile:
+		player_area.unit_grid.add_unit(resurrection_tile, dead_unit)
+		dead_unit.global_position = player_area.get_global_from_tile(resurrection_tile)
+	
+	# Update the visual display
+	if dead_unit.unit_hp:
+		dead_unit.update_stat_display_health(dead_unit.unit_hp, dead_unit.stats.health, dead_unit.base_health, dead_unit.stats.health)
+	
+	# Mark resurrection as used for this combat
+	_resurrection_used_this_combat = true
+	
+	# Show visual feedback
+	print("💀➡️❤️ ", dead_unit.stats.name, " rises again with 1 HP at slot ", resurrection_tile, "!")
+	print("    🌟 Shadeblade's power saves the day! 🌟")
+	print("=== END SHADOW RESURRECTION ===")
+	
+	return true
+
+# Store original unit states at the start of combat for later respawning
+func _store_original_unit_states() -> void:
+	original_board_units.clear()
+	original_hand_units.clear()
+	dead_units_final_stats.clear()
+	# Reset resurrection for new combat
+	_resurrection_used_this_combat = false
+	
+	# Store all board units
+	for tile in player_area.unit_grid.units.keys():
+		var unit = player_area.unit_grid.units[tile]
+		if unit and unit.stats:
+			original_board_units.append({
+				"stats": unit.stats.duplicate(),
+				"tile": tile,
+				"max_health_reached": unit.max_health_reached
+			})
+	
+	# Store all hand units
+	for tile in hand_area.unit_grid.units.keys():
+		var unit = hand_area.unit_grid.units[tile]
+		if unit and unit.stats:
+			original_hand_units.append({
+				"stats": unit.stats.duplicate(),
+				"tile": tile,
+				"max_health_reached": unit.max_health_reached if unit.has_method("max_health_reached") else unit.stats.health
+			})
+	
+	print("Stored original states: ", original_board_units.size(), " board units, ", original_hand_units.size(), " hand units")

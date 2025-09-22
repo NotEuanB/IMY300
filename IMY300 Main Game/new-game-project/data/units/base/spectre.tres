@@ -2,20 +2,16 @@
 
 [ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_43gcn"]
 [ext_resource type="Texture2D" uid="uid://bn45coi5yw8gg" path="res://assets/units/Spectre.png" id="2_n4ysc"]
-[ext_resource type="PackedScene" uid="uid://dfgv6quigunb5" path="res://Scenes/Unit/MossTrollUnit.tscn" id="3_wbyw0"]
+[ext_resource type="PackedScene" uid="uid://dr5v2d4lj5og4" path="res://Scenes/Unit/SpectreUnit.tscn" id="3_43gcn"]
 
 [resource]
 script = ExtResource("1_43gcn")
 name = "Spectre"
-unit_scene = ExtResource("3_wbyw0")
-gold_cost = 1
+unit_scene = ExtResource("3_43gcn")
 attack = 1
-health = 1
 pool_count = 20
-tier = 1
 skin = ExtResource("2_n4ysc")
-description = "Spook man"
-buff_used = false
+description = "When this kills, gain +1/+1 permanently."
 base_attack = 1
 base_health = 1
 metadata/_custom_type_script = "uid://d2inypj55y68q"

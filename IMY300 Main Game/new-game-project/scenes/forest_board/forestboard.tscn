@@ -21,7 +21,7 @@
 [ext_resource type="LabelSettings" uid="uid://d3kcq1iyjj6cf" path="res://assets/font/font_desc.tres" id="19_mfj7e"]
 [ext_resource type="Script" uid="uid://dsyf78p28rgua" path="res://components/camera_shake.gd" id="20_shake"]
 
-[node name="Forestboard" type="Node2D"]
+[node name="Forestboard" type="Node2D" groups=["forestboard"]]
 script = ExtResource("1_6whip")
 player_stats = ExtResource("2_wha1q")
 

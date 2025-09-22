@@ -184,12 +184,31 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 	for unit_data in units_data:
 		var stats = unit_data["stats"]
 		var tile = unit_data["tile"]
+		
+		# Debug: Check what stats we're loading
+		if stats.name == "Spectre":
+			print("=== SPAWNING SPECTRE ===")
+			print("Original stats: ", stats.attack, "/", stats.health)
+			print("Original base stats: ", stats.base_attack, "/", stats.base_health)
+			print("Stats ID: ", stats.get_instance_id())
+		
 		var unit_scene = stats.unit_scene if stats.unit_scene else preload("res://scenes/unit/unit.tscn")
 		var unit = unit_scene.instantiate()
 		play_area.unit_grid.add_child(unit)
 		play_area.unit_grid.add_unit(tile, unit)
 		unit.global_position = play_area.get_global_from_tile(tile)
-		unit.stats = stats.duplicate()
+		
+		# Duplicate the stats
+		var duplicated_stats = stats.duplicate()
+		
+		# Debug: Check duplicated stats
+		if stats.name == "Spectre":
+			print("Duplicated stats: ", duplicated_stats.attack, "/", duplicated_stats.health)
+			print("Duplicated base stats: ", duplicated_stats.base_attack, "/", duplicated_stats.base_health)
+			print("Duplicated ID: ", duplicated_stats.get_instance_id())
+			print("=== END SPAWNING SPECTRE ===")
+		
+		unit.stats = duplicated_stats
 		unit_mover.setup_unit(unit)
 		sell_portal.setup_unit(unit)  # ADD THIS LINE
 

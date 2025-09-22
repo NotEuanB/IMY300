@@ -140,6 +140,10 @@ func reset_after_dragging(starting_position: Vector2) -> void:
 func on_played(_play_area: PlayArea) -> void:
 	pass
 
+# Called when this unit kills another unit in combat
+func on_kill(_killed_unit: Unit) -> void:
+	pass
+
 func _ready() -> void:
 	if stats:
 		call_deferred("refresh_stats_display")

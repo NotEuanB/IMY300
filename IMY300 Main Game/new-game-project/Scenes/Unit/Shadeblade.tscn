@@ -1,12 +1,13 @@
 [gd_scene load_steps=9 format=3 uid="uid://cchtmnmmnbbms"]
 
-[ext_resource type="Script" uid="uid://cfarinjtxtr77" path="res://Scenes/Unit/rotshroud.gd" id="1_jv3ps"]
+[ext_resource type="Script" uid="uid://bj3jvn73s4gd1" path="res://Scenes/Unit/shadeblade.gd" id="1_jv3ps"]
 [ext_resource type="Texture2D" uid="uid://k0xe3d80qixm" path="res://assets/units/frame_uncracked.png" id="2_sougj"]
-[ext_resource type="Texture2D" uid="uid://d1noeddl70tu1" path="res://assets/units/Rolet.png" id="3_p445f"]
+[ext_resource type="Texture2D" uid="uid://qljw0kbvbiic" path="res://assets/units/Shadeblade.png" id="3_p445f"]
 [ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="4_3y0qf"]
 [ext_resource type="Texture2D" uid="uid://doernc8a1byy4" path="res://assets/units/gem_cracked.png" id="5_y2v2t"]
 [ext_resource type="LabelSettings" uid="uid://w0i76r03armr" path="res://assets/font/font_name.tres" id="7_s361a"]
 [ext_resource type="LabelSettings" uid="uid://d3kcq1iyjj6cf" path="res://assets/font/font_desc.tres" id="8_evlhu"]
+[ext_resource type="AudioStream" uid="uid://dubwbrp3e8hg3" path="res://assets/sfx/upgrade_card.ogg" id="9_4kbvh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ulevp"]
 size = Vector2(177, 303)
@@ -47,7 +48,7 @@ offset_left = 23.0
 offset_top = 212.0
 offset_right = 197.0
 offset_bottom = 240.0
-text = "Rat"
+text = "Shadeblade"
 label_settings = ExtResource("7_s361a")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -57,7 +58,7 @@ offset_left = 23.0
 offset_top = 236.0
 offset_right = 200.0
 offset_bottom = 302.0
-text = "On entering: Choose a unit to give +1/+1"
+text = "On entering: Choose a unit to give +1/+1. Passive: First ally death each combat returns next round with 1 HP"
 label_settings = ExtResource("8_evlhu")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -69,7 +70,7 @@ offset_top = 179.0
 offset_right = 77.0
 offset_bottom = 213.0
 bbcode_enabled = true
-text = "2"
+text = "3"
 horizontal_alignment = 1
 
 [node name="HealthStat" type="RichTextLabel" parent="Stats"]
@@ -78,8 +79,11 @@ offset_top = 179.0
 offset_right = 203.0
 offset_bottom = 210.0
 bbcode_enabled = true
-text = "1"
+text = "4"
 horizontal_alignment = 1
+
+[node name="Buff" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_4kbvh")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

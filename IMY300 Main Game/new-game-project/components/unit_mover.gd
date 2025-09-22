@@ -4,7 +4,7 @@ extends Node
 signal unit_moved_to_board(unit: Unit)
 
 static var is_selecting_target: bool = false
-static var selecting_rat: RatUnit = null
+static var selecting_unit: Unit = null
 @export var play_area_paths: Array[NodePath]
 
 var play_areas: Array[PlayArea] = []
