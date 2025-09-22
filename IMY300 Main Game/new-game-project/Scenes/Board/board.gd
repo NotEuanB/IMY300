@@ -264,7 +264,7 @@ func _show_step_popup() -> void:
 			$HighlightReroll.visible = true
 			$HighlightReroll/HighlightAnimation.play("Reroll")
 			tutorial_popup.visible = true
-			tutorial_next.visible = false  # Hide next button - user must reroll
+			tutorial_next.visible = false 
 			_set_tutorial_interactions(false, false, true, false)  # Enable reroll only
 			
 		GameState.GameStep.STEP_1_6:
@@ -273,7 +273,7 @@ func _show_step_popup() -> void:
 			tutorial_popup.position.x = 960
 			tutorial_popup.position.y = 250
 			tutorial_popup.visible = true
-			tutorial_next.visible = false  # Hide next button - user must buy units
+			tutorial_next.visible = false 
 			_set_tutorial_interactions(true, false, true, false)  # Enable shop buying + reroll
 			
 		GameState.GameStep.STEP_1_7:
@@ -284,7 +284,7 @@ func _show_step_popup() -> void:
 			$HighlightBoard.visible = true
 			$HighlightBoard/HighlightAnimation.play("Board")
 			tutorial_popup.visible = true
-			tutorial_next.visible = false  # Hide next button - user must move units
+			tutorial_next.visible = false 
 			_set_tutorial_interactions(false, true, false, false)  # Enable unit moving only
 			
 		GameState.GameStep.STEP_1_8:
@@ -295,7 +295,7 @@ func _show_step_popup() -> void:
 			$HighlightBoard.visible = true
 			$HighlightBoard/HighlightAnimation.play("Board")
 			tutorial_popup.visible = true
-			tutorial_next.visible = false  # Hide next button - user must sell unit
+			tutorial_next.visible = false 
 			_set_tutorial_interactions(false, true, false, true)  # Enable moving + selling
 			
 		GameState.GameStep.STEP_1_9:
@@ -304,7 +304,7 @@ func _show_step_popup() -> void:
 			tutorial_popup.position.x = 960
 			tutorial_popup.position.y = 500
 			tutorial_popup.visible = true
-			tutorial_next.visible = false  # Hide next button - user must click Fight button
+			tutorial_next.visible = false
 			_set_tutorial_interactions(true, true, true, true)  # Enable everything
 			
 		GameState.GameStep.STEP_2, GameState.GameStep.STEP_2_1, GameState.GameStep.FIGHT:

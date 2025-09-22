@@ -122,7 +122,6 @@ func get_hand_state() -> Array:
 	for tile in unit_spawner.hand_area.unit_grid.units:
 		var unit = unit_spawner.hand_area.unit_grid.units[tile]
 		if unit:
-			# Safety check: don't save units that are currently being dragged
 			var unit_drag_component = unit.get_node_or_null("UnitMover")
 			if unit_drag_component and unit_drag_component.is_dragging:
 				print("Skipping dragged unit in hand state: ", unit.stats.name)
@@ -140,7 +139,6 @@ func get_board_state() -> Array:
 	for tile in board_area.unit_grid.units:
 		var unit = board_area.unit_grid.units[tile]
 		if unit:
-			# Safety check: don't save units that are currently being dragged
 			var unit_drag_component = unit.get_node_or_null("UnitMover")
 			if unit_drag_component and unit_drag_component.is_dragging:
 				print("Skipping dragged unit in board state: ", unit.stats.name)
@@ -155,7 +153,6 @@ func get_board_state() -> Array:
 
 func _on_fight_button_pressed() -> void:
 	print("Fight button pressed. Saving state and transitioning to Fight scene.")
-	# Cancel any active dragging before saving state
 	_cancel_all_dragging()
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
