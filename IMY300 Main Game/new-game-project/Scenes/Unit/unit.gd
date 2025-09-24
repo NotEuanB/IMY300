@@ -81,7 +81,6 @@ func set_stats(value: Resource) -> void:
 
 func update_stat_display_attack(label: RichTextLabel, current_value: int, base_value: int) -> void:
 	if not label:
-		print("Label is null!")
 		return
 	
 	# Ensure BBCode is enabled
@@ -100,7 +99,6 @@ func update_stat_display_attack(label: RichTextLabel, current_value: int, base_v
 
 func update_stat_display_health(label: RichTextLabel, current_value: int, base_value: int, max_value: int) -> void:
 	if not label:
-		print("Label is null!")
 		return
 	
 	# Ensure BBCode is enabled
@@ -153,5 +151,3 @@ func refresh_stats_display() -> void:
 	if stats and unit_atk and unit_hp and base_attack > 0:
 		update_stat_display_attack(unit_atk, stats.attack, base_attack)
 		update_stat_display_health(unit_hp, stats.health, base_health, max_health_reached)
-	else:
-		print("Conditions not met for refresh")

@@ -71,11 +71,9 @@ func _ready() -> void:
 	# Get enemies for the current round FIRST
 	enemy_stats = GameState.get_enemies_for_round(GameState.main_round)
 	if not enemy_stats:
-		print("ERROR: No enemy stats found for round ", GameState.main_round)
 		# Fallback to a default enemy if needed
 		enemy_stats = preload("res://data/enemy/goblin.tres")
 	
-	print("Fighting enemies for round ", GameState.main_round, ": ", enemy_stats.resource_path)
 	
 	# Set the enemy avatar (skin) based on the current enemy
 	_set_enemy_avatar()
@@ -125,7 +123,6 @@ func show_boss_intro_then_start() -> void:
 		start_combat()
 		return
 
-	print("Boss intro: round=", GameState.main_round, ", image=", boss_intro_image != null, ", music=", boss_music_stream != null)
 
 	# Set image and fade in
 	intro_texrect.texture = boss_intro_image
@@ -159,9 +156,6 @@ func show_boss_intro_then_start() -> void:
 func _set_enemy_avatar() -> void:
 	if enemy_stats and enemy_stats.skin and enemy_avatar_display:
 		enemy_avatar_display.texture = enemy_stats.skin
-		print("Set enemy avatar (skin) for: ", enemy_stats.resource_path)
-	else:
-		print("No enemy skin found or avatar display element missing")
 
 func _set_background_for_round() -> void:
 	# Assuming you have a background node in your scene
@@ -170,20 +164,15 @@ func _set_background_for_round() -> void:
 	match GameState.main_round:
 		1:
 			background_node.texture = preload("res://assets/backgrounds/Forest_board.png")
-			print("Set background for Round 1")
 		2:
 			background_node.texture = preload("res://assets/backgrounds/Grave_Hollow.png")
-			print("Set background for Round 2")
 		3:
 			background_node.texture = preload("res://assets/backgrounds/Scorched_Gate.png")
-			print("Set background for Round 3")
 		4:
 			background_node.texture = preload("res://assets/backgrounds/Ashfangs_Keep.png")
-			print("Set background for Round 4")
 		_:
 			# Default background
 			background_node.texture = preload("res://assets/backgrounds/Forest_board.png")
-			print("Set default background")
 
 func _show_tutorial_popup() -> void:
 	match GameState.current_step:
@@ -240,11 +229,9 @@ func show_reward_ui(title_text: String, description_text: String) -> void:
 	reward_ui.connect("tree_exited", Callable(self, "_on_reward_ui_closed"))
 
 func _on_reward_ui_closed():
-	print("Reward UI closed. Game mode:", GameState.game_mode, ", Main step:", GameState.main_step, ", Round:", GameState.main_round)
 
 	# Ensure the node is still in the scene tree
 	if not is_inside_tree():
-		print("Node is no longer in the scene tree. Cannot change scene.")
 		return
 
 	$OverlayLayer/Dimmer.visible = false
@@ -259,10 +246,19 @@ func _on_reward_ui_closed():
 			call_deferred("change_scene", "res://scenes/game_flow_manager/GameFlowManager.tscn")
 
 func change_scene(scene_path: String) -> void:
+	# Cancel any active target selection before scene change
+	if UnitMover.is_selecting_target:
+		UnitMover.is_selecting_target = false
+		UnitMover.selecting_unit = null
+		
+		# Reset all unit selectable states
+		var all_units = get_tree().get_nodes_in_group("units")
+		for unit in all_units:
+			if is_instance_valid(unit) and unit.has_method("set_selectable"):
+				unit.set_selectable(false)
+	
 	if get_tree():
 		get_tree().change_scene_to_file(scene_path)
-	else:
-		print("Cannot change scene. get_tree() is null.")
 
 func start_combat() -> void:
 	# Store original unit states at combat start (before any deaths)
@@ -271,11 +267,18 @@ func start_combat() -> void:
 	# Reset resurrection flag for new combat
 	_resurrection_used_this_combat = false
 	
+	# Wait a frame to ensure all unit stats are properly loaded
+	await get_tree().process_frame
+	
+	# Prepare all units and ensure their stats are loaded before triggering abilities
+	await _prepare_units_for_combat()
+	
 	# Trigger combat start abilities for all player units
 	for unit in player_area.unit_grid.units.values():
 		if unit and unit.stats and unit.stats.health > 0:
 			if unit.has_method("on_combat_start"):
-				unit.on_combat_start(enemy_area)
+				# Call with both enemy_area and player_area - units that don't need player_area can ignore it
+				unit.call("on_combat_start", enemy_area, player_area)
 	
 	var initial_enemy_count = get_living_unit_count(enemy_area.unit_grid)
 	
@@ -364,15 +367,28 @@ func _enemy_turn() -> void:
 
 	# Get all living player tiles
 	var living_player_tiles = []
+	var taunt_tiles = []  # Units with taunt ability
+	
 	for tile in player_area.unit_grid.units.keys():
 		var unit = player_area.unit_grid.units[tile]
 		if unit and unit.stats and unit.stats.health > 0:
 			living_player_tiles.append(tile)
+			# Check if this unit has taunt
+			if unit.stats.has_meta("has_taunt") and unit.stats.get_meta("has_taunt"):
+				taunt_tiles.append(tile)
+	
 	if living_player_tiles.size() == 0:
 		return  # No players left
 
-	# Pick a random living player
-	var player_tile = living_player_tiles[randi() % living_player_tiles.size()]
+	# Pick target: prioritize taunt units if any exist
+	var player_tile
+	if taunt_tiles.size() > 0:
+		# If there are taunt units, enemies must attack one of them
+		player_tile = taunt_tiles[randi() % taunt_tiles.size()]
+		print("Enemy targeting taunt unit at tile: ", player_tile)
+	else:
+		# No taunt units, pick random as usual
+		player_tile = living_player_tiles[randi() % living_player_tiles.size()]
 	var player_unit = player_area.unit_grid.units[player_tile]
 
 	# Perform attack
@@ -399,14 +415,38 @@ func _attack(attacker, defender) -> void:
 	# Both units deal damage to each other
 	if camera_shake and camera_shake.has_method("shake"):
 		camera_shake.shake(10.0, 0.2, 8)
-	defender.stats.health -= attacker.stats.attack
-	attacker.stats.health -= defender.stats.attack
+	
+	# Check for Blightflame Shaman's toxic touch ability
+	var attacker_has_toxic = attacker.stats and attacker.stats.has_meta("has_toxic_touch")
+	var defender_has_toxic = defender.stats and defender.stats.has_meta("has_toxic_touch")
+	
+	
+	if attacker_has_toxic or defender_has_toxic:
+		# Toxic touch - both units die instantly
+		defender.stats.health = 0
+		attacker.stats.health = 0
+	else:
+		# Normal combat - apply damage with reduction calculations
+		var defender_damage = attacker.stats.attack
+		var attacker_damage = defender.stats.attack
+		
+		# Apply damage reduction for defender (if protected by Gravestone Warden)
+		if defender.has_meta("damage_reduction"):
+			var reduction = defender.get_meta("damage_reduction", 0)
+			defender_damage = max(1, defender_damage - reduction)  # Minimum 1 damage
+			print("Gravestone Warden: Reduced damage to ", defender.stats.name, " from ", attacker.stats.attack, " to ", defender_damage)
+		
+		# Apply damage reduction for attacker (if protected by Gravestone Warden)
+		if attacker.has_meta("damage_reduction"):
+			var reduction = attacker.get_meta("damage_reduction", 0)
+			attacker_damage = max(1, attacker_damage - reduction)  # Minimum 1 damage
+			print("Gravestone Warden: Reduced damage to ", attacker.stats.name, " from ", defender.stats.attack, " to ", attacker_damage)
+		
+		defender.stats.health -= defender_damage
+		attacker.stats.health -= attacker_damage
+	
 	_update_health_display(defender)
 	_update_health_display(attacker)
-	print("%s attacks %s for %d damage! %s counterattacks for %d damage!" % [
-		attacker.stats.name, defender.stats.name, attacker.stats.attack,
-		defender.stats.name, defender.stats.attack
-	])
 
 	# Animate attacker moving back to original position
 	var tween_back = create_tween()
@@ -435,8 +475,10 @@ func _handle_unit_death(dead_unit: Unit, killer_unit: Unit = null) -> void:
 	
 	# If resurrected, don't process death
 	if was_resurrected:
-		print("Unit was resurrected - skipping death processing")
 		return
+	
+	# Trigger Infernal Harvest for any Ashwraiths on the board
+	_trigger_infernal_harvest()
 	
 	# Save final stats of player units that die (for proper respawning with bonuses)
 	if dead_unit in player_area.unit_grid.units.values():
@@ -445,7 +487,6 @@ func _handle_unit_death(dead_unit: Unit, killer_unit: Unit = null) -> void:
 			"stats": dead_unit.stats.duplicate(),
 			"max_health_reached": dead_unit.max_health_reached
 		}
-		print("Saved final stats for dead unit ", dead_unit.stats.name, " at tile ", tile)
 	
 	# Trigger on_kill for the killer if it exists and survived
 	if killer_unit and is_instance_valid(killer_unit) and killer_unit.stats.health > 0:
@@ -461,7 +502,6 @@ func _handle_unit_death(dead_unit: Unit, killer_unit: Unit = null) -> void:
 	
 	# Queue the unit for deletion
 	dead_unit.queue_free()
-	print(dead_unit.stats.name, " was removed from the battlefield")
 
 func _update_health_display(unit):
 	# Update max_health_reached if current health is higher (for healing)
@@ -551,6 +591,13 @@ func _combat_round() -> void:
 		j += 1
 
 func _save_combat_results() -> void:
+	# First, reset all Scoundrel's Deal temporary effects before processing stats
+	# This prevents the temporary attack bonus from affecting Spectre health calculations
+	AshfangScoundrelUnit.reset_all_scoundrel_deals(player_area)
+	
+	# Reset Infernal Harvest metadata after combat ends
+	AshwraithUnit.reset_all_infernal_harvest(player_area)
+	
 	# Collect unit states using original stored units (includes dead units)
 	var updated_board_state = []
 	var updated_hand_state = []
@@ -570,27 +617,16 @@ func _save_combat_results() -> void:
 			
 			# Restore health based on unit type
 			if stats.name == "Spectre":
-				print("=== SPECTRE HEALTH RESTORATION ===")
-				print("Current health: ", stats.health)
-				print("Current attack: ", stats.attack)
-				print("Max health reached: ", current_unit.max_health_reached)
-				print("Base health: ", stats.base_health)
-				print("Base attack: ", stats.base_attack)
 				
 				# The correct health should match the attack pattern
 				var attack_bonus = stats.attack - stats.base_attack
 				var correct_health = stats.base_health + attack_bonus
 				
-				print("Attack bonus: ", attack_bonus)
-				print("Calculated correct health: ", correct_health)
 				stats.health = correct_health
-				print("Set health to: ", stats.health)
-				print("=== END SPECTRE RESTORATION ===")
 			else:
 				# For all units, restore health to the highest value reached during combat
 				var target_health = current_unit.max_health_reached if current_unit.max_health_reached > 0 else stats.base_health
 				stats.health = target_health
-				print("Unit ", stats.name, " health restored from ", original_damaged_health, " to ", target_health)
 		else:
 			# Unit died - check if we have final stats saved
 			if dead_units_final_stats.has(tile):
@@ -598,19 +634,15 @@ func _save_combat_results() -> void:
 				stats = final_data["stats"]
 				var final_max_health = final_data["max_health_reached"]
 				
-				print("Unit ", stats.name, " died in combat, using final stats for respawn")
 				if stats.name == "Spectre":
 					# For Spectres, maintain any Soul Drain bonuses they had when they died
 					var attack_bonus = stats.attack - stats.base_attack
 					stats.health = stats.base_health + attack_bonus
-					print("Respawning Spectre with Soul Drain bonuses: ", stats.attack, "/", stats.health)
 				else:
 					# For other units, restore to their max health reached
 					stats.health = final_max_health if final_max_health > 0 else stats.base_health
-					print("Respawning ", stats.name, " with health: ", stats.health)
 			else:
 				# Fallback to original stored stats (shouldn't happen with proper tracking)
-				print("Unit ", stats.name, " died but no final stats found, using original")
 				if stats.name == "Spectre":
 					var attack_bonus = stats.attack - stats.base_attack
 					stats.health = stats.base_health + attack_bonus
@@ -633,7 +665,6 @@ func _save_combat_results() -> void:
 		})
 	
 	# Save the updated state back to GameState
-	print("Combat ended - saving updated unit states with restored health")
 	GameState.save_state(updated_board_state, updated_hand_state)
 
 # Try to resurrect a dead player unit immediately if Shadeblade is present
@@ -642,7 +673,6 @@ var _resurrection_used_this_combat = false
 func _try_shadow_resurrection(dead_unit: Unit) -> bool:
 	# Check if resurrection was already used this combat
 	if _resurrection_used_this_combat:
-		print("Shadow Resurrection already used this combat")
 		return false
 	
 	# Check if there's a living Shadeblade on the board
@@ -653,12 +683,8 @@ func _try_shadow_resurrection(dead_unit: Unit) -> bool:
 			break
 	
 	if not has_shadeblade:
-		print("No living Shadeblade found for resurrection")
 		return false
-	
-	print("=== SHADOW RESURRECTION TRIGGERED ===")
-	print("Shadeblade is immediately resurrecting ", dead_unit.stats.name)
-	
+		
 	# Find the original tile where the unit died
 	var original_tile = null
 	for tile in player_area.unit_grid.units.keys():
@@ -683,9 +709,6 @@ func _try_shadow_resurrection(dead_unit: Unit) -> bool:
 	# If no other empty slot found, use the original slot
 	if not resurrection_tile:
 		resurrection_tile = original_tile
-		print("No alternative slot found - using original position")
-	else:
-		print("Resurrecting in new slot: ", resurrection_tile, " (original was: ", original_tile, ")")
 	
 	# Revive the unit with 1 HP
 	dead_unit.stats.health = 1
@@ -702,12 +725,7 @@ func _try_shadow_resurrection(dead_unit: Unit) -> bool:
 	
 	# Mark resurrection as used for this combat
 	_resurrection_used_this_combat = true
-	
-	# Show visual feedback
-	print("💀➡️❤️ ", dead_unit.stats.name, " rises again with 1 HP at slot ", resurrection_tile, "!")
-	print("    🌟 Shadeblade's power saves the day! 🌟")
-	print("=== END SHADOW RESURRECTION ===")
-	
+
 	return true
 
 # Store original unit states at the start of combat for later respawning
@@ -738,4 +756,24 @@ func _store_original_unit_states() -> void:
 				"max_health_reached": unit.max_health_reached if unit.has_method("max_health_reached") else unit.stats.health
 			})
 	
-	print("Stored original states: ", original_board_units.size(), " board units, ", original_hand_units.size(), " hand units")
+
+# Prepare all units for combat by ensuring stats are loaded and ready
+func _prepare_units_for_combat() -> void:
+	
+	# Check all player units and ensure their stats are properly loaded
+	for unit in player_area.unit_grid.units.values():
+		if unit != null:
+			# Give units a chance to load their stats if they haven't yet
+			if not unit.stats:
+				# Wait for stats to load
+				var attempts = 0
+				while not unit.stats and attempts < 10:
+					await get_tree().process_frame
+					attempts += 1
+	
+
+# Trigger Infernal Harvest for all Ashwraiths when any unit dies
+func _trigger_infernal_harvest():
+	for unit in player_area.unit_grid.units.values():
+		if unit != null and unit is AshwraithUnit and unit.stats.has_meta("infernal_harvest_active"):
+			unit.on_unit_death()

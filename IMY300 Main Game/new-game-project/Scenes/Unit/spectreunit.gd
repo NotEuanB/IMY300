@@ -4,10 +4,7 @@ extends Unit
 
 # Soul Drain: When this unit kills an enemy, gain +1/+1 permanently
 func on_kill(_killed_unit: Unit) -> void:
-	print("=== SPECTRE SOUL DRAIN TRIGGERED ===")
-	print("BEFORE - Current stats: ", stats.attack, "/", stats.health)
-	print("BEFORE - Base stats: ", stats.base_attack, "/", stats.base_health)
-	print("BEFORE - Unit base tracking: ", base_attack, "/", base_health)
+
 	
 	# Just increase current stats like the Rat does
 	# But also track how many souls we've drained
@@ -24,8 +21,7 @@ func on_kill(_killed_unit: Unit) -> void:
 	var souls = stats.get_meta("souls_drained") + 1
 	stats.set_meta("souls_drained", souls)
 	
-	print("AFTER - Current stats: ", stats.attack, "/", stats.health)
-	print("Souls drained: ", souls)
+
 	
 	# Mark the resource as changed to ensure it saves properly
 	stats.changed.emit()
@@ -36,15 +32,12 @@ func on_kill(_killed_unit: Unit) -> void:
 		update_stat_display_attack(unit_atk, stats.attack, base_attack)
 		update_stat_display_health(unit_hp, stats.health, base_health, stats.health)
 	
-	print(stats.name + " drained a soul! Final stats: " + str(stats.attack) + "/" + str(stats.health))
-	print("=== END SOUL DRAIN ===")
+
 
 func _ready() -> void:
 	super._ready()
 	if stats:
 		# Restore soul drain bonuses when spawned
 		if stats.has_meta("souls_drained"):
-			var souls = stats.get_meta("souls_drained")
-			print("Spectre spawned with ", souls, " souls drained")
+			var _souls = stats.get_meta("souls_drained")
 			# The stats should already have the bonuses from previous soul drains
-		print("Spectre spawned with stats: ", stats.attack, "/", stats.health, " (base: ", stats.base_attack, "/", stats.base_health, ") ID: ", stats.get_instance_id())

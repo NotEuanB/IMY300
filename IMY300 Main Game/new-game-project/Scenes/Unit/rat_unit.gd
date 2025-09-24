@@ -36,4 +36,5 @@ func _on_target_selected(emitter, candidates):
 	stats.buff_used = true # <-- Mark as used on the stats resource
 	UnitMover.is_selecting_target = false
 	UnitMover.selecting_unit = null
-	$Buff.play()
+	if has_node("Buff"):
+		$Buff.play()

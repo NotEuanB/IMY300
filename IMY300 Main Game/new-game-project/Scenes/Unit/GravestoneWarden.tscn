@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://d2mcbqt7qp76f"]
 
-[ext_resource type="Script" uid="uid://cm58bqarcnm32" path="res://Scenes/Unit/spectreunit.gd" id="1_ex67l"]
+[ext_resource type="Script" path="res://Scenes/Unit/gravestone_warden.gd" id="1_ex67l"]
 [ext_resource type="Texture2D" uid="uid://k0xe3d80qixm" path="res://assets/units/frame_uncracked.png" id="2_8aogw"]
 [ext_resource type="Texture2D" uid="uid://dh1hx2aib8w8y" path="res://assets/units/Rat.png" id="3_diq68"]
 [ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="4_tsym6"]

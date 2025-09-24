@@ -33,7 +33,7 @@ func _on_node_added(node: Node) -> void:
 func setup_unit(unit: Unit) -> void:
 	# Check if drag_and_drop exists before accessing it
 	if not unit.drag_and_drop:
-		print("Warning: Unit ", unit.name, " has no drag_and_drop component")
+		
 		return
 	
 	# Disconnect first to avoid duplicate connections

@@ -142,4 +142,7 @@ func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
 		for u in play_areas[1].unit_grid.units.values():
 			if is_instance_valid(u) and u is GolemUnit:
 				u.update_aura(play_areas[1])
+			elif is_instance_valid(u) and u is GravestoneWardenUnit:
+				u._remove_vigil_aura(play_areas[1])
+				u._update_vigil_aura(play_areas[1])
 	$Place.play()

@@ -43,9 +43,7 @@ func go_to_fight_scene():
 	
 	# Handle tutorial vs main game progression differently
 	if GameState.game_mode == GameState.GameMode.TUTORIAL:
-		print("Tutorial mode - advancing tutorial step from: ", GameState.current_step)
 		GameState.update_step()  # Use tutorial-specific step advancement
-		print("Tutorial mode - advanced to step: ", GameState.current_step)
 	else:
 		GameState.advance()  # Use main game advancement
 	
@@ -111,11 +109,7 @@ func combine_units() -> bool:
 	# Apply the combined buffs to the new unit (ONLY ONCE)
 	buffed_combined_stats.attack += slot_one_attack_buff + slot_two_attack_buff
 	buffed_combined_stats.health += slot_one_health_buff + slot_two_health_buff
-	
-	print("Unit 1 buffs: +", slot_one_attack_buff, " attack, +", slot_one_health_buff, " health")
-	print("Unit 2 buffs: +", slot_two_attack_buff, " attack, +", slot_two_health_buff, " health")
-	print("Combined unit final stats: ", buffed_combined_stats.attack, " attack, ", buffed_combined_stats.health, " health")
-	
+		
 	# Check if this combined unit is already in the pool
 	var pool = GameState.get_unit_pool()
 	if pool:
@@ -127,9 +121,6 @@ func combine_units() -> bool:
 		
 		if not already_exists:
 			pool.add_unit(combined_stats)
-			print("Added 1 copy of ", combined_stats.name, " to unit pool!")
-		else:
-			print("Combined unit ", combined_stats.name, " already exists in pool - not adding duplicate")
 	
 	# Remove units from slots
 	slot_one_area.unit_grid.remove_unit(_get_unit_tile(slot_one_area, slot_one_unit))
@@ -174,7 +165,6 @@ func get_hand_state() -> Array:
 			# Safety check: don't save units that are currently being dragged
 			var unit_mover = unit.get_node_or_null("UnitMover")
 			if unit_mover and unit_mover.is_dragging:
-				print("Skipping dragged unit in hand state: ", unit.stats.name)
 				continue
 			
 			hand.append({
@@ -193,7 +183,6 @@ func get_board_state() -> Array:
 				# Safety check: don't save units that are currently being dragged
 				var unit_mover = unit.get_node_or_null("UnitMover")
 				if unit_mover and unit_mover.is_dragging:
-					print("Skipping dragged unit in board state: ", unit.stats.name)
 					continue
 				
 				board.append({
@@ -210,5 +199,3 @@ func _on_reward_ui_closed():
 			call_deferred("change_scene", "res://Scenes/main_menu/main_menu.tscn")
 		else:
 			call_deferred("change_scene", "res://scenes/game_flow_manager/GameFlowManager.tscn")
-	else:
-		print("Game mode is TUTORIAL. Returning to tutorial flow.")

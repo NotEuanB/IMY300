@@ -77,7 +77,7 @@ func _on_player_stats_changed() -> void:
 
 func _on_pressed() -> void:
 	if bought or disabled or not _can_be_bought() or not buy_enabled:
-		print("Purchase blocked - bought:", bought, " disabled:", disabled, " can_be_bought:", _can_be_bought(), " buy_enabled:", buy_enabled)
+
 		return
 	
 	# Don't deduct gold here - let shop_container handle it

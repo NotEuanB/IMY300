@@ -25,9 +25,6 @@ func _ready():
 func save_state(board_state: Array, hand_state: Array) -> void:
 	board_units = board_state
 	hand_units = hand_state
-	print("Game state saved!")
-	print("Board units:", board_units)
-	print("Hand units:", hand_units)
 
 func load_state() -> Dictionary:
 	return { 
@@ -39,42 +36,28 @@ func update_step() -> void:
 	match current_step:
 		GameStep.STEP_1:
 			current_step = GameStep.STEP_1_1
-			print("Game step updated to STEP_1_1")
 		GameStep.STEP_1_1:
 			current_step = GameStep.STEP_1_2
-			print("Game step updated to STEP_1_2")
 		GameStep.STEP_1_2:
 			current_step = GameStep.STEP_1_3
-			print("Game step updated to STEP_1_3")
 		GameStep.STEP_1_3:
 			current_step = GameStep.STEP_1_4
-			print("Game step updated to STEP_1_4")
 		GameStep.STEP_1_4:
 			current_step = GameStep.STEP_1_5
-			print("Game step updated to STEP_1_5")
 		GameStep.STEP_1_5:
 			current_step = GameStep.STEP_1_6
-			print("Game step updated to STEP_1_6")
 		GameStep.STEP_1_6:
 			current_step = GameStep.STEP_1_7
-			print("Game step updated to STEP_1_7")
 		GameStep.STEP_1_7:
 			current_step = GameStep.STEP_1_8
-			print("Game step updated to STEP_1_8")
 		GameStep.STEP_1_8:
 			current_step = GameStep.STEP_1_9
-			print("Game step updated to STEP_1_9")
 		GameStep.STEP_1_9:
 			current_step = GameStep.STEP_2
-			print("Game step updated to STEP_2")
 		GameStep.STEP_2:
 			current_step = GameStep.STEP_2_1
-			print("Game step updated to STEP_2_1")
 		GameStep.STEP_2_1:
 			current_step = GameStep.FIGHT
-			print("Game step updated to FIGHT")
-		GameStep.FIGHT:
-			print("Already in the fight step. No further steps.")
 
 func reset_state() -> void:
 	board_units = []
@@ -110,7 +93,6 @@ func start_main_game() -> void:
 	if global_unit_pool:
 		global_unit_pool.generate_unit_pool_for_round(main_round)
 		last_generated_round = main_round
-		print("Cleared unit pool for new main game - removed all combined units")
 
 func advance() -> void:
 	if game_mode == GameMode.TUTORIAL:
@@ -152,7 +134,6 @@ func get_unit_pool() -> UnitPool:
 		global_unit_pool = preload("res://data/unit_pool/unit_pool.tres")
 		global_unit_pool.generate_unit_pool_for_round(main_round)
 		last_generated_round = main_round
-		print("Initial generation for round ", main_round)
 	elif last_generated_round != main_round:
 		# Only regenerate base pool, but preserve any added units
 		var added_units = []
@@ -168,7 +149,6 @@ func get_unit_pool() -> UnitPool:
 			global_unit_pool.add_unit(unit)
 		
 		last_generated_round = main_round
-		print("Regenerated pool for round ", main_round, " with ", added_units.size(), " preserved units")
 	
 	return global_unit_pool
 
@@ -196,10 +176,8 @@ func get_enemies_for_round(current_round: int) -> EnemyStats:
 			enemy_pool = [preload("res://data/enemy/goblin.tres")]
 	
 	if enemy_pool.size() == 0:
-		print("No enemies configured for round ", current_round)
 		return null
 	
 	# Pick a random enemy from the pool
 	var selected_enemy = enemy_pool[randi() % enemy_pool.size()]
-	print("Selected enemy: ", selected_enemy.resource_path)
 	return selected_enemy

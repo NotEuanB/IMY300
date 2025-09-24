@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://pd4fdsvjq2pe"]
 
-[ext_resource type="Script" uid="uid://cghdwu2o1112f" path="res://Scenes/Unit/moss_troll_unit.gd" id="1_g4npg"]
+[ext_resource type="Script" path="res://Scenes/Unit/blightflame_shaman_unit.gd" id="1_g4npg"]
 [ext_resource type="Texture2D" uid="uid://k0xe3d80qixm" path="res://assets/units/frame_uncracked.png" id="2_qnoja"]
 [ext_resource type="Texture2D" uid="uid://dh1hx2aib8w8y" path="res://assets/units/Rat.png" id="3_t2vlw"]
 [ext_resource type="Script" uid="uid://iymnlnjefm24" path="res://components/drag_and_drop.gd" id="4_cjc10"]
