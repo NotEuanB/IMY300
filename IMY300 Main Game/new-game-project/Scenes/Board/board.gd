@@ -115,6 +115,7 @@ func _process(_delta: float) -> void:
 
 func get_hand_state() -> Array:
 	var hand = []
+	
 	for tile in unit_spawner.hand_area.unit_grid.units:
 		var unit = unit_spawner.hand_area.unit_grid.units[tile]
 		if unit:
@@ -128,12 +129,15 @@ func get_hand_state() -> Array:
 					"stats": unit.stats,
 					"tile": tile
 				})
+	
+	# Note: Cleanup will happen during spawning in the new scene
 
 	return hand
 
 func get_board_state() -> Array:
 	# If you have a board area, replace 'board_area' with the correct variable
 	var board = []
+	
 	for tile in board_area.unit_grid.units:
 		var unit = board_area.unit_grid.units[tile]
 		if unit:
@@ -147,6 +151,8 @@ func get_board_state() -> Array:
 					"stats": unit.stats,
 					"tile": tile
 				})
+	
+	# Note: Cleanup will happen during spawning in the new scene
 
 	return board
 
@@ -174,9 +180,21 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 		var stats = unit_data["stats"]
 		var tile = unit_data["tile"]
 		
-		# Debug: Check what stats we're loading
+		# Clean up any persistent Golem aura effects from saved stats
+		if stats.has_meta("golem_aura_active"):
+			print("Board Spawn: Cleaning up Golem aura from saved ", stats.name)
+			var original_attack = stats.get_meta("golem_original_attack")
+			var original_health = stats.get_meta("golem_original_health")
+			
+			# Restore original stats
+			stats.attack = original_attack
+			stats.health = original_health
+			
+			# Clean up metadata
+			stats.remove_meta("golem_aura_active")
+			stats.remove_meta("golem_original_attack")
+			stats.remove_meta("golem_original_health")
 
-		
 		var unit_scene = stats.unit_scene if stats.unit_scene else preload("res://scenes/unit/unit.tscn")
 		var unit = unit_scene.instantiate()
 		play_area.unit_grid.add_child(unit)
@@ -191,6 +209,14 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 		unit.stats = duplicated_stats
 		unit_mover.setup_unit(unit)
 		sell_portal.setup_unit(unit)  # ADD THIS LINE
+	
+	# After all units are spawned, refresh Golem auras (only for board area)
+	await get_tree().process_frame  # Wait one frame for units to be fully initialized
+	if play_area.area_type == "board":  # Only apply auras on the board, not in hand
+		for unit in play_area.unit_grid.units.values():
+			if unit and is_instance_valid(unit) and unit is GolemUnit:
+				print("Board: Auto-applying aura for spawned Golem: ", unit.stats.name)
+				unit.update_aura(play_area)
 
 func _show_step_popup() -> void:
 	

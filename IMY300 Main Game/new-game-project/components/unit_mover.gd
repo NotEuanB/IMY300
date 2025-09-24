@@ -85,6 +85,12 @@ func _on_unit_drag_started(unit: Unit) -> void:
 					unit.set_meta("last_tile", tile)
 					if unit is GolemUnit:
 						unit.on_removed_from_board(play_areas[i])
+					
+					# Refresh other Golem auras when any unit is dragged from the board
+					if play_areas[i] == play_areas[1]:  # Board area
+						for u in play_areas[i].unit_grid.units.values():
+							if is_instance_valid(u) and u is GolemUnit and u != unit:
+								u.update_aura(play_areas[i])
 					return
 
 
@@ -92,6 +98,13 @@ func _on_unit_drag_canceled(starting_position: Vector2, unit: Unit) -> void:
 	if not enabled:
 		return
 	_reset_unit_to_starting_position(starting_position, unit)
+	
+	# Check if the unit was put back on the board and refresh auras
+	for i in play_areas.size():
+		if unit.get_parent() == play_areas[i].unit_grid and play_areas[i] == play_areas[1]:  # Board area
+			for u in play_areas[i].unit_grid.units.values():
+				if is_instance_valid(u) and u is GolemUnit:
+					u.update_aura(play_areas[i])
 
 
 func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
@@ -139,10 +152,22 @@ func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
 		unit.on_played(new_area)
 	
 	if new_area == play_areas[1]:
+		# Refresh all auras when any unit is moved to the board
 		for u in play_areas[1].unit_grid.units.values():
 			if is_instance_valid(u) and u is GolemUnit:
 				u.update_aura(play_areas[1])
 			elif is_instance_valid(u) and u is GravestoneWardenUnit:
 				u._remove_vigil_aura(play_areas[1])
 				u._update_vigil_aura(play_areas[1])
+	
+	# Also refresh auras when units are moved FROM the board (to handle dragging away from auras)
+	if old_area == play_areas[1] and new_area != play_areas[1]:
+		# Unit was removed from board - refresh remaining Golem auras
+		for u in play_areas[1].unit_grid.units.values():
+			if is_instance_valid(u) and u is GolemUnit:
+				u.update_aura(play_areas[1])
+			elif is_instance_valid(u) and u is GravestoneWardenUnit:
+				u._remove_vigil_aura(play_areas[1])
+				u._update_vigil_aura(play_areas[1])
+	
 	$Place.play()

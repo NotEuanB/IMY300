@@ -187,6 +187,22 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 	for unit_data in units_data:
 		var stats = unit_data["stats"]
 		var tile = unit_data["tile"]
+		
+		# Clean up any persistent Golem aura effects from saved stats
+		if stats.has_meta("golem_aura_active"):
+			print("Spawn: Cleaning up Golem aura from saved ", stats.name)
+			var original_attack = stats.get_meta("golem_original_attack")
+			var original_health = stats.get_meta("golem_original_health")
+			
+			# Restore original stats
+			stats.attack = original_attack
+			stats.health = original_health
+			
+			# Clean up metadata
+			stats.remove_meta("golem_aura_active")
+			stats.remove_meta("golem_original_attack")
+			stats.remove_meta("golem_original_health")
+		
 		var unit_scene = stats.unit_scene if stats.unit_scene else preload("res://scenes/unit/unit.tscn")
 		var unit = unit_scene.instantiate()
 		play_area.unit_grid.add_child(unit)
@@ -196,6 +212,14 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 		
 		# Initialize max_health_reached to current health
 		unit.max_health_reached = unit.stats.health
+	
+	# After all units are spawned, refresh Golem auras (for player units, not enemies)
+	await get_tree().process_frame  # Wait one frame for units to be fully initialized
+	if play_area != enemy_area:  # Apply auras for player units but not enemies
+		for unit in play_area.unit_grid.units.values():
+			if unit and is_instance_valid(unit) and unit is GolemUnit:
+				print("Forest: Auto-applying aura for spawned Golem: ", unit.stats.name)
+				unit.update_aura(play_area)
 
 func _spawn_enemy_units() -> void:
 	for i in range(enemy_stats.units.size()):
@@ -351,48 +375,8 @@ func _player_turn() -> void:
 
 	_attack(player_unit, enemy_unit)
 
-func _enemy_turn() -> void:
-	# Get all living enemy tiles
-	var living_enemy_tiles = []
-	for tile in enemy_area.unit_grid.units.keys():
-		var unit = enemy_area.unit_grid.units[tile]
-		if unit and unit.stats and unit.stats.health > 0:
-			living_enemy_tiles.append(tile)
-	if living_enemy_tiles.size() == 0:
-		return
-
-	# Pick a random living enemy
-	var enemy_tile = living_enemy_tiles[randi() % living_enemy_tiles.size()]
-	var enemy_unit = enemy_area.unit_grid.units[enemy_tile]
-
-	# Get all living player tiles
-	var living_player_tiles = []
-	var taunt_tiles = []  # Units with taunt ability
-	
-	for tile in player_area.unit_grid.units.keys():
-		var unit = player_area.unit_grid.units[tile]
-		if unit and unit.stats and unit.stats.health > 0:
-			living_player_tiles.append(tile)
-			# Check if this unit has taunt
-			if unit.stats.has_meta("has_taunt") and unit.stats.get_meta("has_taunt"):
-				taunt_tiles.append(tile)
-	
-	if living_player_tiles.size() == 0:
-		return  # No players left
-
-	# Pick target: prioritize taunt units if any exist
-	var player_tile
-	if taunt_tiles.size() > 0:
-		# If there are taunt units, enemies must attack one of them
-		player_tile = taunt_tiles[randi() % taunt_tiles.size()]
-		print("Enemy targeting taunt unit at tile: ", player_tile)
-	else:
-		# No taunt units, pick random as usual
-		player_tile = living_player_tiles[randi() % living_player_tiles.size()]
-	var player_unit = player_area.unit_grid.units[player_tile]
-
-	# Perform attack
-	_attack(enemy_unit, player_unit)
+# Taunt system is now integrated directly into _combat_round()
+# Old _enemy_turn() function removed as it was not being called
 
 func _attack(attacker, defender) -> void:
 	if attacker == null or defender == null:
@@ -479,6 +463,12 @@ func _handle_unit_death(dead_unit: Unit, killer_unit: Unit = null) -> void:
 	
 	# Trigger Infernal Harvest for any Ashwraiths on the board
 	_trigger_infernal_harvest()
+	
+	# Check for Stone Inheritance (Rolet death effect) - calculate based on max health or damage taken
+	if dead_unit is RoletUnit and dead_unit in player_area.unit_grid.units.values():
+		# Use the unit's max health reached as the inheritance amount (represents its "full" health)
+		var rolet_inheritance = max(1, dead_unit.max_health_reached if dead_unit.max_health_reached > 0 else dead_unit.stats.base_health)
+		_trigger_stone_inheritance(dead_unit, rolet_inheritance)
 	
 	# Save final stats of player units that die (for proper respawning with bonuses)
 	if dead_unit in player_area.unit_grid.units.values():
@@ -576,15 +566,35 @@ func _combat_round() -> void:
 		# Enemy attacks
 		if j < enemy_tiles.size() and player_tiles.size() > 0:
 			var enemy_unit = enemy_area.unit_grid.units[enemy_tiles[j]]
-			# Refresh living player tiles
+			# Refresh living player tiles and check for taunt
 			var living_player_tiles = []
+			var taunt_tiles = []  # Units with taunt ability
+			
 			for tile in player_area.unit_grid.units.keys():
 				var unit = player_area.unit_grid.units[tile]
 				if unit and unit.stats and unit.stats.health > 0:
 					living_player_tiles.append(tile)
+					# Check if this unit has taunt
+					if unit.stats.has_meta("has_taunt"):
+						var has_taunt = unit.stats.get_meta("has_taunt")
+						if has_taunt:
+							taunt_tiles.append(tile)
+							print("Combat: Found taunt unit ", unit.stats.name, " - enemy must target it!")
+			
 			if living_player_tiles.size() == 0:
 				break
-			var player_tile = living_player_tiles[randi() % living_player_tiles.size()]
+				
+			# Pick target: prioritize taunt units if any exist
+			var player_tile
+			if taunt_tiles.size() > 0:
+				# If there are taunt units, enemies must attack one of them
+				player_tile = taunt_tiles[randi() % taunt_tiles.size()]
+				print("Combat: Enemy targeting taunt unit at tile: ", player_tile)
+			else:
+				# No taunt units, pick random as usual
+				player_tile = living_player_tiles[randi() % living_player_tiles.size()]
+				print("Combat: No taunt units, targeting random unit at tile: ", player_tile)
+				
 			var player_unit = player_area.unit_grid.units[player_tile]
 			await _attack(enemy_unit, player_unit)
 			await get_tree().create_timer(attack_cooldown).timeout
@@ -777,3 +787,34 @@ func _trigger_infernal_harvest():
 	for unit in player_area.unit_grid.units.values():
 		if unit != null and unit is AshwraithUnit and unit.stats.has_meta("infernal_harvest_active"):
 			unit.on_unit_death()
+
+# Trigger Stone Inheritance when a Rolet dies
+func _trigger_stone_inheritance(dead_rolet: RoletUnit, inherited_health: int):
+	print("Rolet: Stone Inheritance triggered - inheriting ", inherited_health, " health")
+	
+	if inherited_health <= 0:
+		print("Rolet: No health to inherit")
+		return
+	
+	# Find all living friendly units (excluding the dead Rolet)
+	var living_allies = []
+	for unit in player_area.unit_grid.units.values():
+		if unit != null and unit != dead_rolet and unit.stats and unit.stats.health > 0:
+			living_allies.append(unit)
+	
+	if living_allies.size() == 0:
+		print("Rolet: No living allies to inherit health")
+		return
+	
+	# Pick a random ally to inherit the health
+	var heir = living_allies[randi() % living_allies.size()]
+	
+	# Give the heir temporary health for this combat only
+	heir.stats.health += inherited_health
+	heir.set_stats(heir.stats)
+	
+	print("Rolet: ", heir.stats.name, " inherited ", inherited_health, " health from fallen Rolet!")
+	
+	# Play inheritance sound effect
+	if dead_rolet.has_node("Buff"):
+		dead_rolet.get_node("Buff").play()
