@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6rbow86y7ycm"]
+
+[ext_resource type="PackedScene" uid="uid://dxqabp3b8fvlr" path="res://Scenes/Unit/Unit.tscn" id="1_base"]
+[ext_resource type="Script" path="res://Scenes/Unit/drownfangraider_unit.gd" id="2_script"]
+
+[node name="DrownfangRaiderUnit" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+
+[node name="Stats" parent="." index="1"]
+
+[node name="AttackStat" parent="Stats" index="0"]
+text = "[color=black]2[/color]"
+
+[node name="HealthStat" parent="Stats" index="1"]
+text = "[color=black]4[/color]"
+
+[node name="Name" parent="Stats" index="2"]
+text = "Drownfang Raider"
+
+[node name="Description" parent="Stats" index="3"]
+text = "Depths Empowerment: Give a unit +1/+1 and Submerge (first death becomes 1 HP instead)"

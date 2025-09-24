@@ -8,6 +8,7 @@
 script = ExtResource("1_mavkx")
 name = "Flame Imp"
 unit_scene = ExtResource("3_cdjna")
+gold_cost = 2
 attack = 1
 health = 2
 pool_count = 20

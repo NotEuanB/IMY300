@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://c8lam5n2p7q1r"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_43gcn"]
+[ext_resource type="Texture2D" uid="uid://kvr1ieel4qhu" path="res://assets/units/Tide_Serpent.png" id="2_n4ysc"]
+[ext_resource type="PackedScene" uid="uid://bx70aw2v5n8m3" path="res://Scenes/Unit/TideSerpentUnit.tscn" id="3_fp58a"]
+
+[resource]
+script = ExtResource("1_43gcn")
+name = "Tide Serpent"
+unit_scene = ExtResource("3_fp58a")
+gold_cost = 5
+attack = 3
+health = 7
+pool_count = 6
+tier = 4
+skin = ExtResource("2_n4ysc")
+description = "Crushing Depths: Start of combat: Set the strongest enemy's attack to 1"
+base_attack = 3
+base_health = 7
+metadata/_custom_type_script = "uid://d2inypj55y68q"

@@ -75,7 +75,12 @@ var combination_db := {
 	"Flame Imp+Spectre": preload("res://data/units/combined/ashwraith.tres"),
 	"Moss Troll+Spectre": preload("res://data/units/combined/rotshroud.tres"),
 	"Rat+Spectre": preload("res://data/units/combined/shadeblade.tres"),
-	"Moss Troll+Rat": preload("res://data/units/combined/rootsnare_bandit.tres")
+	"Moss Troll+Rat": preload("res://data/units/combined/rootsnare_bandit.tres"),
+	"Moss Troll+Tide Serpent": preload("res://data/units/combined/bog_leviathan.tres"),
+	"Flame Imp+Storm Harpy": preload("res://data/units/combined/ashen_harpy.tres"),
+	"Golem+Tide Serpent": preload("res://data/units/combined/coral_colossus.tres"),
+	"Spectre+Tide Serpent": preload("res://data/units/combined/drowned_shade.tres"),
+	"Rat+Tide Serpent": preload("res://data/units/combined/drownfang_raider.tres")
 }
 
 @export var slot_one_area: PlayArea

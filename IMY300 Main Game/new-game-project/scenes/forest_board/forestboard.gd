@@ -426,6 +426,10 @@ func _attack(attacker, defender) -> void:
 			attacker_damage = max(1, attacker_damage - reduction)  # Minimum 1 damage
 			print("Gravestone Warden: Reduced damage to ", attacker.stats.name, " from ", defender.stats.attack, " to ", attacker_damage)
 		
+		# Check for Coral Colossus immunity before applying damage
+		defender_damage = _apply_coral_aegis_immunity(defender, defender_damage)
+		attacker_damage = _apply_coral_aegis_immunity(attacker, attacker_damage)
+		
 		defender.stats.health -= defender_damage
 		attacker.stats.health -= attacker_damage
 	
@@ -442,9 +446,13 @@ func _attack(attacker, defender) -> void:
 
 	# Handle unit deaths using the helper function
 	if defender.stats.health <= 0:
-		_handle_unit_death(defender, attacker)
+		# Check for Submerge ability before processing death
+		if not _handle_submerge_ability(defender):
+			_handle_unit_death(defender, attacker)
 	if attacker.stats.health <= 0:
-		_handle_unit_death(attacker, defender)
+		# Check for Submerge ability before processing death
+		if not _handle_submerge_ability(attacker):
+			_handle_unit_death(attacker, defender)
 	$Attack.play()
 
 # Helper function to handle unit death properly
@@ -607,6 +615,9 @@ func _save_combat_results() -> void:
 	
 	# Reset Infernal Harvest metadata after combat ends
 	AshwraithUnit.reset_all_infernal_harvest(player_area)
+	
+	# Reset Tidal Haunting effects on enemies
+	DrownedShadeUnit.reset_all_tidal_haunting(enemy_area)
 	
 	# Collect unit states using original stored units (includes dead units)
 	var updated_board_state = []
@@ -818,3 +829,38 @@ func _trigger_stone_inheritance(dead_rolet: RoletUnit, inherited_health: int):
 	# Play inheritance sound effect
 	if dead_rolet.has_node("Buff"):
 		dead_rolet.get_node("Buff").play()
+
+# Apply Coral Colossus immunity to damage calculation
+func _apply_coral_aegis_immunity(unit: Unit, damage: int) -> int:
+	if not unit or not unit.stats:
+		return damage
+	
+	# Check if this unit has first damage immunity and hasn't used it yet
+	if unit.stats.has_meta("coral_first_damage_immunity"):
+		print("Coral Colossus: ", unit.stats.name, " ignored first instance of ", damage, " damage!")
+		# Remove the immunity (first instance only)
+		unit.stats.remove_meta("coral_first_damage_immunity")
+		# Ignore this damage
+		return 0
+	else:
+		print("Coral Colossus: ", unit.stats.name, " does not have immunity, taking ", damage, " damage")
+	
+	# Normal damage
+	return damage
+
+# Handle Submerge ability when units take lethal damage (Drownfang Raider ability)
+func _handle_submerge_ability(unit: Unit) -> bool:
+	if not unit or not unit.stats:
+		return false
+	
+	# Check if this unit has Submerge and hasn't used it yet
+	if unit.stats.has_meta("submerge_active"):
+		print("Drownfang Raider: ", unit.stats.name, " used Submerge ability - surviving with 1 HP!")
+		# Remove the submerge ability (one-time use)
+		unit.stats.remove_meta("submerge_active")
+		# Set health to 1 instead of dying
+		unit.stats.health = 1
+		unit.set_stats(unit.stats)
+		return true  # Indicate that death was prevented
+	
+	return false  # Unit dies normally

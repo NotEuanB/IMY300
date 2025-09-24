@@ -159,6 +159,8 @@ func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
 			elif is_instance_valid(u) and u is GravestoneWardenUnit:
 				u._remove_vigil_aura(play_areas[1])
 				u._update_vigil_aura(play_areas[1])
+			elif is_instance_valid(u) and u is CoralColossusUnit:
+				u._apply_coral_aegis_aura()
 	
 	# Also refresh auras when units are moved FROM the board (to handle dragging away from auras)
 	if old_area == play_areas[1] and new_area != play_areas[1]:
@@ -168,6 +170,9 @@ func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
 				u.update_aura(play_areas[1])
 			elif is_instance_valid(u) and u is GravestoneWardenUnit:
 				u._remove_vigil_aura(play_areas[1])
+				u._update_vigil_aura(play_areas[1])
+			elif is_instance_valid(u) and u is CoralColossusUnit:
+				u._apply_coral_aegis_aura()
 				u._update_vigil_aura(play_areas[1])
 	
 	$Place.play()

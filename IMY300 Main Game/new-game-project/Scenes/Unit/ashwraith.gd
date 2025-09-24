@@ -52,8 +52,11 @@ func _deal_damage_to_random_enemy(enemy_area: PlayArea):
 		# Pick a random enemy
 		var target = enemies[randi() % enemies.size()]
 		
-		# Deal 1 damage
-		target.stats.health -= 1
+		# Check for Coral Colossus immunity before applying damage
+		var damage = _apply_coral_aegis_immunity(target, 1)
+		
+		# Deal damage
+		target.stats.health -= damage
 		target.set_stats(target.stats)
 		
 		# Check if target died and handle removal
@@ -76,3 +79,19 @@ static func reset_all_infernal_harvest(play_area: PlayArea):
 	for unit in play_area.unit_grid.units.values():
 		if unit != null and unit.stats.has_meta("infernal_harvest_active"):
 			unit.stats.remove_meta("infernal_harvest_active")
+
+# Apply Coral Colossus immunity to damage calculation
+func _apply_coral_aegis_immunity(unit: Unit, damage: int) -> int:
+	if not unit or not unit.stats:
+		return damage
+	
+	# Check if this unit has first damage immunity and hasn't used it yet
+	if unit.stats.has_meta("coral_first_damage_immunity"):
+		print("Coral Colossus: ", unit.stats.name, " ignored first instance of ", damage, " damage!")
+		# Remove the immunity (first instance only)
+		unit.stats.remove_meta("coral_first_damage_immunity")
+		# Ignore this damage
+		return 0
+	
+	# Normal damage
+	return damage

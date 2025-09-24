@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="UnitPool" load_steps=8 format=3 uid="uid://bn1waem751oqp"]
+[gd_resource type="Resource" script_class="UnitPool" load_steps=10 format=3 uid="uid://bn1waem751oqp"]
 
 [ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_mc54o"]
 [ext_resource type="Resource" uid="uid://cc31lth8kllsv" path="res://data/units/base/golem.tres" id="2_1aqrh"]
@@ -6,9 +6,11 @@
 [ext_resource type="Resource" uid="uid://24ojvr82jtob" path="res://data/units/base/rat.tres" id="3_mht32"]
 [ext_resource type="Resource" uid="uid://drdktlcrfcjfq" path="res://data/units/base/flame_imp.tres" id="4_mht32"]
 [ext_resource type="Resource" uid="uid://cwplf0fisypoh" path="res://data/units/base/moss_troll.tres" id="5_2sl0h"]
-[ext_resource type="Resource" uid="uid://bjp5j8n36uxm4" path="res://data/units/base/spectre.tres" id="6_pq0gh"]
+[ext_resource type="Resource" uid="uid://bkl2n5x7u8waw" path="res://data/units/base/storm_harpy.tres" id="6_22rhc"]
+[ext_resource type="Resource" uid="uid://banh5gxxga8uw" path="res://data/units/base/spectre.tres" id="6_pq0gh"]
+[ext_resource type="Resource" uid="uid://c8lam5n2p7q1r" path="res://data/units/base/tide_serpent.tres" id="8_t2ywo"]
 
 [resource]
 script = ExtResource("2_qbk8p")
-available_units = Array[ExtResource("1_mc54o")]([ExtResource("2_1aqrh"), ExtResource("3_mht32"), ExtResource("4_mht32"), ExtResource("5_2sl0h"), ExtResource("6_pq0gh")])
+available_units = Array[ExtResource("1_mc54o")]([ExtResource("2_1aqrh"), ExtResource("3_mht32"), ExtResource("4_mht32"), ExtResource("5_2sl0h"), ExtResource("6_22rhc"), ExtResource("6_pq0gh"), ExtResource("8_t2ywo")])
 metadata/_custom_type_script = "uid://or8rrjcsjo64"

@@ -92,7 +92,7 @@ func update_stat_display_attack(label: RichTextLabel, current_value: int, base_v
 		label.text = "[color=#006400][b][font_size=20]" + str(current_value) + "[/font_size][/b][/color]"
 	elif current_value < base_value:
 		# Dark red, bold, and larger for decreased stats
-		label.text = "[color=#4A0000[b][font_size=20]" + str(current_value) + "[/font_size][/b][/color]"
+		label.text = "[color=#4A0000][b][font_size=20]" + str(current_value) + "[/font_size][/b][/color]"
 	else:
 		# Black for normal/base stats
 		label.text = "[color=black]" + str(current_value) + "[/color]"

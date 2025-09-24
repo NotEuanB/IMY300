@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://dx3mpvutj2sow"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_ashen"]
+[ext_resource type="Texture2D" uid="uid://d1jaa3fked4g6" path="res://assets/units/Ashen_Harpy.png" id="2_ashen"]
+[ext_resource type="PackedScene" uid="uid://73c1xho28vsh" path="res://Scenes/Unit/AshenHarpyUnit.tscn" id="3_ashen"]
+
+[resource]
+script = ExtResource("1_ashen")
+name = "Ashen Harpy"
+unit_scene = ExtResource("3_ashen")
+gold_cost = 5
+attack = 3
+health = 4
+pool_count = 10
+tier = 3
+skin = ExtResource("2_ashen")
+description = "Firestorm: Start of combat: Deal 1 damage to all enemies"
+base_attack = 3
+base_health = 4
+metadata/_custom_type_script = "uid://d2inypj55y68q"

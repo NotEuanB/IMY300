@@ -1,8 +1,8 @@
 @tool
-class_name FlameImpUnit
+class_name AshenHarpyUnit
 extends Unit
 
-# Flame Burst: At the start of combat, deal 1 damage to a random enemy
+# Firestorm: At the start of combat, deal 1 damage to all enemies
 func on_combat_start(enemy_area: PlayArea, _player_area: PlayArea = null) -> void:
 	# Find all living enemy units
 	var enemies: Array = []
@@ -11,20 +11,18 @@ func on_combat_start(enemy_area: PlayArea, _player_area: PlayArea = null) -> voi
 			enemies.append(unit)
 	
 	if enemies.size() > 0:
-		# Pick a random enemy
-		var target = enemies[randi() % enemies.size()]
-		
-		# Deal 1 damage
-		_deal_damage_to_unit(target, 1)
+		# Deal 1 damage to all enemies
+		for enemy in enemies:
+			_deal_fire_damage_to_unit(enemy, 1)
 
-func _deal_damage_to_unit(target: Unit, damage: int) -> void:
+func _deal_fire_damage_to_unit(target: Unit, damage: int) -> void:
 	if not target or not target.stats or target.stats.health <= 0:
 		return
 	
 	# Check for Coral Colossus immunity before applying damage
 	damage = _apply_coral_aegis_immunity(target, damage)
 	
-	# Apply damage
+	# Apply fire damage
 	target.stats.health -= damage
 	target.set_stats(target.stats)
 	

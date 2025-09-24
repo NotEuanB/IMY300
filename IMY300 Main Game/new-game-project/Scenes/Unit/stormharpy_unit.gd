@@ -1,8 +1,8 @@
 @tool
-class_name FlameImpUnit
+class_name StormHarpyUnit
 extends Unit
 
-# Flame Burst: At the start of combat, deal 1 damage to a random enemy
+# Storm Strike: At the start of combat, deal 2 damage to the weakest enemy unit
 func on_combat_start(enemy_area: PlayArea, _player_area: PlayArea = null) -> void:
 	# Find all living enemy units
 	var enemies: Array = []
@@ -11,11 +11,14 @@ func on_combat_start(enemy_area: PlayArea, _player_area: PlayArea = null) -> voi
 			enemies.append(unit)
 	
 	if enemies.size() > 0:
-		# Pick a random enemy
-		var target = enemies[randi() % enemies.size()]
+		# Find the weakest enemy (lowest health)
+		var weakest_enemy = enemies[0]
+		for enemy in enemies:
+			if enemy.stats.health < weakest_enemy.stats.health:
+				weakest_enemy = enemy
 		
-		# Deal 1 damage
-		_deal_damage_to_unit(target, 1)
+		# Deal 2 damage to the weakest enemy
+		_deal_damage_to_unit(weakest_enemy, 2)
 
 func _deal_damage_to_unit(target: Unit, damage: int) -> void:
 	if not target or not target.stats or target.stats.health <= 0:

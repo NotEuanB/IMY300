@@ -81,19 +81,19 @@ func update_aura(play_area: PlayArea) -> void:
 				buffed_units.append(adj_unit)
 
 func _apply_aura_buff(unit) -> void:
-	"""Apply aura buff using stored original values approach"""
-	# Store original stats before applying buff (like Scoundrel's Deal does)
-	if not unit.stats.has_meta("golem_original_attack"):
-		unit.stats.set_meta("golem_original_attack", unit.stats.attack)
-		unit.stats.set_meta("golem_original_health", unit.stats.health)
+	"""Apply aura buff using additive approach to preserve permanent buffs"""
+	# If aura is already active, don't reapply
+	if unit.stats.has_meta("golem_aura_active"):
+		return
 	
-	# Apply the aura buff: +2 attack, +2 health
+	# Apply the aura buff: +2 attack, +2 health (additive, doesn't store "original")
 	unit.stats.attack += 2
 	unit.stats.health += 2
 	unit.set_stats(unit.stats)
 	
 	# Mark this unit as having golem aura active
 	unit.stats.set_meta("golem_aura_active", true)
+	print("Golem: Applied +2/+2 aura to ", unit.stats.name, " (new stats: ", unit.stats.attack, "/", unit.stats.health, ")")
 
 func _is_unit_already_buffed(unit) -> bool:
 	# Check if this unit already has golem aura active
@@ -104,22 +104,22 @@ func _remove_aura() -> void:
 	for unit in buffed_units:
 		if unit and is_instance_valid(unit):
 			if unit.stats.has_meta("golem_aura_active"):
-				print("Golem: Restoring original stats for ", unit.stats.name)
-				var original_attack = unit.stats.get_meta("golem_original_attack")
-				var original_health = unit.stats.get_meta("golem_original_health")
+				print("Golem: Removing +2/+2 aura from ", unit.stats.name, " (current: ", unit.stats.attack, "/", unit.stats.health, ")")
 				
-				# Restore original stats
-				unit.stats.attack = original_attack
-				unit.stats.health = original_health
+				# Remove the aura buff: -2 attack, -2 health (subtractive to preserve permanent buffs)
+				unit.stats.attack -= 2
+				unit.stats.health -= 2
+				
+				# Make sure health doesn't go below 1
+				if unit.stats.health < 1:
+					unit.stats.health = 1
 				
 				# Clean up metadata
 				unit.stats.remove_meta("golem_aura_active")
-				unit.stats.remove_meta("golem_original_attack")
-				unit.stats.remove_meta("golem_original_health")
 				
 				# Update display
 				unit.set_stats(unit.stats)
-				print("Golem: Restored ", unit.stats.name, " to ", unit.stats.attack, "/", unit.stats.health)
+				print("Golem: ", unit.stats.name, " now has ", unit.stats.attack, "/", unit.stats.health, " (permanent buffs preserved)")
 	
 	buffed_units.clear()
 	print("Golem: Aura removal complete")
