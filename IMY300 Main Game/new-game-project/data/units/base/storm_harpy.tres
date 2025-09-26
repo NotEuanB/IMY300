@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://bkl2n5x7u8waw"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_43gcn"]
+[ext_resource type="Texture2D" uid="uid://erykm2tqyr8k" path="res://assets/units/Storm_Harpy.png" id="2_n4ysc"]
+[ext_resource type="PackedScene" uid="uid://b6qrvy3ypjfs7" path="res://Scenes/Unit/StormHarpyUnit.tscn" id="3_de4ms"]
+
+[resource]
+script = ExtResource("1_43gcn")
+name = "Storm Harpy"
+unit_scene = ExtResource("3_de4ms")
+gold_cost = 4
+attack = 4
+health = 3
+pool_count = 9
+skin = ExtResource("2_n4ysc")
+description = "Storm Harpy"
+base_attack = 4
+base_health = 3
+metadata/_custom_type_script = "uid://d2inypj55y68q"

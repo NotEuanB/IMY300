@@ -17,24 +17,7 @@ func _ready() -> void:
 	# Use the global unit pool instead of the local one
 	unit_pool = GameState.get_unit_pool()
 	
-	# Debug: Check if the pool has units
-	print("=== SHOP READY DEBUG ===")
-	print("Current round:", GameState.main_round)
-	if unit_pool:
-		print("Unit pool exists, size:", unit_pool.unit_pool.size())
-		
-		# DON'T regenerate here - it will overwrite combined units!
-		# if unit_pool.unit_pool.size() == 0:
-		#     print("Unit pool is empty, regenerating...")
-		#     unit_pool.generate_unit_pool()
-		#     print("After regeneration, size:", unit_pool.unit_pool.size())
-		
-		for i in range(min(10, unit_pool.unit_pool.size())):
-			var unit = unit_pool.unit_pool[i]
-			print("  [", i, "] ", unit.name, " (Tier ", unit.tier, ", Cost ", unit.gold_cost, ")")
-	else:
-		print("ERROR: unit_pool is null!")
-	print("=== END SHOP READY DEBUG ===")
+
 	
 	for child: Node in shop_cards.get_children():
 		child.queue_free()
@@ -59,12 +42,14 @@ func _is_unit_valid_for_round(unit_stats: UnitStats, current_round: int) -> bool
 	var tier = unit_stats.tier
 	
 	match tier:
-		1: # Tier 1 - always valid
+		1: # Tier 1 - always valid (early game)
 			return true
-		2: # Tier 2 - valid from round 2+
-			return current_round >= 2
-		3: # Tier 3 - valid from round 3+
+		2: # Tier 2 - valid from round 3+
 			return current_round >= 3
+		3: # Tier 3 - valid from round 5+
+			return current_round >= 5
+		4: # Tier 4 - valid from round 7+ (endgame units)
+			return current_round >= 7
 		_:
 			return true
 
@@ -74,18 +59,13 @@ func _roll_units() -> void:
 	for card in shop_cards.get_children():
 		if card.visible and card.unit_stats:
 			# Check if this unit should exist in the current round
-			var should_exist = _is_unit_valid_for_round(card.unit_stats, GameState.main_round)
-			if should_exist:
+			var is_valid_for_round = _is_unit_valid_for_round(card.unit_stats, GameState.main_round)
+			if is_valid_for_round:
 				current_units.append(card.unit_stats)
-				print("Putting back unit: ", card.unit_stats.name)
-			else:
-				print("NOT putting back ", card.unit_stats.name, " - invalid for round ", GameState.main_round)
 	
 	# Put back units to pool before clearing
 	for unit in current_units:
 		unit_pool.add_unit(unit)
-	
-	print("Put back ", current_units.size(), " units to pool")
 	
 	# Clear existing cards
 	for child: Node in shop_cards.get_children():
@@ -94,26 +74,7 @@ func _roll_units() -> void:
 	# Wait for the queue_free to process
 	await get_tree().process_frame
 	
-	# Add debug to see what's in the pool
-	print("=== SHOP ROLL DEBUG ===")
-	print("Unit pool size after putting back:", unit_pool.unit_pool.size())
-	
-	# Show FULL unit pool contents
-	print("=== FULL UNIT POOL CONTENTS ===")
-	var unit_counts = {}
-	for i in range(unit_pool.unit_pool.size()):
-		var unit = unit_pool.unit_pool[i]
-		print("  [", i, "] ", unit.name, " (Tier ", unit.tier, ", Cost ", unit.gold_cost, ")")
-		
-		# Count occurrences of each unit
-		if unit.name in unit_counts:
-			unit_counts[unit.name] += 1
-		else:
-			unit_counts[unit.name] = 1
-	
-	print("=== UNIT COUNT SUMMARY ===")
-	for unit_name in unit_counts.keys():
-		print("  ", unit_name, ": ", unit_counts[unit_name], " copies")
+
 	
 	# Show all combined units in the pool
 	var combined_units = []
@@ -121,16 +82,11 @@ func _roll_units() -> void:
 		if not unit.name in ["Rat", "Golem", "Flame Imp", "Moss Troll", "Spectre"]:  # Add your base unit names
 			combined_units.append(unit.name)
 	
-	if combined_units.size() > 0:
-		print("Combined units in pool: ", combined_units)
-	else:
-		print("No combined units found in pool")
-	
-	print("=== END SHOP DEBUG ===")
+
 	
 	# Get which slots should be active
 	var active_slots = get_shop_slot_positions()
-	print("Active slots:", active_slots)
+
 	
 	# Create and populate cards for active slots only
 	for i in 6:
@@ -139,7 +95,7 @@ func _roll_units() -> void:
 		
 		if i in active_slots:
 			var unit = unit_pool.get_random_unit()
-			print("Slot", i, "got unit:", unit.name if unit else "null")
+
 			if unit:
 				new_card.unit_stats = unit
 				new_card.player_stats = player_stats
@@ -172,7 +128,7 @@ func get_shop_slot_positions() -> Array[int]:
 
 func set_purchasing_enabled(enabled: bool) -> void:
 	purchasing_enabled = enabled
-	print("ShopContainer purchasing enabled: ", enabled)
+
 	
 	# Enable/disable all unit cards in the shop
 	for child in shop_cards.get_children():
@@ -182,16 +138,12 @@ func set_purchasing_enabled(enabled: bool) -> void:
 func _on_unit_bought(unit: UnitStats) -> void:
 	# Check if purchasing is enabled
 	if not purchasing_enabled:
-		print("Purchasing is disabled - blocking buy action")
 		return
 		
 	if player_stats.gold < unit.gold_cost:
-		print("Not enough gold to buy this unit!")
 		return
 	
-	print("Gold before purchase:", player_stats.gold)
 	player_stats.gold -= unit.gold_cost
-	print("Gold after purchase:", player_stats.gold)
 	player_stats.changed.emit()
 	
 	# Remove the unit from the pool only when bought
@@ -206,5 +158,3 @@ func _on_reroll_button_pressed() -> void:
 		
 		# The _roll_units function now handles putting units back
 		_roll_units()
-	else:
-		print("Not enough gold to reroll!")

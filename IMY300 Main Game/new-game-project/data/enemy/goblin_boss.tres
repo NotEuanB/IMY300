@@ -12,6 +12,9 @@
 [resource]
 script = ExtResource("1_8all0")
 skin = ExtResource("2_8all0")
+is_boss = true
+boss_name = "Ashfang the Flame Warden"
+boss_effect_type = 1
 units = Array[PackedScene]([ExtResource("6_t32j5"), ExtResource("6_t32j5"), ExtResource("6_t32j5"), ExtResource("8_t32j5"), ExtResource("8_t32j5")])
 unit_stats = Array[ExtResource("3_bcofb")]([ExtResource("4_bcofb"), ExtResource("5_ucdtn"), ExtResource("6_bahu6"), ExtResource("5_ucdtn"), ExtResource("4_bcofb")])
 metadata/_custom_type_script = "uid://crbjf0i6q7xqi"

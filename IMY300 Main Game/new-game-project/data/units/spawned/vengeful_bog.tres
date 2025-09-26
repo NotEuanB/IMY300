@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://dq0or4v0rj6o4"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_vengeful"]
+[ext_resource type="Texture2D" uid="uid://c1s07gi8fy3ms" path="res://assets/units/Moss_Troll.png" id="2_8fof7"]
+[ext_resource type="PackedScene" uid="uid://baj5e1e3f5yqt" path="res://Scenes/Unit/unit.tscn" id="3_basic_unit"]
+
+[resource]
+script = ExtResource("1_vengeful")
+name = "Vengeful Bog"
+unit_scene = ExtResource("3_basic_unit")
+gold_cost = 0
+attack = 1
+health = 1
+pool_count = 0
+tier = 0
+skin = ExtResource("2_8fof7")
+description = "Vengeful spirit of the fallen"
+base_attack = 1
+base_health = 1
+metadata/_custom_type_script = "uid://d2inypj55y68q"

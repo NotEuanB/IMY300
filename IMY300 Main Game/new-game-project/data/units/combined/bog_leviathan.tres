@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://bsu6pqcmay4jh"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_bog"]
+[ext_resource type="Texture2D" uid="uid://cy5kstyp3qhc" path="res://assets/units/Bog_Leviathan.png" id="2_bog"]
+[ext_resource type="PackedScene" uid="uid://c6hijib4jfvxd" path="res://Scenes/Unit/BogLeviathanUnit.tscn" id="3_bog"]
+
+[resource]
+script = ExtResource("1_bog")
+name = "Bog Leviathan"
+unit_scene = ExtResource("3_bog")
+gold_cost = 7
+attack = 4
+health = 9
+pool_count = 1
+tier = 4
+skin = ExtResource("2_bog")
+description = "Swamp Vengeance: When this dies, spawn a 'Vengeful Bog' unit with attack/health equal to the number of enemy units"
+base_attack = 4
+base_health = 9
+metadata/_custom_type_script = "uid://d2inypj55y68q"

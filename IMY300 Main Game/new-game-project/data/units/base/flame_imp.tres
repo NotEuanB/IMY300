@@ -8,14 +8,12 @@
 script = ExtResource("1_mavkx")
 name = "Flame Imp"
 unit_scene = ExtResource("3_cdjna")
-gold_cost = 1
+gold_cost = 2
 attack = 1
 health = 2
 pool_count = 20
-tier = 1
 skin = ExtResource("2_6r17g")
-description = "Smol flame boy"
-buff_used = false
+description = "On play: Deal 1 damage to a random enemy"
 base_attack = 1
 base_health = 2
 metadata/_custom_type_script = "uid://d2inypj55y68q"

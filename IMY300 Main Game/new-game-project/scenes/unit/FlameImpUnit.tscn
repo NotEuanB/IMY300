@@ -48,7 +48,7 @@ offset_top = 179.0
 offset_right = 77.0
 offset_bottom = 213.0
 bbcode_enabled = true
-text = "2"
+text = "1"
 horizontal_alignment = 1
 
 [node name="HealthStat" type="RichTextLabel" parent="Stats"]
@@ -57,7 +57,7 @@ offset_top = 179.0
 offset_right = 203.0
 offset_bottom = 210.0
 bbcode_enabled = true
-text = "1"
+text = "2"
 horizontal_alignment = 1
 
 [node name="Name" type="Label" parent="Stats"]
@@ -65,7 +65,7 @@ offset_left = 23.0
 offset_top = 212.0
 offset_right = 197.0
 offset_bottom = 240.0
-text = "Rat"
+text = "Flame Imp"
 label_settings = ExtResource("6_bjxaf")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -75,7 +75,7 @@ offset_left = 23.0
 offset_top = 236.0
 offset_right = 200.0
 offset_bottom = 302.0
-text = "On entering: Choose a unit to give +1/+1"
+text = "Combat start: Deal 1 damage to a random enemy"
 label_settings = ExtResource("7_hglv4")
 horizontal_alignment = 1
 vertical_alignment = 1

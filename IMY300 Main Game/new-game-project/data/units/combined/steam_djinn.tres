@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://b43agf6iua42i"]
+
+[ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://pq5hko80otxc" path="res://assets/units/Steam_Dijn.png" id="2_sccrl"]
+[ext_resource type="PackedScene" uid="uid://cx16f8dnqsga" path="res://Scenes/Unit/SteamDjinnUnit.tscn" id="3_scene"]
+
+[resource]
+script = ExtResource("1_script")
+name = "Steam Djinn"
+unit_scene = ExtResource("3_scene")
+gold_cost = 5
+attack = 3
+health = 5
+pool_count = 6
+tier = 3
+skin = ExtResource("2_sccrl")
+description = "Steam Cleave: When attacking, also deal damage to an additional adjacent enemy"
+base_attack = 3
+base_health = 5
+metadata/_custom_type_script = "uid://d2inypj55y68q"

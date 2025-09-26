@@ -27,7 +27,6 @@ func _get_first_available_area() -> PlayArea:
 func spawn_unit(unit: UnitStats) -> Unit:
 	var area := _get_first_available_area()
 	if area == null:
-		print("⚠ No available space to add unit to hand!")
 		return null
 	
 	var unit_scene := unit.unit_scene if unit.unit_scene else UNIT

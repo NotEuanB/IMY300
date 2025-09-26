@@ -14,6 +14,15 @@ var enemy_stats: EnemyStats
 @onready var enemy_avatar_display: Sprite2D = $Visuals/Goblin
 var paused = false
 
+# Boss Effect Manager
+var boss_effect_manager
+
+# Track original unit positions and stats for respawning
+var original_board_units = []
+var original_hand_units = []
+# Track units that died during combat with their final stats
+var dead_units_final_stats = {}
+
 # Attack/combat timing (adjust in Inspector)
 @export var combat_start_delay: float = 3
 @export var attack_move_duration: float = 0.35
@@ -62,14 +71,22 @@ func _process(_delta: float) -> void:
 func _ready() -> void:
 	randomize()
 	
+	# Initialize Boss Effect Manager
+	var BossEffectManager = preload("res://components/boss_effect_manager.gd")
+	boss_effect_manager = BossEffectManager.new()
+	add_child(boss_effect_manager)
+	
+	# Ensure global family display is available
+	GameState.ensure_family_display_in_scene()
+	
 	# Get enemies for the current round FIRST
 	enemy_stats = GameState.get_enemies_for_round(GameState.main_round)
 	if not enemy_stats:
-		print("ERROR: No enemy stats found for round ", GameState.main_round)
 		# Fallback to a default enemy if needed
 		enemy_stats = preload("res://data/enemy/goblin.tres")
 	
-	print("Fighting enemies for round ", GameState.main_round, ": ", enemy_stats.resource_path)
+	# Initialize boss effects if this is a boss fight
+	boss_effect_manager.initialize_boss_effects(enemy_stats)
 	
 	# Set the enemy avatar (skin) based on the current enemy
 	_set_enemy_avatar()
@@ -119,7 +136,6 @@ func show_boss_intro_then_start() -> void:
 		start_combat()
 		return
 
-	print("Boss intro: round=", GameState.main_round, ", image=", boss_intro_image != null, ", music=", boss_music_stream != null)
 
 	# Set image and fade in
 	intro_texrect.texture = boss_intro_image
@@ -153,9 +169,6 @@ func show_boss_intro_then_start() -> void:
 func _set_enemy_avatar() -> void:
 	if enemy_stats and enemy_stats.skin and enemy_avatar_display:
 		enemy_avatar_display.texture = enemy_stats.skin
-		print("Set enemy avatar (skin) for: ", enemy_stats.resource_path)
-	else:
-		print("No enemy skin found or avatar display element missing")
 
 func _set_background_for_round() -> void:
 	# Assuming you have a background node in your scene
@@ -164,20 +177,15 @@ func _set_background_for_round() -> void:
 	match GameState.main_round:
 		1:
 			background_node.texture = preload("res://assets/backgrounds/Forest_board.png")
-			print("Set background for Round 1")
 		2:
 			background_node.texture = preload("res://assets/backgrounds/Grave_Hollow.png")
-			print("Set background for Round 2")
 		3:
 			background_node.texture = preload("res://assets/backgrounds/Scorched_Gate.png")
-			print("Set background for Round 3")
 		4:
 			background_node.texture = preload("res://assets/backgrounds/Ashfangs_Keep.png")
-			print("Set background for Round 4")
 		_:
 			# Default background
 			background_node.texture = preload("res://assets/backgrounds/Forest_board.png")
-			print("Set default background")
 
 func _show_tutorial_popup() -> void:
 	match GameState.current_step:
@@ -192,6 +200,22 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 	for unit_data in units_data:
 		var stats = unit_data["stats"]
 		var tile = unit_data["tile"]
+		
+		# Clean up any persistent Golem aura effects from saved stats
+		if stats.has_meta("golem_aura_active"):
+			print("Spawn: Cleaning up Golem aura from saved ", stats.name)
+			var original_attack = stats.get_meta("golem_original_attack")
+			var original_health = stats.get_meta("golem_original_health")
+			
+			# Restore original stats
+			stats.attack = original_attack
+			stats.health = original_health
+			
+			# Clean up metadata
+			stats.remove_meta("golem_aura_active")
+			stats.remove_meta("golem_original_attack")
+			stats.remove_meta("golem_original_health")
+		
 		var unit_scene = stats.unit_scene if stats.unit_scene else preload("res://scenes/unit/unit.tscn")
 		var unit = unit_scene.instantiate()
 		play_area.unit_grid.add_child(unit)
@@ -201,6 +225,14 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 		
 		# Initialize max_health_reached to current health
 		unit.max_health_reached = unit.stats.health
+	
+	# After all units are spawned, refresh Golem auras (for player units, not enemies)
+	await get_tree().process_frame  # Wait one frame for units to be fully initialized
+	if play_area != enemy_area:  # Apply auras for player units but not enemies
+		for unit in play_area.unit_grid.units.values():
+			if unit and is_instance_valid(unit) and unit is GolemUnit:
+				print("Forest: Auto-applying aura for spawned Golem: ", unit.stats.name)
+				unit.update_aura(play_area)
 
 func _spawn_enemy_units() -> void:
 	for i in range(enemy_stats.units.size()):
@@ -214,6 +246,10 @@ func _spawn_enemy_units() -> void:
 			unit.stats = enemy_stats.unit_stats[i].duplicate()
 		else:
 			unit.stats = null
+	
+	# Set boss unit reference if this is a boss fight
+	if boss_effect_manager and enemy_stats.is_boss:
+		boss_effect_manager.set_boss_unit(enemy_area)
 
 func get_living_unit_count(unit_grid) -> int:
 	var count = 0
@@ -234,11 +270,9 @@ func show_reward_ui(title_text: String, description_text: String) -> void:
 	reward_ui.connect("tree_exited", Callable(self, "_on_reward_ui_closed"))
 
 func _on_reward_ui_closed():
-	print("Reward UI closed. Game mode:", GameState.game_mode, ", Main step:", GameState.main_step, ", Round:", GameState.main_round)
 
 	# Ensure the node is still in the scene tree
 	if not is_inside_tree():
-		print("Node is no longer in the scene tree. Cannot change scene.")
 		return
 
 	$OverlayLayer/Dimmer.visible = false
@@ -253,12 +287,47 @@ func _on_reward_ui_closed():
 			call_deferred("change_scene", "res://scenes/game_flow_manager/GameFlowManager.tscn")
 
 func change_scene(scene_path: String) -> void:
+	# Cancel any active target selection before scene change
+	if UnitMover.is_selecting_target:
+		UnitMover.is_selecting_target = false
+		UnitMover.selecting_unit = null
+		
+		# Reset all unit selectable states
+		var all_units = get_tree().get_nodes_in_group("units")
+		for unit in all_units:
+			if is_instance_valid(unit) and unit.has_method("set_selectable"):
+				unit.set_selectable(false)
+	
 	if get_tree():
 		get_tree().change_scene_to_file(scene_path)
-	else:
-		print("Cannot change scene. get_tree() is null.")
 
 func start_combat() -> void:
+	# Store original unit states at combat start (before any deaths)
+	_store_original_unit_states()
+	
+	# Reset resurrection flag for new combat
+	_resurrection_used_this_combat = false
+	
+	# Wait a frame to ensure all unit stats are properly loaded
+	await get_tree().process_frame
+	
+	# Prepare all units and ensure their stats are loaded before triggering abilities
+	await _prepare_units_for_combat()
+	
+	# Apply family bonuses to all player units before combat starts
+	_apply_family_bonuses()
+	
+	# Trigger boss effects for round start
+	if boss_effect_manager:
+		boss_effect_manager.on_combat_round_start(player_area, enemy_area)
+	
+	# Trigger combat start abilities for all player units
+	for unit in player_area.unit_grid.units.values():
+		if unit and unit.stats and unit.stats.health > 0:
+			if unit.has_method("on_combat_start"):
+				# Call with both enemy_area and player_area - units that don't need player_area can ignore it
+				unit.call("on_combat_start", enemy_area, player_area)
+	
 	var initial_enemy_count = get_living_unit_count(enemy_area.unit_grid)
 	
 	while get_living_unit_count(player_area.unit_grid) > 0 and get_living_unit_count(enemy_area.unit_grid) > 0:		
@@ -272,6 +341,9 @@ func start_combat() -> void:
 	var gold_earned = enemies_killed
 	player_stats.gold += gold_earned
 	player_stats.changed.emit()
+	
+	# Save the updated unit states (including any Soul Drain bonuses)
+	_save_combat_results()
 	
 	# Determine the outcome
 	var player_units_alive = get_living_unit_count(player_area.unit_grid)
@@ -327,35 +399,8 @@ func _player_turn() -> void:
 
 	_attack(player_unit, enemy_unit)
 
-func _enemy_turn() -> void:
-	# Get all living enemy tiles
-	var living_enemy_tiles = []
-	for tile in enemy_area.unit_grid.units.keys():
-		var unit = enemy_area.unit_grid.units[tile]
-		if unit and unit.stats and unit.stats.health > 0:
-			living_enemy_tiles.append(tile)
-	if living_enemy_tiles.size() == 0:
-		return
-
-	# Pick a random living enemy
-	var enemy_tile = living_enemy_tiles[randi() % living_enemy_tiles.size()]
-	var enemy_unit = enemy_area.unit_grid.units[enemy_tile]
-
-	# Get all living player tiles
-	var living_player_tiles = []
-	for tile in player_area.unit_grid.units.keys():
-		var unit = player_area.unit_grid.units[tile]
-		if unit and unit.stats and unit.stats.health > 0:
-			living_player_tiles.append(tile)
-	if living_player_tiles.size() == 0:
-		return  # No players left
-
-	# Pick a random living player
-	var player_tile = living_player_tiles[randi() % living_player_tiles.size()]
-	var player_unit = player_area.unit_grid.units[player_tile]
-
-	# Perform attack
-	_attack(enemy_unit, player_unit)
+# Taunt system is now integrated directly into _combat_round()
+# Old _enemy_turn() function removed as it was not being called
 
 func _attack(attacker, defender) -> void:
 	if attacker == null or defender == null:
@@ -378,14 +423,84 @@ func _attack(attacker, defender) -> void:
 	# Both units deal damage to each other
 	if camera_shake and camera_shake.has_method("shake"):
 		camera_shake.shake(10.0, 0.2, 8)
-	defender.stats.health -= attacker.stats.attack
-	attacker.stats.health -= defender.stats.attack
+	
+	# Check for Blightflame Shaman's toxic touch ability
+	var attacker_has_toxic = attacker.stats and attacker.stats.has_meta("has_toxic_touch")
+	var defender_has_toxic = defender.stats and defender.stats.has_meta("has_toxic_touch")
+	
+	
+	if attacker_has_toxic or defender_has_toxic:
+		# Toxic touch - both units die instantly
+		defender.stats.health = 0
+		attacker.stats.health = 0
+	else:
+		# Normal combat - apply damage with reduction calculations
+		var defender_damage = attacker.stats.attack
+		var attacker_damage = defender.stats.attack
+		
+		# Apply family bonus damage modifiers
+		defender_damage = _apply_family_damage_bonus(attacker, defender_damage)
+		attacker_damage = _apply_family_damage_bonus(defender, attacker_damage)
+		
+		# Apply damage reduction for defender (if protected by Gravestone Warden)
+		if defender.has_meta("damage_reduction"):
+			var reduction = defender.get_meta("damage_reduction", 0)
+			defender_damage = max(1, defender_damage - reduction)  # Minimum 1 damage
+			print("Gravestone Warden: Reduced damage to ", defender.stats.name, " from ", attacker.stats.attack, " to ", defender_damage)
+		
+		# Apply damage reduction for attacker (if protected by Gravestone Warden)  
+		if attacker.has_meta("damage_reduction"):
+			var reduction = attacker.get_meta("damage_reduction", 0)
+			attacker_damage = max(1, attacker_damage - reduction)  # Minimum 1 damage
+			print("Gravestone Warden: Reduced damage to ", attacker.stats.name, " from ", defender.stats.attack, " to ", attacker_damage)
+		
+		# Apply family defense bonuses (armor, fortress, dodge)
+		defender_damage = _apply_family_defense_bonus(defender, defender_damage)
+		attacker_damage = _apply_family_defense_bonus(attacker, attacker_damage)
+		
+		# Check for Coral Colossus immunity before applying damage
+		defender_damage = _apply_coral_aegis_immunity(defender, defender_damage)
+		attacker_damage = _apply_coral_aegis_immunity(attacker, attacker_damage)
+		
+		defender.stats.health -= defender_damage
+		attacker.stats.health -= attacker_damage
+		
+		# Notify boss effect manager of the attack
+		if boss_effect_manager:
+			boss_effect_manager.on_unit_attack(attacker, defender, defender_damage)
+			boss_effect_manager.on_unit_attack(defender, attacker, attacker_damage)
+		
+		# Apply Imp family effects after damage is dealt
+		_apply_imp_family_effects(attacker, defender, attacker_damage, defender_damage)
+	
+	# Handle Steam Djinn cleave attacks (after primary damage has been dealt)
+	print("ForestBoard: Checking cleave for attacker: ", attacker.stats.name if attacker.stats else "No Stats")
+	print("ForestBoard: Attacker has steam cleave meta: ", attacker.stats.has_meta("has_steam_cleave") if attacker.stats else false)
+	if attacker.stats and attacker.stats.has_meta("has_steam_cleave"):
+		print("ForestBoard: Steam Djinn cleave detected for attacker")
+		if attacker.has_method("apply_cleave_damage"):
+			# Attacker cleaves enemies in the defender's area
+			var defender_area = enemy_area if attacker in player_area.unit_grid.units.values() else player_area
+			attacker.call("apply_cleave_damage", defender, defender_area)
+		else:
+			print("ForestBoard: Attacker missing apply_cleave_damage method")
+	else:
+		print("ForestBoard: Attacker does not have steam cleave metadata")
+	
+	print("ForestBoard: Checking cleave for defender: ", defender.stats.name if defender.stats else "No Stats")
+	if defender.stats and defender.stats.has_meta("has_steam_cleave"):
+		print("ForestBoard: Steam Djinn cleave detected for defender")
+		if defender.has_method("apply_cleave_damage"):
+			# Defender cleaves enemies in the attacker's area
+			var attacker_area = player_area if defender in enemy_area.unit_grid.units.values() else enemy_area
+			defender.call("apply_cleave_damage", attacker, attacker_area)
+		else:
+			print("ForestBoard: Defender missing apply_cleave_damage method")
+	else:
+		print("ForestBoard: Defender does not have steam cleave metadata")
+	
 	_update_health_display(defender)
 	_update_health_display(attacker)
-	print("%s attacks %s for %d damage! %s counterattacks for %d damage!" % [
-		attacker.stats.name, defender.stats.name, attacker.stats.attack,
-		defender.stats.name, defender.stats.attack
-	])
 
 	# Animate attacker moving back to original position
 	var tween_back = create_tween()
@@ -395,25 +510,69 @@ func _attack(attacker, defender) -> void:
 	# Restore original z_index
 	attacker.z_index = original_z
 
-	# Remove defender if dead
+	# Handle unit deaths using the helper function
 	if defender.stats.health <= 0:
-		if defender in player_area.unit_grid.units.values():
-			var tile = player_area.unit_grid.units.keys()[player_area.unit_grid.units.values().find(defender)]
-			player_area.unit_grid.remove_unit(tile)
-		elif defender in enemy_area.unit_grid.units.values():
-			var tile = enemy_area.unit_grid.units.keys()[enemy_area.unit_grid.units.values().find(defender)]
-			enemy_area.unit_grid.remove_unit(tile)
-		defender.queue_free()
-	# Remove attacker if dead (from counterattack)
+		# Check for Submerge ability before processing death
+		if not _handle_submerge_ability(defender):
+			_handle_unit_death(defender, attacker)
 	if attacker.stats.health <= 0:
-		if attacker in player_area.unit_grid.units.values():
-			var tile = player_area.unit_grid.units.keys()[player_area.unit_grid.units.values().find(attacker)]
-			player_area.unit_grid.remove_unit(tile)
-		elif attacker in enemy_area.unit_grid.units.values():
-			var tile = enemy_area.unit_grid.units.keys()[enemy_area.unit_grid.units.values().find(attacker)]
-			enemy_area.unit_grid.remove_unit(tile)
-		attacker.queue_free()
+		# Check for Submerge ability before processing death
+		if not _handle_submerge_ability(attacker):
+			_handle_unit_death(attacker, defender)
 	$Attack.play()
+
+# Helper function to handle unit death properly
+func _handle_unit_death(dead_unit: Unit, killer_unit: Unit = null) -> void:
+	if not is_instance_valid(dead_unit) or dead_unit.stats.health > 0:
+		return
+	
+	# Notify boss effect manager of the death
+	if boss_effect_manager:
+		boss_effect_manager.on_unit_death(dead_unit, killer_unit)
+	
+	# Check for Shadow Resurrection FIRST (before removing from grid)
+	var was_resurrected = false
+	if dead_unit in player_area.unit_grid.units.values():
+		was_resurrected = _try_shadow_resurrection(dead_unit)
+	
+	# If resurrected, don't process death
+	if was_resurrected:
+		return
+	
+	# Trigger Infernal Harvest for any Ashwraiths on the board
+	_trigger_infernal_harvest()
+	
+	# Check for Stone Inheritance (Rolet death effect) - calculate based on max health or damage taken
+	if dead_unit is RoletUnit and dead_unit in player_area.unit_grid.units.values():
+		# Use the unit's max health reached as the inheritance amount (represents its "full" health)
+		var rolet_inheritance = max(1, dead_unit.max_health_reached if dead_unit.max_health_reached > 0 else dead_unit.stats.base_health)
+		_trigger_stone_inheritance(dead_unit, rolet_inheritance)
+	
+	# Save final stats of player units that die (for proper respawning with bonuses)
+	if dead_unit in player_area.unit_grid.units.values():
+		var tile = player_area.unit_grid.units.keys()[player_area.unit_grid.units.values().find(dead_unit)]
+		dead_units_final_stats[tile] = {
+			"stats": dead_unit.stats.duplicate(),
+			"max_health_reached": dead_unit.max_health_reached
+		}
+	
+	# Trigger on_kill for the killer if it exists and survived
+	if killer_unit and is_instance_valid(killer_unit) and killer_unit.stats.health > 0:
+		killer_unit.on_kill(dead_unit)
+	
+	# Remove unit from the appropriate grid
+	if dead_unit in player_area.unit_grid.units.values():
+		var tile = player_area.unit_grid.units.keys()[player_area.unit_grid.units.values().find(dead_unit)]
+		player_area.unit_grid.remove_unit(tile)
+	elif dead_unit in enemy_area.unit_grid.units.values():
+		var tile = enemy_area.unit_grid.units.keys()[enemy_area.unit_grid.units.values().find(dead_unit)]
+		enemy_area.unit_grid.remove_unit(tile)
+	
+	# Refresh family display after unit removal
+	GameState.refresh_global_family_display()
+	
+	# Queue the unit for deletion
+	dead_unit.queue_free()
 
 func _update_health_display(unit):
 	# Update max_health_reached if current health is higher (for healing)
@@ -488,16 +647,390 @@ func _combat_round() -> void:
 		# Enemy attacks
 		if j < enemy_tiles.size() and player_tiles.size() > 0:
 			var enemy_unit = enemy_area.unit_grid.units[enemy_tiles[j]]
-			# Refresh living player tiles
+			# Refresh living player tiles and check for taunt
 			var living_player_tiles = []
+			var taunt_tiles = []  # Units with taunt ability
+			
 			for tile in player_area.unit_grid.units.keys():
 				var unit = player_area.unit_grid.units[tile]
 				if unit and unit.stats and unit.stats.health > 0:
 					living_player_tiles.append(tile)
+					# Check if this unit has taunt
+					if unit.stats.has_meta("has_taunt"):
+						var has_taunt = unit.stats.get_meta("has_taunt")
+						if has_taunt:
+							taunt_tiles.append(tile)
+							print("Combat: Found taunt unit ", unit.stats.name, " - enemy must target it!")
+			
 			if living_player_tiles.size() == 0:
 				break
-			var player_tile = living_player_tiles[randi() % living_player_tiles.size()]
+				
+			# Pick target: prioritize taunt units if any exist
+			var player_tile
+			if taunt_tiles.size() > 0:
+				# If there are taunt units, enemies must attack one of them
+				player_tile = taunt_tiles[randi() % taunt_tiles.size()]
+				print("Combat: Enemy targeting taunt unit at tile: ", player_tile)
+			else:
+				# No taunt units, pick random as usual
+				player_tile = living_player_tiles[randi() % living_player_tiles.size()]
+				print("Combat: No taunt units, targeting random unit at tile: ", player_tile)
+				
 			var player_unit = player_area.unit_grid.units[player_tile]
 			await _attack(enemy_unit, player_unit)
 			await get_tree().create_timer(attack_cooldown).timeout
 		j += 1
+
+func _save_combat_results() -> void:
+	# First, reset all Scoundrel's Deal temporary effects before processing stats
+	# This prevents the temporary attack bonus from affecting Spectre health calculations
+	AshfangScoundrelUnit.reset_all_scoundrel_deals(player_area)
+	
+	# Reset Infernal Harvest metadata after combat ends
+	AshwraithUnit.reset_all_infernal_harvest(player_area)
+	
+	# Reset Tidal Haunting effects on enemies
+	DrownedShadeUnit.reset_all_tidal_haunting(enemy_area)
+	
+	# Collect unit states using original stored units (includes dead units)
+	var updated_board_state = []
+	var updated_hand_state = []
+	
+	# Restore all original board units (including those that died)
+	for unit_data in original_board_units:
+		var stats = unit_data["stats"]
+		var tile = unit_data["tile"]
+		var stored_max_health = unit_data["max_health_reached"]
+		
+		# Check if unit is still alive to get current buffed state
+		var current_unit = player_area.unit_grid.units.get(tile)
+		if current_unit and current_unit.stats:
+			# Unit survived - use its current buffed stats but restore health
+			stats = current_unit.stats.duplicate()
+			var _original_damaged_health = stats.health
+			
+			# Restore health based on unit type
+			if stats.name == "Spectre":
+				
+				# The correct health should match the attack pattern
+				var attack_bonus = stats.attack - stats.base_attack
+				var correct_health = stats.base_health + attack_bonus
+				
+				stats.health = correct_health
+			else:
+				# For all units, restore health to the highest value reached during combat
+				var target_health = current_unit.max_health_reached if current_unit.max_health_reached > 0 else stats.base_health
+				stats.health = target_health
+		else:
+			# Unit died - check if we have final stats saved
+			if dead_units_final_stats.has(tile):
+				var final_data = dead_units_final_stats[tile]
+				stats = final_data["stats"]
+				var final_max_health = final_data["max_health_reached"]
+				
+				if stats.name == "Spectre":
+					# For Spectres, maintain any Soul Drain bonuses they had when they died
+					var attack_bonus = stats.attack - stats.base_attack
+					stats.health = stats.base_health + attack_bonus
+				else:
+					# For other units, restore to their max health reached
+					stats.health = final_max_health if final_max_health > 0 else stats.base_health
+			else:
+				# Fallback to original stored stats (shouldn't happen with proper tracking)
+				if stats.name == "Spectre":
+					var attack_bonus = stats.attack - stats.base_attack
+					stats.health = stats.base_health + attack_bonus
+				else:
+					stats.health = stored_max_health if stored_max_health > 0 else stats.base_health
+		
+		updated_board_state.append({
+			"stats": stats,
+			"tile": tile
+		})
+	
+	# Save all hand units (use original stored states since hand units don't change during combat)
+	for unit_data in original_hand_units:
+		var stats = unit_data["stats"]
+		var tile = unit_data["tile"]
+		
+		updated_hand_state.append({
+			"stats": stats,
+			"tile": tile
+		})
+	
+	# Save the updated state back to GameState
+	GameState.save_state(updated_board_state, updated_hand_state)
+
+# Try to resurrect a dead player unit immediately if Shadeblade is present
+var _resurrection_used_this_combat = false
+
+func _try_shadow_resurrection(dead_unit: Unit) -> bool:
+	# Check if resurrection was already used this combat
+	if _resurrection_used_this_combat:
+		return false
+	
+	# Check if there's a living Shadeblade on the board
+	var has_shadeblade = false
+	for unit in player_area.unit_grid.units.values():
+		if unit and unit.stats and unit.stats.health > 0 and unit.stats.name == "Shadeblade":
+			has_shadeblade = true
+			break
+	
+	if not has_shadeblade:
+		return false
+		
+	# Find the original tile where the unit died
+	var original_tile = null
+	for tile in player_area.unit_grid.units.keys():
+		if player_area.unit_grid.units[tile] == dead_unit:
+			original_tile = tile
+			break
+	
+	# Find the next available slot (prefer not the original slot)
+	var resurrection_tile = null
+	
+	# First, try to find any empty slot that's not the original
+	for x in range(player_area.unit_grid.size.x):
+		for y in range(player_area.unit_grid.size.y):
+			var tile = Vector2i(x, y)
+			if not player_area.unit_grid.units.has(tile) or player_area.unit_grid.units[tile] == null:
+				if tile != original_tile:
+					resurrection_tile = tile
+					break
+		if resurrection_tile:
+			break
+	
+	# If no other empty slot found, use the original slot
+	if not resurrection_tile:
+		resurrection_tile = original_tile
+	
+	# Revive the unit with 1 HP
+	dead_unit.stats.health = 1
+	dead_unit.max_health_reached = max(dead_unit.max_health_reached, 1)
+	
+	# Add unit back to grid at resurrection tile
+	if resurrection_tile:
+		player_area.unit_grid.add_unit(resurrection_tile, dead_unit)
+		dead_unit.global_position = player_area.get_global_from_tile(resurrection_tile)
+	
+	# Update the visual display
+	if dead_unit.unit_hp:
+		dead_unit.update_stat_display_health(dead_unit.unit_hp, dead_unit.stats.health, dead_unit.base_health, dead_unit.stats.health)
+	
+	# Mark resurrection as used for this combat
+	_resurrection_used_this_combat = true
+
+	return true
+
+# Store original unit states at the start of combat for later respawning
+func _store_original_unit_states() -> void:
+	original_board_units.clear()
+	original_hand_units.clear()
+	dead_units_final_stats.clear()
+	# Reset resurrection for new combat
+	_resurrection_used_this_combat = false
+	
+	# Store all board units
+	for tile in player_area.unit_grid.units.keys():
+		var unit = player_area.unit_grid.units[tile]
+		if unit and unit.stats:
+			original_board_units.append({
+				"stats": unit.stats.duplicate(),
+				"tile": tile,
+				"max_health_reached": unit.max_health_reached
+			})
+	
+	# Store all hand units
+	for tile in hand_area.unit_grid.units.keys():
+		var unit = hand_area.unit_grid.units[tile]
+		if unit and unit.stats:
+			original_hand_units.append({
+				"stats": unit.stats.duplicate(),
+				"tile": tile,
+				"max_health_reached": unit.max_health_reached if unit.has_method("max_health_reached") else unit.stats.health
+			})
+	
+
+# Prepare all units for combat by ensuring stats are loaded and ready
+func _prepare_units_for_combat() -> void:
+	
+	# Check all player units and ensure their stats are properly loaded
+	for unit in player_area.unit_grid.units.values():
+		if unit != null:
+			# Give units a chance to load their stats if they haven't yet
+			if not unit.stats:
+				# Wait for stats to load
+				var attempts = 0
+				while not unit.stats and attempts < 10:
+					await get_tree().process_frame
+					attempts += 1
+	
+
+# Apply family bonuses to all player units
+func _apply_family_bonuses() -> void:
+	var board_units = []
+	
+	# Collect all living units on the board
+	for unit in player_area.unit_grid.units.values():
+		if unit and unit.stats and unit.stats.health > 0:
+			board_units.append(unit)
+	
+	# Update family aura metadata through GameState
+	GameState.apply_family_bonuses_to_board(board_units)
+	
+	# Apply combat start bonuses that need health modifications
+	_apply_combat_start_family_bonuses(board_units)
+	
+	# Refresh family display to show active bonuses
+	GameState.refresh_global_family_display()
+	
+	print("Family System: Updated auras for ", board_units.size(), " units")
+
+# Apply combat start family bonuses (like troll health)
+func _apply_combat_start_family_bonuses(units: Array) -> void:
+	for unit in units:
+		if unit and unit.stats:
+			# Troll Combat Health - +1 health at combat start for all units when 2+ trolls
+			if unit.stats.has_meta("family_troll_combat_health"):
+				unit.stats.health += 1
+				print("Troll Family: ", unit.stats.name, " gains +1 combat health")
+
+# Apply family damage bonuses using dynamic calculation
+func _apply_family_damage_bonus(attacker: Unit, base_damage: int) -> int:
+	var final_damage = base_damage
+	
+	# Get family attack bonus from family system
+	if GameState.family_system:
+		var family_bonus = GameState.family_system.get_family_attack_bonus(attacker)
+		if family_bonus > 0:
+			final_damage += family_bonus
+			print("Family Attack Bonus: ", attacker.stats.name, " deals +", family_bonus, " damage")
+	
+	# Rat Pack Hunter - additional damage per other rat
+	if attacker.stats.has_meta("family_pack_hunter"):
+		var bonus_damage = attacker.stats.get_meta("family_pack_hunter", 0)
+		final_damage += bonus_damage
+		print("Pack Hunter: ", attacker.stats.name, " deals bonus damage: +", bonus_damage)
+	
+	return final_damage
+
+# Apply family defense bonuses using metadata
+func _apply_family_defense_bonus(defender: Unit, incoming_damage: int) -> int:
+	var final_damage = incoming_damage
+	
+	# Golem Armor - reduce damage by 1 when 3+ golems
+	if defender.stats.has_meta("family_golem_armor"):
+		var armor_value = 1  # Flat reduction of 1
+		final_damage = max(1, final_damage - armor_value)
+		print("Golem Armor: ", defender.stats.name, " reduces damage by ", armor_value, " (", incoming_damage, " -> ", final_damage, ")")
+	
+	# Golem Fortress - reduce damage by 2 when 4+ golems
+	if defender.stats.has_meta("family_golem_fortress"):
+		var fortress_value = 2  # Flat reduction of 2
+		final_damage = max(1, final_damage - fortress_value)
+		print("Golem Fortress: ", defender.stats.name, " reduces damage by ", fortress_value, " (", incoming_damage, " -> ", final_damage, ")")
+	
+	# Spectre Phase Dodge - 25% chance to avoid damage when 3+ spectres  
+	if defender.stats.has_meta("family_spectre_dodge"):
+		var dodge_chance = 25.0  # 25% dodge chance
+		if randf() < (dodge_chance / 100.0):
+			final_damage = 0
+			print("Spectre Phase Dodge: ", defender.stats.name, " dodges attack completely!")
+	
+	return final_damage
+
+# Apply Imp family effects after combat damage
+func _apply_imp_family_effects(attacker: Unit, defender: Unit, _attacker_damage: int, defender_damage: int) -> void:
+	# Imp Retaliate (3+ Imps) - When an Imp takes damage, it deals 1 damage back
+	if defender.stats and defender.stats.has_meta("family_imp_retaliate") and defender_damage > 0 and defender.stats.health > 0:
+		# Imp retaliates against the attacker
+		attacker.stats.health -= 1
+		print("Imp Retaliate: ", defender.stats.name, " deals 1 retaliation damage to ", attacker.stats.name)
+	
+	# Imp Blazing (4+ Imps) - When an Imp deals damage, it deals 1 additional damage to a random enemy
+	if attacker.stats and attacker.stats.has_meta("family_imp_blazing") and defender_damage > 0:
+		# Find a random enemy to apply blazing damage to
+		var target_area = enemy_area if attacker in player_area.unit_grid.units.values() else player_area
+		var living_enemies = []
+		
+		for unit in target_area.unit_grid.units.values():
+			if unit and unit.stats and unit.stats.health > 0:
+				living_enemies.append(unit)
+		
+		if living_enemies.size() > 0:
+			var random_enemy = living_enemies[randi() % living_enemies.size()]
+			random_enemy.stats.health -= 1
+			print("Imp Blazing: ", attacker.stats.name, " deals 1 blazing damage to ", random_enemy.stats.name)
+
+# Trigger Infernal Harvest for all Ashwraiths when any unit dies
+func _trigger_infernal_harvest():
+	for unit in player_area.unit_grid.units.values():
+		if unit != null and unit is AshwraithUnit and unit.stats.has_meta("infernal_harvest_active"):
+			unit.on_unit_death()
+
+# Spawn Vengeful Bog when a Troll family unit dies (4+ Trolls)
+# Trigger Stone Inheritance when a Rolet dies
+func _trigger_stone_inheritance(dead_rolet: RoletUnit, inherited_health: int):
+	print("Rolet: Stone Inheritance triggered - inheriting ", inherited_health, " health")
+	
+	if inherited_health <= 0:
+		print("Rolet: No health to inherit")
+		return
+	
+	# Find all living friendly units (excluding the dead Rolet)
+	var living_allies = []
+	for unit in player_area.unit_grid.units.values():
+		if unit != null and unit != dead_rolet and unit.stats and unit.stats.health > 0:
+			living_allies.append(unit)
+	
+	if living_allies.size() == 0:
+		print("Rolet: No living allies to inherit health")
+		return
+	
+	# Pick a random ally to inherit the health
+	var heir = living_allies[randi() % living_allies.size()]
+	
+	# Give the heir temporary health for this combat only
+	heir.stats.health += inherited_health
+	heir.set_stats(heir.stats)
+	
+	print("Rolet: ", heir.stats.name, " inherited ", inherited_health, " health from fallen Rolet!")
+	
+	# Play inheritance sound effect
+	if dead_rolet.has_node("Buff"):
+		dead_rolet.get_node("Buff").play()
+
+# Apply Coral Colossus immunity to damage calculation
+func _apply_coral_aegis_immunity(unit: Unit, damage: int) -> int:
+	if not unit or not unit.stats:
+		return damage
+	
+	# Check if this unit has first damage immunity and hasn't used it yet
+	if unit.stats.has_meta("coral_first_damage_immunity"):
+		print("Coral Colossus: ", unit.stats.name, " ignored first instance of ", damage, " damage!")
+		# Remove the immunity (first instance only)
+		unit.stats.remove_meta("coral_first_damage_immunity")
+		# Ignore this damage
+		return 0
+	else:
+		print("Coral Colossus: ", unit.stats.name, " does not have immunity, taking ", damage, " damage")
+	
+	# Normal damage
+	return damage
+
+# Handle Submerge ability when units take lethal damage (Drownfang Raider ability)
+func _handle_submerge_ability(unit: Unit) -> bool:
+	if not unit or not unit.stats:
+		return false
+	
+	# Check if this unit has Submerge and hasn't used it yet
+	if unit.stats.has_meta("submerge_active"):
+		print("Drownfang Raider: ", unit.stats.name, " used Submerge ability - surviving with 1 HP!")
+		# Remove the submerge ability (one-time use)
+		unit.stats.remove_meta("submerge_active")
+		# Set health to 1 instead of dying
+		unit.stats.health = 1
+		unit.set_stats(unit.stats)
+		return true  # Indicate that death was prevented
+	
+	return false  # Unit dies normally

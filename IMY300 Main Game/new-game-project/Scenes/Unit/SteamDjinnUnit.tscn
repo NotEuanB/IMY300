@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://cx16f8dnqsga"]
+
+[ext_resource type="PackedScene" uid="uid://mmpc3j84035o" path="res://Scenes/Unit/Unit.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://6ud28x1oesh8" path="res://Scenes/Unit/steamdjinn_unit.gd" id="2_script"]
+
+[node name="SteamDjinnUnit" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+
+[node name="Name" parent="Stats" index="0"]
+text = "Steam Djinn"
+
+[node name="Description" parent="Stats" index="1"]
+text = "Steam Cleave: When attacking, also deal damage to an additional adjacent enemy"
+
+[node name="AttackStat" parent="Stats" index="2"]
+text = "[color=black]3[/color]"
+
+[node name="HealthStat" parent="Stats" index="3"]
+text = "[color=black]5[/color]"

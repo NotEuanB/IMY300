@@ -21,9 +21,9 @@ func pauseMenu():
 	paused = !paused
 
 func _ready() -> void:
-	# Log the current game mode and step
-	print("GameState: Mode = ", GameState.game_mode, ", Step = ", GameState.main_step, ", Round = ", GameState.main_round)
-
+	# Ensure family display is available
+	GameState.ensure_family_display_in_scene()
+	
 	if GameState.game_mode == GameState.GameMode.MAIN_GAME:
 		# Main game flow
 		_update_ui_for_main_game()
@@ -35,7 +35,6 @@ func _ready() -> void:
 		return
 
 	# Tutorial flow
-	print("Tutorial: Starting tutorial flow.")
 	$FlowMenuAnimation/FlowMenuAnimation.play("Flowmenu_idle")
 	_update_ui()
 	var tut_states = GameState.load_state()
@@ -46,7 +45,6 @@ func _ready() -> void:
 	_show_tutorial_popup()
 
 func _show_tutorial_popup() -> void:
-	print("Showing tutorial popup for step:", GameState.current_step)
 	match GameState.current_step:
 		GameState.GameStep.STEP_1: 
 			tutorial_text.text = "Welcome to the game! Here are your options:\n\n- Shop: Buy units.\n- Combine: Combine units.\n\nPress the Shop button to begin."
@@ -85,6 +83,26 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 		unit.global_position = play_area.get_global_from_tile(tile)
 		unit.stats = stats.duplicate()
 		unit_mover.setup_unit(unit)
+	
+	# Apply family bonuses after spawning units
+	_apply_family_bonuses_to_board()
+
+func _apply_family_bonuses_to_board():
+	"""Apply family bonuses to all units currently on the board"""
+	var board_units = []
+	
+	# Collect all living units on the board
+	for unit in board_area.unit_grid.units.values():
+		if unit and unit.stats and unit.stats.health > 0:
+			board_units.append(unit)
+	
+	# Apply family bonuses through GameState
+	GameState.apply_family_bonuses_to_board(board_units)
+	
+	# Refresh the global family display
+	GameState.refresh_global_family_display()
+	
+	print("GameFlowManager: Applied family bonuses to ", board_units.size(), " units")
 
 func _update_ui() -> void:
 	# Hide all buttons initially
@@ -109,12 +127,7 @@ func _update_ui_for_main_game() -> void:
 	$FightButton.visible = GameState.main_step == GameState.MainStep.FIGHT
 
 func _load_scene(scene_path: String) -> void:
-	print("Changing scene to:", scene_path, " | Current Mode:", GameState.game_mode, ", Step =", GameState.main_step, ", Round =", GameState.main_round)
 	var result = get_tree().change_scene_to_file(scene_path)
-	if result != OK:
-		print("Failed to load scene:", scene_path)
-	else:
-		print("Scene loaded successfully:", scene_path)
 	_update_ui()
 
 func get_hand_state() -> Array:
@@ -124,7 +137,6 @@ func get_hand_state() -> Array:
 		if unit:
 			var unit_drag_component = unit.get_node_or_null("UnitMover")
 			if unit_drag_component and unit_drag_component.is_dragging:
-				print("Skipping dragged unit in hand state: ", unit.stats.name)
 				continue
 			
 			hand.append({
@@ -141,7 +153,6 @@ func get_board_state() -> Array:
 		if unit:
 			var unit_drag_component = unit.get_node_or_null("UnitMover")
 			if unit_drag_component and unit_drag_component.is_dragging:
-				print("Skipping dragged unit in board state: ", unit.stats.name)
 				continue
 			
 			board.append({
@@ -152,7 +163,6 @@ func get_board_state() -> Array:
 
 
 func _on_fight_button_pressed() -> void:
-	print("Fight button pressed. Saving state and transitioning to Fight scene.")
 	_cancel_all_dragging()
 	var board_state = get_board_state()
 	var hand_state = get_hand_state()
@@ -160,14 +170,10 @@ func _on_fight_button_pressed() -> void:
 	
 	# If in tutorial mode, advance the step
 	if GameState.game_mode == GameState.GameMode.TUTORIAL:
-		print("Tutorial mode - advancing step from: ", GameState.current_step)
-		GameState.advance()  # This should advance to next tutorial step
-		print("Tutorial mode - advanced to step: ", GameState.current_step)
-	
+		GameState.advance()  # This should advance to next tutorial step	
 	_load_scene("res://scenes/forest_board/forestboard.tscn")
 
 func _on_combine_button_pressed() -> void:
-	print("Combine button pressed. Saving state and transitioning to Combine scene.")
 	# Cancel any active dragging before saving state
 	_cancel_all_dragging()
 	var board_state = get_board_state()
@@ -176,14 +182,11 @@ func _on_combine_button_pressed() -> void:
 	
 	# If in tutorial mode, advance the step
 	if GameState.game_mode == GameState.GameMode.TUTORIAL:
-		print("Tutorial mode - advancing step from: ", GameState.current_step)
 		GameState.advance()  # This should advance to next tutorial step
-		print("Tutorial mode - advanced to step: ", GameState.current_step)
 	
 	_load_scene("res://scenes/combine_board/combineboard.tscn")
 
 func _on_shop_button_pressed() -> void:
-	print("Shop button pressed. Saving state and transitioning to Shop scene.")
 	# Cancel any active dragging before saving state
 	_cancel_all_dragging()
 	var board_state = get_board_state()
@@ -192,9 +195,7 @@ func _on_shop_button_pressed() -> void:
 	
 	# If in tutorial mode, advance the step
 	if GameState.game_mode == GameState.GameMode.TUTORIAL:
-		print("Tutorial mode - advancing step from: ", GameState.current_step)
 		GameState.advance()  # This should go from STEP_1 (0) to STEP_1_1 (3)
-		print("Tutorial mode - advanced to step: ", GameState.current_step)
 	
 	_load_scene("res://scenes/board/board.tscn")
 
@@ -204,3 +205,14 @@ func _cancel_all_dragging():
 	for component in drag_components:
 		if component and component.has_method("cancel_drag"):
 			component.cancel_drag()
+	
+	# Cancel any active target selection (like Shadeblade ability)
+	if UnitMover.is_selecting_target:
+		UnitMover.is_selecting_target = false
+		UnitMover.selecting_unit = null
+		
+		# Reset all unit selectable states
+		var all_units = get_tree().get_nodes_in_group("units")
+		for unit in all_units:
+			if is_instance_valid(unit) and unit.has_method("set_selectable"):
+				unit.set_selectable(false)

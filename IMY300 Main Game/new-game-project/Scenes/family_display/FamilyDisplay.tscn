@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2lqp5ptu1xjd"]
+
+[ext_resource type="Script" path="res://Scenes/family_display/family_display.gd" id="1_g8f7k"]
+[ext_resource type="Theme" uid="uid://cjdxptlxd5qby" path="res://assets/themes/main_theme.tres" id="2_h4m8v"]
+
+[node name="FamilyBonusDisplay" type="Control"]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -180.0
+offset_right = 400.0
+offset_bottom = -20.0
+grow_vertical = 0
+script = ExtResource("1_g8f7k")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("2_h4m8v")
+modulate = Color(1, 1, 1, 0.8)
+
+[node name="FamilyContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0

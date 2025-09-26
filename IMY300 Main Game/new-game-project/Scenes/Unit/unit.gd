@@ -70,18 +70,19 @@ func set_stats(value: Resource) -> void:
 	if unit_name:
 		unit_name.text = stats.name
 	
-	# Always update visual formatting
+	# Always update visual formatting - use effective stats with family bonuses
 	if unit_atk and base_attack > 0:
-		update_stat_display_attack(unit_atk, stats.attack, base_attack)
+		var effective_attack = _get_effective_attack_with_family_bonuses()
+		update_stat_display_attack(unit_atk, effective_attack, base_attack)
 	if unit_hp and base_health > 0:
-		update_stat_display_health(unit_hp, stats.health, base_health, max_health_reached)
+		var effective_health = _get_effective_health_with_family_bonuses()
+		update_stat_display_health(unit_hp, effective_health, base_health, max_health_reached)
 	
 	if unit_description:
 		unit_description.text = stats.description
 
 func update_stat_display_attack(label: RichTextLabel, current_value: int, base_value: int) -> void:
 	if not label:
-		print("Label is null!")
 		return
 	
 	# Ensure BBCode is enabled
@@ -93,14 +94,13 @@ func update_stat_display_attack(label: RichTextLabel, current_value: int, base_v
 		label.text = "[color=#006400][b][font_size=20]" + str(current_value) + "[/font_size][/b][/color]"
 	elif current_value < base_value:
 		# Dark red, bold, and larger for decreased stats
-		label.text = "[color=#4A0000[b][font_size=20]" + str(current_value) + "[/font_size][/b][/color]"
+		label.text = "[color=#4A0000][b][font_size=20]" + str(current_value) + "[/font_size][/b][/color]"
 	else:
 		# Black for normal/base stats
 		label.text = "[color=black]" + str(current_value) + "[/color]"
 
 func update_stat_display_health(label: RichTextLabel, current_value: int, base_value: int, max_value: int) -> void:
 	if not label:
-		print("Label is null!")
 		return
 	
 	# Ensure BBCode is enabled
@@ -140,6 +140,10 @@ func reset_after_dragging(starting_position: Vector2) -> void:
 func on_played(_play_area: PlayArea) -> void:
 	pass
 
+# Called when this unit kills another unit in combat
+func on_kill(_killed_unit: Unit) -> void:
+	pass
+
 func _ready() -> void:
 	if stats:
 		call_deferred("refresh_stats_display")
@@ -147,7 +151,19 @@ func _ready() -> void:
 func refresh_stats_display() -> void:
 	
 	if stats and unit_atk and unit_hp and base_attack > 0:
-		update_stat_display_attack(unit_atk, stats.attack, base_attack)
-		update_stat_display_health(unit_hp, stats.health, base_health, max_health_reached)
-	else:
-		print("Conditions not met for refresh")
+		var effective_attack = _get_effective_attack_with_family_bonuses()
+		var effective_health = _get_effective_health_with_family_bonuses()
+		update_stat_display_attack(unit_atk, effective_attack, base_attack)
+		update_stat_display_health(unit_hp, effective_health, base_health, max_health_reached)
+
+# Get effective attack including family bonuses
+func _get_effective_attack_with_family_bonuses() -> int:
+	if GameState and GameState.family_system and stats:
+		return GameState.family_system.get_effective_attack(self)
+	return stats.attack if stats else 0
+
+# Get effective health including family bonuses  
+func _get_effective_health_with_family_bonuses() -> int:
+	if GameState and GameState.family_system and stats:
+		return GameState.family_system.get_effective_health(self)
+	return stats.health if stats else 0

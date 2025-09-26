@@ -2,20 +2,18 @@
 
 [ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_ve4d0"]
 [ext_resource type="Texture2D" uid="uid://dcpx12ca3vdwm" path="res://assets/units/Ashwraith.png" id="2_1pdam"]
-[ext_resource type="PackedScene" uid="uid://dfgv6quigunb5" path="res://Scenes/Unit/MossTrollUnit.tscn" id="3_av8mw"]
+[ext_resource type="PackedScene" uid="uid://bvmigu6db5y5i" path="res://Scenes/Unit/Ashwraith.tscn" id="3_ve4d0"]
 
 [resource]
 script = ExtResource("1_ve4d0")
 name = "Ashwraith"
-unit_scene = ExtResource("3_av8mw")
+unit_scene = ExtResource("3_ve4d0")
 gold_cost = 6
 attack = 3
 health = 4
 pool_count = 1
-tier = 1
 skin = ExtResource("2_1pdam")
-description = "Ashwraith man"
-buff_used = false
+description = "Gain +1 attack when a unit dies"
 base_attack = 3
 base_health = 4
 metadata/_custom_type_script = "uid://d2inypj55y68q"

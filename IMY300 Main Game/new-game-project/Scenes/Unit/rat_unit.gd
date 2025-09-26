@@ -15,7 +15,7 @@ func on_played(play_area: PlayArea) -> void:
 
 	self.set_selectable(false)
 	UnitMover.is_selecting_target = true
-	UnitMover.selecting_rat = self
+	UnitMover.selecting_unit = self
 
 	for unit in candidates:
 		if is_instance_valid(unit):
@@ -35,5 +35,6 @@ func _on_target_selected(emitter, candidates):
 			unit.set_selectable(false)
 	stats.buff_used = true # <-- Mark as used on the stats resource
 	UnitMover.is_selecting_target = false
-	UnitMover.selecting_rat = null
-	$Buff.play()
+	UnitMover.selecting_unit = null
+	if has_node("Buff"):
+		$Buff.play()

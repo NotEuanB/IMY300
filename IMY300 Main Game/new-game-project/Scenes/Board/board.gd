@@ -44,10 +44,7 @@ func _ready() -> void:
 	_spawn_units(board_units, board_area)
 	_spawn_units(hand_units, hand_area)
 
-	print("=== BOARD READY DEBUG ===")
-	print("GameState.game_mode: ", GameState.game_mode)
-	print("GameState.current_step: ", GameState.current_step)
-	print("=== END BOARD READY DEBUG ===")
+
 	
 	# Use call_deferred to ensure shop_container is fully ready
 	call_deferred("_show_step_popup")
@@ -59,7 +56,6 @@ func _on_unit_bought(unit_stats: UnitStats) -> void:
 	if GameState.game_mode == GameState.GameMode.TUTORIAL:
 		# Only advance if we're in the specific step for buying (don't advance past 1_9)
 		if GameState.current_step == GameState.GameStep.STEP_1_6:
-			print("Unit bought - advancing tutorial from STEP_1_6")
 			GameState.update_step()
 			call_deferred("_show_step_popup")
 
@@ -119,6 +115,7 @@ func _process(_delta: float) -> void:
 
 func get_hand_state() -> Array:
 	var hand = []
+	
 	for tile in unit_spawner.hand_area.unit_grid.units:
 		var unit = unit_spawner.hand_area.unit_grid.units[tile]
 		if unit:
@@ -132,13 +129,15 @@ func get_hand_state() -> Array:
 					"stats": unit.stats,
 					"tile": tile
 				})
-			else:
-				print("Skipping dragged unit in hand: ", unit.stats.name)
+	
+	# Note: Cleanup will happen during spawning in the new scene
+
 	return hand
 
 func get_board_state() -> Array:
 	# If you have a board area, replace 'board_area' with the correct variable
 	var board = []
+	
 	for tile in board_area.unit_grid.units:
 		var unit = board_area.unit_grid.units[tile]
 		if unit:
@@ -152,8 +151,9 @@ func get_board_state() -> Array:
 					"stats": unit.stats,
 					"tile": tile
 				})
-			else:
-				print("Skipping dragged unit on board: ", unit.stats.name)
+	
+	# Note: Cleanup will happen during spawning in the new scene
+
 	return board
 
 func _on_fight_button_pressed() -> void:
@@ -168,13 +168,8 @@ func _on_fight_button_pressed() -> void:
 	if GameState.game_mode == GameState.GameMode.TUTORIAL:
 		# Special case: In STEP_1_9, the Fight button should advance the tutorial
 		if GameState.current_step == GameState.GameStep.STEP_1_9:
-			print("Tutorial mode STEP_1_9 - Fight button pressed, advancing tutorial")
 			GameState.update_step()  # Advance from STEP_1_9 to next step
-		else:
-			print("Tutorial mode - NOT advancing step (already advanced by Next button)")
-			# Don't advance step in tutorial mode for other steps - Next button handles that
 	else:
-		print("Main game mode - advancing main game step")
 		GameState.advance()  # Use main game advancement
 	
 	GameState.save_state(board_state, hand_state)
@@ -184,38 +179,61 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 	for unit_data in units_data:
 		var stats = unit_data["stats"]
 		var tile = unit_data["tile"]
+		
+		# Clean up any persistent Golem aura effects from saved stats
+		if stats.has_meta("golem_aura_active"):
+			print("Board Spawn: Cleaning up Golem aura from saved ", stats.name)
+			var original_attack = stats.get_meta("golem_original_attack")
+			var original_health = stats.get_meta("golem_original_health")
+			
+			# Restore original stats
+			stats.attack = original_attack
+			stats.health = original_health
+			
+			# Clean up metadata
+			stats.remove_meta("golem_aura_active")
+			stats.remove_meta("golem_original_attack")
+			stats.remove_meta("golem_original_health")
+
 		var unit_scene = stats.unit_scene if stats.unit_scene else preload("res://scenes/unit/unit.tscn")
 		var unit = unit_scene.instantiate()
 		play_area.unit_grid.add_child(unit)
 		play_area.unit_grid.add_unit(tile, unit)
 		unit.global_position = play_area.get_global_from_tile(tile)
-		unit.stats = stats.duplicate()
+		
+		# Duplicate the stats
+		var duplicated_stats = stats.duplicate()
+		
+
+		
+		unit.stats = duplicated_stats
 		unit_mover.setup_unit(unit)
 		sell_portal.setup_unit(unit)  # ADD THIS LINE
+	
+	# After all units are spawned, refresh Golem auras (only for board area)
+	await get_tree().process_frame  # Wait one frame for units to be fully initialized
+	if play_area.area_type == "board":  # Only apply auras on the board, not in hand
+		for unit in play_area.unit_grid.units.values():
+			if unit and is_instance_valid(unit) and unit is GolemUnit:
+				print("Board: Auto-applying aura for spawned Golem: ", unit.stats.name)
+				unit.update_aura(play_area)
 
 func _show_step_popup() -> void:
-	print("=== BOARD TUTORIAL DEBUG ===")
-	print("Game mode: ", GameState.game_mode)
-	print("Current step enum value: ", GameState.current_step)
 	
 	# Only show tutorial popups if in Tutorial Mode
 	if GameState.game_mode != GameState.GameMode.TUTORIAL:
-		print("Not in tutorial mode - hiding popup")
 		tutorial_popup.visible = false
 		_enable_all_interactions()  # Enable everything in main game
 		return
 	
 	# If we're in tutorial mode but at STEP_1, advance to STEP_1_1
 	if GameState.current_step == GameState.GameStep.STEP_1:
-		print("At STEP_1, advancing to STEP_1_1")
 		GameState.current_step = GameState.GameStep.STEP_1_1
 	
-	print("In tutorial mode - checking step match...")
 	
 	# Show tutorial popups based on the current step
 	match GameState.current_step:
 		GameState.GameStep.STEP_1_1:
-			print("✅ MATCHED STEP_1_1 - Showing popup")
 			tutorial_text.text = "This is the shop screen, where you can buy units and manipulate your board area to create effective battle teams!"
 			tutorial_popup.position.x = 960
 			tutorial_popup.position.y = 500
@@ -224,7 +242,6 @@ func _show_step_popup() -> void:
 			_set_tutorial_interactions(false, false, false, false)  # Disable everything
 			
 		GameState.GameStep.STEP_1_2:
-			print("✅ MATCHED STEP_1_2 - Showing popup")
 			tutorial_text.text = "These are the units that are currently available in the shop."
 			tutorial_popup.position.x = 960
 			tutorial_popup.position.y = 800
@@ -309,12 +326,10 @@ func _show_step_popup() -> void:
 			
 		GameState.GameStep.STEP_2, GameState.GameStep.STEP_2_1, GameState.GameStep.FIGHT:
 			# Tutorial has moved beyond shop steps - hide popup and enable everything
-			print("✅ TUTORIAL PAST SHOP - Hiding popup and enabling all interactions")
 			tutorial_popup.visible = false
 			_enable_all_interactions()  # Enable everything including fight button
 			
 		_:
-			print("❌ NO MATCH - Current step: ", GameState.current_step)
 			tutorial_popup.visible = false
 			_enable_all_interactions()  # Enable everything if no match
 
@@ -338,15 +353,12 @@ func _set_tutorial_interactions(shopping: bool, moving: bool, rerolling: bool, s
 	
 	if has_node("FightButton"):
 		$FightButton.disabled = !fight_enabled
-		print("Fight button disabled state: ", $FightButton.disabled, " (current_step: ", GameState.current_step, ", fight_enabled: ", fight_enabled, ")")
 	
-	print("Tutorial interactions - Shopping:", shopping, " Moving:", moving, " Rerolling:", rerolling, " Selling:", selling, " Fight:", fight_enabled)
 
 func _enable_all_interactions() -> void:
 	_set_tutorial_interactions(true, true, true, true)
 
 func _set_all_drag_and_drop_enabled(enabled: bool) -> void:
-	print("Setting drag and drop enabled: ", enabled)
 	var hand_count = 0
 	var board_count = 0
 	
@@ -362,12 +374,9 @@ func _set_all_drag_and_drop_enabled(enabled: bool) -> void:
 			unit.get_node("DragAndDrop").enabled = enabled
 			board_count += 1
 	
-	print("Updated drag and drop for ", hand_count, " hand units and ", board_count, " board units")
 
 func _on_next_step_pressed() -> void:
-	print("Next button pressed - current step: ", GameState.current_step)
 	GameState.update_step()
-	print("After update - new step: ", GameState.current_step)
 	_show_step_popup()
 
 func _on_reroll_pressed() -> void:
@@ -375,7 +384,6 @@ func _on_reroll_pressed() -> void:
 	if GameState.game_mode == GameState.GameMode.TUTORIAL:
 		# Only advance if we're in the specific step for rerolling (don't advance past 1_9)
 		if GameState.current_step == GameState.GameStep.STEP_1_5:
-			print("Reroll pressed - advancing tutorial from STEP_1_5")
 			GameState.update_step()
 			call_deferred("_show_step_popup")
 
@@ -384,7 +392,6 @@ func _on_unit_sold(_unit: Unit) -> void:
 	if GameState.game_mode == GameState.GameMode.TUTORIAL:
 		# Check if we're in a step where selling should advance the tutorial
 		if GameState.current_step == GameState.GameStep.STEP_1_8:
-			print("Unit sold - advancing tutorial from STEP_1_8")
 			GameState.update_step()
 			call_deferred("_show_step_popup")
 
@@ -393,7 +400,6 @@ func _on_unit_moved_to_board(_unit: Unit) -> void:
 	if GameState.game_mode == GameState.GameMode.TUTORIAL:
 		# Check if we're in a step where moving to board should advance the tutorial
 		if GameState.current_step == GameState.GameStep.STEP_1_7:
-			print("Unit moved to board - advancing tutorial from STEP_1_7")
 			GameState.update_step()
 			call_deferred("_show_step_popup")
 
@@ -403,7 +409,6 @@ func _cancel_all_dragging() -> void:
 		if unit and unit.has_node("DragAndDrop"):
 			var drag_drop = unit.get_node("DragAndDrop")
 			if drag_drop.dragging:
-				print("Cancelling drag for hand unit: ", unit.stats.name)
 				drag_drop._cancel_dragging()
 	
 	# Cancel dragging for all units on board
@@ -411,5 +416,15 @@ func _cancel_all_dragging() -> void:
 		if unit and unit.has_node("DragAndDrop"):
 			var drag_drop = unit.get_node("DragAndDrop")
 			if drag_drop.dragging:
-				print("Cancelling drag for board unit: ", unit.stats.name)
 				drag_drop._cancel_dragging()
+	
+	# Cancel any active target selection (like Shadeblade ability)
+	if UnitMover.is_selecting_target:
+		UnitMover.is_selecting_target = false
+		UnitMover.selecting_unit = null
+		
+		# Reset all unit selectable states
+		var all_units = get_tree().get_nodes_in_group("units")
+		for unit in all_units:
+			if is_instance_valid(unit) and unit.has_method("set_selectable"):
+				unit.set_selectable(false)

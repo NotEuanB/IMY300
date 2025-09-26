@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://bfx5n8m2q7xar"]
+
+[ext_resource type="PackedScene" uid="uid://dxqabp3b8fvlr" path="res://Scenes/Unit/Unit.tscn" id="1_base"]
+[ext_resource type="Script" path="res://Scenes/Unit/drownedshade_unit.gd" id="2_script"]
+
+[node name="DrownedShadeUnit" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+
+[node name="Stats" parent="." index="1"]
+
+[node name="AttackStat" parent="Stats" index="0"]
+text = "[color=black]2[/color]"
+
+[node name="HealthStat" parent="Stats" index="1"]
+text = "[color=black]7[/color]"
+
+[node name="Name" parent="Stats" index="2"]
+text = "Drowned Shade"
+
+[node name="Description" parent="Stats" index="3"]
+text = "Tidal Haunting: Reduce all enemy attacks by 1, gain +1 attack per enemy affected"
