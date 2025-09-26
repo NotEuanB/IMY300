@@ -27,24 +27,36 @@ func get_spawn_count_for_round(unit: UnitStats, round: int) -> int:
 	var base_count = unit.pool_count
 		
 	match tier:
-		1: # Tier 1 - always full availability
+		1: # Tier 1 - always full availability (early game)
 			return base_count
-		2: # Tier 2 - gradual introduction
-			match round:
-				1:
-					return 0
-				2:
-					return max(1, base_count / 2)  # 50% availability
-				_:
-					return base_count  # Full availability from round 3+
-		3: # Tier 3 - late game
+		2: # Tier 2 - mid-early game
 			match round:
 				1, 2:
 					return 0
-				3:
-					return max(1, base_count / 3)  # 33% availability
+				3, 4:
+					return max(1, int(base_count / 2.0))  # 50% availability
 				_:
-					return base_count  # Full availability from round 4+
+					return base_count  # Full availability from round 5+
+		3: # Tier 3 - mid-late game
+			match round:
+				1, 2, 3, 4:
+					return 0
+				5, 6:
+					return max(1, int(base_count / 3.0))  # 33% availability
+				7, 8:
+					return max(1, int(base_count / 2.0))  # 50% availability
+				_:
+					return base_count  # Full availability from round 9+
+		4: # Tier 4 - endgame units
+			match round:
+				1, 2, 3, 4, 5, 6:
+					return 0
+				7, 8:
+					return max(1, int(base_count / 4.0))  # 25% availability
+				9, 10:
+					return max(1, int(base_count / 2.0))  # 50% availability
+				_:
+					return base_count  # Full availability from round 11+
 		_:
 			return base_count
 

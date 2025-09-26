@@ -14,6 +14,9 @@ var enemy_stats: EnemyStats
 @onready var enemy_avatar_display: Sprite2D = $Visuals/Goblin
 var paused = false
 
+# Boss Effect Manager
+var boss_effect_manager
+
 # Track original unit positions and stats for respawning
 var original_board_units = []
 var original_hand_units = []
@@ -68,12 +71,22 @@ func _process(_delta: float) -> void:
 func _ready() -> void:
 	randomize()
 	
+	# Initialize Boss Effect Manager
+	var BossEffectManager = preload("res://components/boss_effect_manager.gd")
+	boss_effect_manager = BossEffectManager.new()
+	add_child(boss_effect_manager)
+	
+	# Ensure global family display is available
+	GameState.ensure_family_display_in_scene()
+	
 	# Get enemies for the current round FIRST
 	enemy_stats = GameState.get_enemies_for_round(GameState.main_round)
 	if not enemy_stats:
 		# Fallback to a default enemy if needed
 		enemy_stats = preload("res://data/enemy/goblin.tres")
 	
+	# Initialize boss effects if this is a boss fight
+	boss_effect_manager.initialize_boss_effects(enemy_stats)
 	
 	# Set the enemy avatar (skin) based on the current enemy
 	_set_enemy_avatar()
@@ -233,6 +246,10 @@ func _spawn_enemy_units() -> void:
 			unit.stats = enemy_stats.unit_stats[i].duplicate()
 		else:
 			unit.stats = null
+	
+	# Set boss unit reference if this is a boss fight
+	if boss_effect_manager and enemy_stats.is_boss:
+		boss_effect_manager.set_boss_unit(enemy_area)
 
 func get_living_unit_count(unit_grid) -> int:
 	var count = 0
@@ -296,6 +313,13 @@ func start_combat() -> void:
 	
 	# Prepare all units and ensure their stats are loaded before triggering abilities
 	await _prepare_units_for_combat()
+	
+	# Apply family bonuses to all player units before combat starts
+	_apply_family_bonuses()
+	
+	# Trigger boss effects for round start
+	if boss_effect_manager:
+		boss_effect_manager.on_combat_round_start(player_area, enemy_area)
 	
 	# Trigger combat start abilities for all player units
 	for unit in player_area.unit_grid.units.values():
@@ -414,17 +438,25 @@ func _attack(attacker, defender) -> void:
 		var defender_damage = attacker.stats.attack
 		var attacker_damage = defender.stats.attack
 		
+		# Apply family bonus damage modifiers
+		defender_damage = _apply_family_damage_bonus(attacker, defender_damage)
+		attacker_damage = _apply_family_damage_bonus(defender, attacker_damage)
+		
 		# Apply damage reduction for defender (if protected by Gravestone Warden)
 		if defender.has_meta("damage_reduction"):
 			var reduction = defender.get_meta("damage_reduction", 0)
 			defender_damage = max(1, defender_damage - reduction)  # Minimum 1 damage
 			print("Gravestone Warden: Reduced damage to ", defender.stats.name, " from ", attacker.stats.attack, " to ", defender_damage)
 		
-		# Apply damage reduction for attacker (if protected by Gravestone Warden)
+		# Apply damage reduction for attacker (if protected by Gravestone Warden)  
 		if attacker.has_meta("damage_reduction"):
 			var reduction = attacker.get_meta("damage_reduction", 0)
 			attacker_damage = max(1, attacker_damage - reduction)  # Minimum 1 damage
 			print("Gravestone Warden: Reduced damage to ", attacker.stats.name, " from ", defender.stats.attack, " to ", attacker_damage)
+		
+		# Apply family defense bonuses (armor, fortress, dodge)
+		defender_damage = _apply_family_defense_bonus(defender, defender_damage)
+		attacker_damage = _apply_family_defense_bonus(attacker, attacker_damage)
 		
 		# Check for Coral Colossus immunity before applying damage
 		defender_damage = _apply_coral_aegis_immunity(defender, defender_damage)
@@ -432,6 +464,40 @@ func _attack(attacker, defender) -> void:
 		
 		defender.stats.health -= defender_damage
 		attacker.stats.health -= attacker_damage
+		
+		# Notify boss effect manager of the attack
+		if boss_effect_manager:
+			boss_effect_manager.on_unit_attack(attacker, defender, defender_damage)
+			boss_effect_manager.on_unit_attack(defender, attacker, attacker_damage)
+		
+		# Apply Imp family effects after damage is dealt
+		_apply_imp_family_effects(attacker, defender, attacker_damage, defender_damage)
+	
+	# Handle Steam Djinn cleave attacks (after primary damage has been dealt)
+	print("ForestBoard: Checking cleave for attacker: ", attacker.stats.name if attacker.stats else "No Stats")
+	print("ForestBoard: Attacker has steam cleave meta: ", attacker.stats.has_meta("has_steam_cleave") if attacker.stats else false)
+	if attacker.stats and attacker.stats.has_meta("has_steam_cleave"):
+		print("ForestBoard: Steam Djinn cleave detected for attacker")
+		if attacker.has_method("apply_cleave_damage"):
+			# Attacker cleaves enemies in the defender's area
+			var defender_area = enemy_area if attacker in player_area.unit_grid.units.values() else player_area
+			attacker.call("apply_cleave_damage", defender, defender_area)
+		else:
+			print("ForestBoard: Attacker missing apply_cleave_damage method")
+	else:
+		print("ForestBoard: Attacker does not have steam cleave metadata")
+	
+	print("ForestBoard: Checking cleave for defender: ", defender.stats.name if defender.stats else "No Stats")
+	if defender.stats and defender.stats.has_meta("has_steam_cleave"):
+		print("ForestBoard: Steam Djinn cleave detected for defender")
+		if defender.has_method("apply_cleave_damage"):
+			# Defender cleaves enemies in the attacker's area
+			var attacker_area = player_area if defender in enemy_area.unit_grid.units.values() else enemy_area
+			defender.call("apply_cleave_damage", attacker, attacker_area)
+		else:
+			print("ForestBoard: Defender missing apply_cleave_damage method")
+	else:
+		print("ForestBoard: Defender does not have steam cleave metadata")
 	
 	_update_health_display(defender)
 	_update_health_display(attacker)
@@ -459,6 +525,10 @@ func _attack(attacker, defender) -> void:
 func _handle_unit_death(dead_unit: Unit, killer_unit: Unit = null) -> void:
 	if not is_instance_valid(dead_unit) or dead_unit.stats.health > 0:
 		return
+	
+	# Notify boss effect manager of the death
+	if boss_effect_manager:
+		boss_effect_manager.on_unit_death(dead_unit, killer_unit)
 	
 	# Check for Shadow Resurrection FIRST (before removing from grid)
 	var was_resurrected = false
@@ -497,6 +567,9 @@ func _handle_unit_death(dead_unit: Unit, killer_unit: Unit = null) -> void:
 	elif dead_unit in enemy_area.unit_grid.units.values():
 		var tile = enemy_area.unit_grid.units.keys()[enemy_area.unit_grid.units.values().find(dead_unit)]
 		enemy_area.unit_grid.remove_unit(tile)
+	
+	# Refresh family display after unit removal
+	GameState.refresh_global_family_display()
 	
 	# Queue the unit for deletion
 	dead_unit.queue_free()
@@ -634,7 +707,7 @@ func _save_combat_results() -> void:
 		if current_unit and current_unit.stats:
 			# Unit survived - use its current buffed stats but restore health
 			stats = current_unit.stats.duplicate()
-			var original_damaged_health = stats.health
+			var _original_damaged_health = stats.health
 			
 			# Restore health based on unit type
 			if stats.name == "Spectre":
@@ -793,12 +866,109 @@ func _prepare_units_for_combat() -> void:
 					attempts += 1
 	
 
+# Apply family bonuses to all player units
+func _apply_family_bonuses() -> void:
+	var board_units = []
+	
+	# Collect all living units on the board
+	for unit in player_area.unit_grid.units.values():
+		if unit and unit.stats and unit.stats.health > 0:
+			board_units.append(unit)
+	
+	# Update family aura metadata through GameState
+	GameState.apply_family_bonuses_to_board(board_units)
+	
+	# Apply combat start bonuses that need health modifications
+	_apply_combat_start_family_bonuses(board_units)
+	
+	# Refresh family display to show active bonuses
+	GameState.refresh_global_family_display()
+	
+	print("Family System: Updated auras for ", board_units.size(), " units")
+
+# Apply combat start family bonuses (like troll health)
+func _apply_combat_start_family_bonuses(units: Array) -> void:
+	for unit in units:
+		if unit and unit.stats:
+			# Troll Combat Health - +1 health at combat start for all units when 2+ trolls
+			if unit.stats.has_meta("family_troll_combat_health"):
+				unit.stats.health += 1
+				print("Troll Family: ", unit.stats.name, " gains +1 combat health")
+
+# Apply family damage bonuses using dynamic calculation
+func _apply_family_damage_bonus(attacker: Unit, base_damage: int) -> int:
+	var final_damage = base_damage
+	
+	# Get family attack bonus from family system
+	if GameState.family_system:
+		var family_bonus = GameState.family_system.get_family_attack_bonus(attacker)
+		if family_bonus > 0:
+			final_damage += family_bonus
+			print("Family Attack Bonus: ", attacker.stats.name, " deals +", family_bonus, " damage")
+	
+	# Rat Pack Hunter - additional damage per other rat
+	if attacker.stats.has_meta("family_pack_hunter"):
+		var bonus_damage = attacker.stats.get_meta("family_pack_hunter", 0)
+		final_damage += bonus_damage
+		print("Pack Hunter: ", attacker.stats.name, " deals bonus damage: +", bonus_damage)
+	
+	return final_damage
+
+# Apply family defense bonuses using metadata
+func _apply_family_defense_bonus(defender: Unit, incoming_damage: int) -> int:
+	var final_damage = incoming_damage
+	
+	# Golem Armor - reduce damage by 1 when 3+ golems
+	if defender.stats.has_meta("family_golem_armor"):
+		var armor_value = 1  # Flat reduction of 1
+		final_damage = max(1, final_damage - armor_value)
+		print("Golem Armor: ", defender.stats.name, " reduces damage by ", armor_value, " (", incoming_damage, " -> ", final_damage, ")")
+	
+	# Golem Fortress - reduce damage by 2 when 4+ golems
+	if defender.stats.has_meta("family_golem_fortress"):
+		var fortress_value = 2  # Flat reduction of 2
+		final_damage = max(1, final_damage - fortress_value)
+		print("Golem Fortress: ", defender.stats.name, " reduces damage by ", fortress_value, " (", incoming_damage, " -> ", final_damage, ")")
+	
+	# Spectre Phase Dodge - 25% chance to avoid damage when 3+ spectres  
+	if defender.stats.has_meta("family_spectre_dodge"):
+		var dodge_chance = 25.0  # 25% dodge chance
+		if randf() < (dodge_chance / 100.0):
+			final_damage = 0
+			print("Spectre Phase Dodge: ", defender.stats.name, " dodges attack completely!")
+	
+	return final_damage
+
+# Apply Imp family effects after combat damage
+func _apply_imp_family_effects(attacker: Unit, defender: Unit, _attacker_damage: int, defender_damage: int) -> void:
+	# Imp Retaliate (3+ Imps) - When an Imp takes damage, it deals 1 damage back
+	if defender.stats and defender.stats.has_meta("family_imp_retaliate") and defender_damage > 0 and defender.stats.health > 0:
+		# Imp retaliates against the attacker
+		attacker.stats.health -= 1
+		print("Imp Retaliate: ", defender.stats.name, " deals 1 retaliation damage to ", attacker.stats.name)
+	
+	# Imp Blazing (4+ Imps) - When an Imp deals damage, it deals 1 additional damage to a random enemy
+	if attacker.stats and attacker.stats.has_meta("family_imp_blazing") and defender_damage > 0:
+		# Find a random enemy to apply blazing damage to
+		var target_area = enemy_area if attacker in player_area.unit_grid.units.values() else player_area
+		var living_enemies = []
+		
+		for unit in target_area.unit_grid.units.values():
+			if unit and unit.stats and unit.stats.health > 0:
+				living_enemies.append(unit)
+		
+		if living_enemies.size() > 0:
+			var random_enemy = living_enemies[randi() % living_enemies.size()]
+			random_enemy.stats.health -= 1
+			print("Imp Blazing: ", attacker.stats.name, " deals 1 blazing damage to ", random_enemy.stats.name)
+
 # Trigger Infernal Harvest for all Ashwraiths when any unit dies
 func _trigger_infernal_harvest():
 	for unit in player_area.unit_grid.units.values():
 		if unit != null and unit is AshwraithUnit and unit.stats.has_meta("infernal_harvest_active"):
 			unit.on_unit_death()
 
+# Spawn Vengeful Bog when a Troll family unit dies (4+ Trolls)
 # Trigger Stone Inheritance when a Rolet dies
 func _trigger_stone_inheritance(dead_rolet: RoletUnit, inherited_health: int):
 	print("Rolet: Stone Inheritance triggered - inheriting ", inherited_health, " health")

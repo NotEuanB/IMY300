@@ -70,11 +70,13 @@ func set_stats(value: Resource) -> void:
 	if unit_name:
 		unit_name.text = stats.name
 	
-	# Always update visual formatting
+	# Always update visual formatting - use effective stats with family bonuses
 	if unit_atk and base_attack > 0:
-		update_stat_display_attack(unit_atk, stats.attack, base_attack)
+		var effective_attack = _get_effective_attack_with_family_bonuses()
+		update_stat_display_attack(unit_atk, effective_attack, base_attack)
 	if unit_hp and base_health > 0:
-		update_stat_display_health(unit_hp, stats.health, base_health, max_health_reached)
+		var effective_health = _get_effective_health_with_family_bonuses()
+		update_stat_display_health(unit_hp, effective_health, base_health, max_health_reached)
 	
 	if unit_description:
 		unit_description.text = stats.description
@@ -149,5 +151,19 @@ func _ready() -> void:
 func refresh_stats_display() -> void:
 	
 	if stats and unit_atk and unit_hp and base_attack > 0:
-		update_stat_display_attack(unit_atk, stats.attack, base_attack)
-		update_stat_display_health(unit_hp, stats.health, base_health, max_health_reached)
+		var effective_attack = _get_effective_attack_with_family_bonuses()
+		var effective_health = _get_effective_health_with_family_bonuses()
+		update_stat_display_attack(unit_atk, effective_attack, base_attack)
+		update_stat_display_health(unit_hp, effective_health, base_health, max_health_reached)
+
+# Get effective attack including family bonuses
+func _get_effective_attack_with_family_bonuses() -> int:
+	if GameState and GameState.family_system and stats:
+		return GameState.family_system.get_effective_attack(self)
+	return stats.attack if stats else 0
+
+# Get effective health including family bonuses  
+func _get_effective_health_with_family_bonuses() -> int:
+	if GameState and GameState.family_system and stats:
+		return GameState.family_system.get_effective_health(self)
+	return stats.health if stats else 0

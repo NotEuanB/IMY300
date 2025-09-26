@@ -161,6 +161,9 @@ func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
 				u._update_vigil_aura(play_areas[1])
 			elif is_instance_valid(u) and u is CoralColossusUnit:
 				u._apply_coral_aegis_aura()
+		
+		# Apply family bonuses when unit is moved to board
+		_apply_family_bonuses_to_board_area()
 	
 	# Also refresh auras when units are moved FROM the board (to handle dragging away from auras)
 	if old_area == play_areas[1] and new_area != play_areas[1]:
@@ -173,6 +176,26 @@ func _on_unit_dropped(starting_position: Vector2, unit: Unit) -> void:
 				u._update_vigil_aura(play_areas[1])
 			elif is_instance_valid(u) and u is CoralColossusUnit:
 				u._apply_coral_aegis_aura()
-				u._update_vigil_aura(play_areas[1])
+		
+		# Apply family bonuses when unit is removed from board
+		_apply_family_bonuses_to_board_area()
 	
 	$Place.play()
+
+func _apply_family_bonuses_to_board_area():
+	"""Apply family bonuses to all units in the board area"""
+	if play_areas.size() > 1:
+		var board_units = []
+		
+		# Collect all living units on the board (play_areas[1] is typically the board)
+		for unit in play_areas[1].unit_grid.units.values():
+			if unit and unit.stats and unit.stats.health > 0:
+				board_units.append(unit)
+		
+		# Apply family bonuses through GameState
+		GameState.apply_family_bonuses_to_board(board_units)
+		
+		# Refresh the global family display
+		GameState.refresh_global_family_display()
+		
+		print("UnitMover: Applied family bonuses to ", board_units.size(), " units")

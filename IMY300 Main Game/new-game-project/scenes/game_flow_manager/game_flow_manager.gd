@@ -21,6 +21,9 @@ func pauseMenu():
 	paused = !paused
 
 func _ready() -> void:
+	# Ensure family display is available
+	GameState.ensure_family_display_in_scene()
+	
 	if GameState.game_mode == GameState.GameMode.MAIN_GAME:
 		# Main game flow
 		_update_ui_for_main_game()
@@ -80,6 +83,26 @@ func _spawn_units(units_data: Array, play_area: PlayArea) -> void:
 		unit.global_position = play_area.get_global_from_tile(tile)
 		unit.stats = stats.duplicate()
 		unit_mover.setup_unit(unit)
+	
+	# Apply family bonuses after spawning units
+	_apply_family_bonuses_to_board()
+
+func _apply_family_bonuses_to_board():
+	"""Apply family bonuses to all units currently on the board"""
+	var board_units = []
+	
+	# Collect all living units on the board
+	for unit in board_area.unit_grid.units.values():
+		if unit and unit.stats and unit.stats.health > 0:
+			board_units.append(unit)
+	
+	# Apply family bonuses through GameState
+	GameState.apply_family_bonuses_to_board(board_units)
+	
+	# Refresh the global family display
+	GameState.refresh_global_family_display()
+	
+	print("GameFlowManager: Applied family bonuses to ", board_units.size(), " units")
 
 func _update_ui() -> void:
 	# Hide all buttons initially

@@ -1,19 +1,18 @@
 [gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://dhb10helbkwse"]
 
 [ext_resource type="Script" uid="uid://d2inypj55y68q" path="res://data/units/unit_stats.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://dh1hx2aib8w8y" path="res://assets/units/Rat.png" id="2_texture"]
-[ext_resource type="PackedScene" uid="uid://p8q9r2s3t4u5v6w7" path="res://Scenes/Unit/DrownfangRaiderUnit.tscn" id="3_scene"]
+[ext_resource type="Texture2D" uid="uid://ccsknca0wwfhj" path="res://assets/units/Drownfang_Raider.png" id="2_v4gli"]
+[ext_resource type="PackedScene" path="res://Scenes/Unit/DrownfangRaiderUnit.tscn" id="3_scene"]
 
 [resource]
 script = ExtResource("1_script")
 name = "Drownfang Raider"
 unit_scene = ExtResource("3_scene")
 gold_cost = 4
-attack = 2
 health = 4
 pool_count = 6
 tier = 3
-skin = ExtResource("2_texture")
+skin = ExtResource("2_v4gli")
 description = "Depths Empowerment: Give a unit +1/+1 and Submerge (first death becomes 1 HP instead)"
 base_attack = 2
 base_health = 4

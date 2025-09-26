@@ -42,12 +42,14 @@ func _is_unit_valid_for_round(unit_stats: UnitStats, current_round: int) -> bool
 	var tier = unit_stats.tier
 	
 	match tier:
-		1: # Tier 1 - always valid
+		1: # Tier 1 - always valid (early game)
 			return true
-		2: # Tier 2 - valid from round 2+
-			return current_round >= 2
-		3: # Tier 3 - valid from round 3+
+		2: # Tier 2 - valid from round 3+
 			return current_round >= 3
+		3: # Tier 3 - valid from round 5+
+			return current_round >= 5
+		4: # Tier 4 - valid from round 7+ (endgame units)
+			return current_round >= 7
 		_:
 			return true
 

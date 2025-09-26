@@ -80,7 +80,8 @@ var combination_db := {
 	"Flame Imp+Storm Harpy": preload("res://data/units/combined/ashen_harpy.tres"),
 	"Golem+Tide Serpent": preload("res://data/units/combined/coral_colossus.tres"),
 	"Spectre+Tide Serpent": preload("res://data/units/combined/drowned_shade.tres"),
-	"Rat+Tide Serpent": preload("res://data/units/combined/drownfang_raider.tres")
+	"Rat+Tide Serpent": preload("res://data/units/combined/drownfang_raider.tres"),
+	"Flame Imp+Tide Serpent": preload("res://data/units/combined/steam_djinn.tres")
 }
 
 @export var slot_one_area: PlayArea
